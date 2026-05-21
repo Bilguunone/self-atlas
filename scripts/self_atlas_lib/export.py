@@ -268,7 +268,7 @@ def build_export_graph(
     return {
         "schema_version": EXPORT_SCHEMA_VERSION,
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
-        "vault": str(vault),
+        "vault": {"name": vault.name},
         "counts": counts,
         "nodes": nodes,
         "edges": edges,

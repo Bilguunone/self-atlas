@@ -15,6 +15,7 @@ sys.path.insert(0, str(PLUGIN_ROOT / "scripts"))
 
 from self_atlas_lib.export import build_export_graph
 from self_atlas_lib.extraction import build_extraction_plan
+from self_atlas_lib.init import init_vault
 from self_atlas_lib.questions import build_question_refresh, refresh_questions
 from self_atlas_lib.timeline import build_timeline
 from self_atlas_lib.vault import extract_section_bullets, parse_frontmatter_text
@@ -129,8 +130,30 @@ class SelfAtlasTests(unittest.TestCase):
             self.assertEqual(data["counts"]["relationship_nodes"], 0)
             self.assertEqual(data["counts"]["relationship_edges"], 0)
             self.assertGreater(data["counts"]["omitted_edges"], 0)
+            self.assertEqual(data["vault"], {"name": vault.name})
             self.assertTrue(all(node["body"] is None for node in data["nodes"]))
             self.assertFalse([edge for edge in data["edges"] if edge["to"] is None and not edge["missing"]])
+
+    def test_init_vault_minimal_core_has_app_fields_without_templates(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_name:
+            vault = Path(tmp_name)
+
+            with contextlib.redirect_stdout(io.StringIO()):
+                init_vault(vault)
+
+            core_notes = (
+                "00 System/Home.md",
+                "00 System/Graph Rules.md",
+                "00 System/Question Queue.md",
+                "00 System/Source Log.md",
+                "00 System/Open Threads.md",
+            )
+            for relative in core_notes:
+                frontmatter, _ = parse_frontmatter_text((vault / relative).read_text(encoding="utf-8"))
+                self.assertTrue(frontmatter.get("id"), relative)
+                self.assertEqual(frontmatter.get("schema_version"), "1")
+
+            self.assertFalse(list((vault / "00 System" / "Templates").glob("*.md")))
 
     def test_default_export_excludes_templates_but_can_include_them_explicitly(self) -> None:
         with self.make_vault() as tmp_name:
@@ -355,7 +378,7 @@ class SelfAtlasTests(unittest.TestCase):
 
                         - What exact years did Mira attend North Studio School and start at Lumen Labs?
                         - Has Mira confirmed the archive appointments by email yet?
-                        - What kind of weekly money plan would support the USA move?
+                        - What kind of weekly money plan would support the relocation?
                         - What has the intermittent heart pain felt like?
                         """
                     ),

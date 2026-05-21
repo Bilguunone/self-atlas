@@ -153,25 +153,24 @@ def infer_candidate_kind(text: str) -> str:
             "team",
             "ownership",
             "employer",
-            "genie",
         ),
     ):
         return "work"
-    if has_any_keyword(text, ("velum", "project", "prototype", "app", "product", "startup", "twill", "clozy")):
+    if has_any_keyword(text, ("project", "prototype", "app", "product", "startup", "tool", "platform")):
         return "project"
     if has_any_keyword(text, ("taste", "reject", "generic", "soulless", "music", "design", "motion", "ui")):
         return "preference"
     if has_any_keyword(text, ("health", "heart", "pain", "sleep", "energy", "body")):
         return "health_observation"
-    if has_any_keyword(text, ("visa", "embassy", "appointment", "document", "deadline", "travel")):
+    if has_any_keyword(text, ("visa", "immigration", "relocation", "appointment", "document", "deadline", "travel")):
         return "logistics_thread"
     if "?" in text:
         return "question"
     if has_any_keyword(text, ("need", "fear", "pattern", "tension", "structure", "pressure")):
         return "pattern"
-    if has_any_keyword(text, ("tumendari", "girlfriend", "boyfriend", "partner", "romantic")):
+    if has_any_keyword(text, ("girlfriend", "boyfriend", "partner", "spouse", "romantic")):
         return "relationship_love"
-    if has_any_keyword(text, ("joao", "colleague", "coworker", "collaborator", "team")):
+    if has_any_keyword(text, ("colleague", "coworker", "collaborator", "team")):
         return "relationship_collaborator"
     if has_any_keyword(text, ("friend", "friends", "classmate", "parkour")):
         return "relationship_friend"

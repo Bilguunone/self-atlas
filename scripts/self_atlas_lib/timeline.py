@@ -41,16 +41,16 @@ MONTHS = {
 }
 
 THREAD_KEYWORDS = {
-    "love": ("tumendari", "love", "girlfriend", "wife", "romantic", "relationship"),
-    "family": ("family", "father", "mother", "sister", "wife", "husband"),
-    "career": ("work", "job", "career", "employer", "univision", "genie", "mstars", "startup", "swift", "swiftui"),
-    "education": ("school", "grade", "class", "rafl", "university", "teacher", "typography", "gpa"),
+    "love": ("love", "partner", "girlfriend", "boyfriend", "spouse", "romantic", "relationship"),
+    "family": ("family", "father", "mother", "sister", "brother", "parent", "spouse"),
+    "career": ("work", "job", "career", "employer", "company", "startup", "role", "team", "swift", "swiftui"),
+    "education": ("school", "grade", "class", "university", "college", "teacher", "typography", "gpa"),
     "creative_identity": ("design", "3d", "music", "poster", "artist", "vfx", "drawing", "figma", "taste", "typography"),
-    "immigration": ("visa", "embassy", "usa", "green card", "america", "interview", "document submission"),
-    "health": ("health", "nose surgery", "surgery", "body", "pain"),
-    "money_pressure": ("money", "paid", "pay", "salary", "tuition", "provide", "no job", "no money", "pressure"),
+    "immigration": ("visa", "immigration", "relocation", "green card", "interview", "document submission"),
+    "health": ("health", "surgery", "body", "pain", "sleep", "energy"),
+    "money_pressure": ("money", "paid", "pay", "salary", "tuition", "provide", "unemployed", "pressure"),
     "confidence": ("potential", "confidence", "confident", "capable", "admired", "best at this work", "realized"),
-    "product": ("product", "app", "prototype", "ar", "ios", "velum", "clozy", "void", "seedshare"),
+    "product": ("product", "app", "prototype", "ar", "ios", "tool", "platform"),
 }
 
 PRESSURE_HIGH = (
@@ -62,8 +62,8 @@ PRESSURE_HIGH = (
     "conflict",
     "serious",
     "hated",
-    "no job",
-    "no money",
+    "unemployed",
+    "financially stuck",
     "pause",
     "underage",
 )
@@ -173,18 +173,14 @@ def infer_life_period(text: str, threads: tuple[str, ...]) -> str | None:
     lowered = text.lower()
     if "1st school" in lowered or "grade" in lowered or "middle" in lowered or "high school" in lowered:
         return "school-era"
-    if "raffles" in lowered or "university" in lowered:
-        return "raffles-university-era"
-    if "mstars" in lowered:
-        return "mstars-startup-era"
-    if "univision" in lowered:
-        return "univision-era"
-    if "post-univision" in lowered or "no job and no money" in lowered:
-        return "post-univision-pressure-era"
-    if "genie" in lowered:
-        return "genie-runway-era"
-    if "visa" in lowered or "embassy" in lowered or "usa" in lowered:
-        return "usa-immigration-era"
+    if "university" in lowered or "college" in lowered:
+        return "university-era"
+    if "startup" in lowered:
+        return "startup-era"
+    if "unemployed" in lowered or "financially stuck" in lowered:
+        return "pressure-era"
+    if "visa" in lowered or "immigration" in lowered or "relocation" in lowered:
+        return "relocation-era"
     if "education" in threads:
         return "education-era"
     if "career" in threads:

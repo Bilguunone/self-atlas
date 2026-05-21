@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from .constants import CORE_DIRS, DOMAIN_CONFIG, FULL_EXTRA_DIRS
-from .templates import template_files
+from .constants import CORE_DIRS, DOMAIN_CONFIG, EXPORT_SCHEMA_VERSION, FULL_EXTRA_DIRS
 from .vault import (
     append_under_heading,
+    computed_note_id,
     default_vault_path,
     frontmatter,
     has_existing_content,
@@ -73,8 +73,6 @@ def init_vault(vault: Path, full: bool = False) -> None:
         "00 System/Source Log.md": source_log_note(),
         "00 System/Open Threads.md": open_threads_note(),
     }
-    files.update(template_files())
-
     if full:
         for directory in FULL_EXTRA_DIRS:
             (vault / directory).mkdir(parents=True, exist_ok=True)
@@ -98,25 +96,26 @@ def init_vault(vault: Path, full: bool = False) -> None:
         print("Vault already had the starter files. Nothing overwritten.")
 
 def full_domain_files() -> dict[str, str]:
-    return {
-        "10 Self/Identity.md": domain_note("Identity", "identity"),
-        "10 Self/Body.md": domain_note("Body", "health"),
-        "10 Self/Mindset.md": domain_note("Mindset", "identity"),
-        "10 Self/Values.md": domain_note("Values", "identity"),
-        "10 Self/Desires.md": domain_note("Desires", "desire"),
-        "30 Work/Career.md": domain_note("Career", "work"),
-        "30 Work/Skills.md": domain_note("Skills", "work"),
-        "40 Health/Health Overview.md": domain_note("Health Overview", "health", "health"),
-        "50 Taste/Taste Profile.md": domain_note("Taste Profile", "taste"),
-        "50 Taste/Influences.md": domain_note("Influences", "taste"),
-        "50 Taste/Anti-Taste.md": domain_note("Anti-Taste", "taste"),
-        "60 Interests/Hobbies.md": domain_note("Hobbies", "obsession"),
-        "60 Interests/Obsessions.md": domain_note("Obsessions", "obsession"),
-        "60 Interests/Media.md": domain_note("Media", "taste"),
-        "70 Timeline/Life Timeline.md": domain_note("Life Timeline", "event"),
-        "80 Reflections/Patterns.md": domain_note("Patterns", "identity"),
-        "80 Reflections/Tensions.md": domain_note("Tensions", "identity"),
+    specs = {
+        "10 Self/Identity.md": ("Identity", "identity", "normal"),
+        "10 Self/Body.md": ("Body", "health", "normal"),
+        "10 Self/Mindset.md": ("Mindset", "identity", "normal"),
+        "10 Self/Values.md": ("Values", "identity", "normal"),
+        "10 Self/Desires.md": ("Desires", "desire", "normal"),
+        "30 Work/Career.md": ("Career", "work", "normal"),
+        "30 Work/Skills.md": ("Skills", "work", "normal"),
+        "40 Health/Health Overview.md": ("Health Overview", "health", "health"),
+        "50 Taste/Taste Profile.md": ("Taste Profile", "taste", "normal"),
+        "50 Taste/Influences.md": ("Influences", "taste", "normal"),
+        "50 Taste/Anti-Taste.md": ("Anti-Taste", "taste", "normal"),
+        "60 Interests/Hobbies.md": ("Hobbies", "obsession", "normal"),
+        "60 Interests/Obsessions.md": ("Obsessions", "obsession", "normal"),
+        "60 Interests/Media.md": ("Media", "taste", "normal"),
+        "70 Timeline/Life Timeline.md": ("Life Timeline", "event", "normal"),
+        "80 Reflections/Patterns.md": ("Patterns", "identity", "normal"),
+        "80 Reflections/Tensions.md": ("Tensions", "identity", "normal"),
     }
+    return {relative: domain_note(title, domain, sensitivity, relative) for relative, (title, domain, sensitivity) in specs.items()}
 
 def ensure_home_link(vault: Path, relative_path: str, title: str) -> bool:
     home = vault / "00 System" / "Home.md"
@@ -131,7 +130,7 @@ def ensure_domain_map(vault: Path, domain: str, sensitivity: str) -> Path:
     map_sensitivity = sensitivity if sensitivity != "normal" else config["sensitivity"]
     created = write_if_missing(
         map_path,
-        domain_note(config["title"], slugify(domain), map_sensitivity),
+        domain_note(config["title"], slugify(domain), map_sensitivity, config["map"]),
     )
     ensure_home_link(vault, config["map"], config["title"])
     if created:
@@ -149,6 +148,8 @@ def append_domain_capture(map_path: Path, capture_relative: str, title: str) -> 
 
 def home_note() -> str:
     return f"""---
+id: {computed_note_id("00 System/Home")}
+schema_version: {EXPORT_SCHEMA_VERSION}
 type: index
 status: active
 sensitivity: normal
@@ -181,6 +182,8 @@ Small questions. Rich extraction. Dynamic maps. No questionnaire sludge.
 
 def graph_rules_note() -> str:
     return f"""---
+id: {computed_note_id("00 System/Graph Rules")}
+schema_version: {EXPORT_SCHEMA_VERSION}
 type: rules
 status: active
 sensitivity: normal
@@ -216,6 +219,8 @@ links:
 
 def question_queue_note() -> str:
     return f"""---
+id: {computed_note_id("00 System/Question Queue")}
+schema_version: {EXPORT_SCHEMA_VERSION}
 type: question
 status: active
 sensitivity: normal
@@ -244,6 +249,8 @@ Use this to park questions worth asking later.
 
 def source_log_note() -> str:
     return f"""---
+id: {computed_note_id("00 System/Source Log")}
+schema_version: {EXPORT_SCHEMA_VERSION}
 type: source
 status: active
 sensitivity: normal
@@ -266,6 +273,8 @@ Add raw capture links here when new source notes are created.
 
 def open_threads_note() -> str:
     return f"""---
+id: {computed_note_id("00 System/Open Threads")}
+schema_version: {EXPORT_SCHEMA_VERSION}
 type: index
 status: active
 sensitivity: normal
@@ -284,8 +293,9 @@ links:
 Questions, contradictions, and unfinished threads that need future attention.
 """
 
-def domain_note(title: str, domain: str, sensitivity: str = "normal") -> str:
-    return f"""{frontmatter('index', domain, sensitivity, [f'self-atlas/{domain}'])}
+def domain_note(title: str, domain: str, sensitivity: str = "normal", relative_path: str | None = None) -> str:
+    note_id = computed_note_id(Path(relative_path).with_suffix("").as_posix()) if relative_path else None
+    return f"""{frontmatter('index', domain, sensitivity, [f'self-atlas/{domain}'], note_id=note_id, schema_version=EXPORT_SCHEMA_VERSION)}
 # {title}
 
 ## What We Know

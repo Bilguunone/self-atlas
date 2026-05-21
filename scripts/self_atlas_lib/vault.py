@@ -8,6 +8,7 @@ from pathlib import Path
 
 from .constants import (
     DEFAULT_VAULT_NAME,
+    EXPORT_SCHEMA_VERSION,
     REQUIRED_FRONTMATTER,
     WIKI_LINK_RE,
     WORD_RE,
@@ -500,10 +501,24 @@ def has_existing_content(vault: Path) -> bool:
         return False
     return any(vault.iterdir())
 
-def frontmatter(kind: str, domain: str, sensitivity: str, tags: list[str]) -> str:
+def frontmatter(
+    kind: str,
+    domain: str,
+    sensitivity: str,
+    tags: list[str],
+    note_id: str | None = None,
+    schema_version: int | None = None,
+) -> str:
     tag_lines = "\n".join(f"  - {tag}" for tag in tags)
+    app_lines = ""
+    if note_id:
+        app_lines = (
+            f"id: {note_id}\n"
+            f"schema_version: {schema_version or EXPORT_SCHEMA_VERSION}\n"
+        )
     return (
         "---\n"
+        f"{app_lines}"
         f"type: {kind}\n"
         "status: active\n"
         f"sensitivity: {sensitivity}\n"

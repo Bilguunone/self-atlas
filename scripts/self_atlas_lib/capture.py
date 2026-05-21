@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from .constants import EXPORT_SCHEMA_VERSION
 from .init import append_domain_capture, append_source_log, domain_config, ensure_domain_map
 from .vault import (
+    computed_note_id,
     frontmatter,
     is_self_atlas_vault,
     normalized_path,
@@ -27,10 +29,18 @@ def capture(vault: Path, title: str, body: str, domain: str, sensitivity: str, t
     capture_dir.mkdir(parents=True, exist_ok=True)
     filename = f"{today()}-{slugify(title)}.md"
     path = capture_dir / filename
+    capture_key = f"90 Sources/Captures/{filename[:-3]}"
     body = body.strip()
     note_tags = tags or [f"self-atlas/{normalized_domain}", "self-atlas/capture"]
     content = (
-        frontmatter("source", normalized_domain, sensitivity, note_tags)
+        frontmatter(
+            "source",
+            normalized_domain,
+            sensitivity,
+            note_tags,
+            note_id=computed_note_id(capture_key),
+            schema_version=EXPORT_SCHEMA_VERSION,
+        )
         + f"# {title}\n\n"
         + "## Domain\n\n"
         + f"- {wiki_link(str(map_path.relative_to(vault)), domain_config(normalized_domain)['title'])}\n\n"

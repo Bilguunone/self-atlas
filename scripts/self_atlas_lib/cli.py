@@ -180,8 +180,10 @@ def main(argv: list[str]) -> int:
     export_json_parser = subparsers.add_parser("export-json", help="Export an app-ready JSON graph snapshot")
     export_json_parser.add_argument("--vault", required=True, type=Path)
     export_json_parser.add_argument("--out", type=Path, default=None, help="Optional output file. Defaults to stdout.")
-    export_json_parser.add_argument("--exclude-body", action="store_true", help="Omit note body text from exported nodes")
-    export_json_parser.add_argument("--exclude-sensitive", action="store_true", help="Exclude private, health, financial, and intimate notes")
+    export_json_parser.add_argument("--include-body", action="store_true", help="Include full note body text. Defaults to omitted.")
+    export_json_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes. Defaults to excluded.")
+    export_json_parser.add_argument("--exclude-body", action="store_true", help="Deprecated compatibility flag; body text is omitted by default.")
+    export_json_parser.add_argument("--exclude-sensitive", action="store_true", help="Deprecated compatibility flag; sensitive notes are excluded by default.")
     export_json_parser.add_argument("--include-templates", action="store_true", help="Include template notes in the graph export")
     export_json_parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON")
 
@@ -242,5 +244,7 @@ def main(argv: list[str]) -> int:
     elif args.command == "schema-report":
         schema_report(args.vault)
     elif args.command == "export-json":
-        export_json(args.vault, args.out, args.exclude_body, args.exclude_sensitive, args.pretty, args.include_templates)
+        exclude_body = args.exclude_body or not args.include_body
+        exclude_sensitive = args.exclude_sensitive or not args.include_sensitive
+        export_json(args.vault, args.out, exclude_body, exclude_sensitive, args.pretty, args.include_templates)
     return 0

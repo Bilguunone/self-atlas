@@ -525,14 +525,14 @@ QUESTION_EXAMPLES = {
 def infer_question_domain(question: str) -> str:
     lowered = question.lower()
     domain_keywords = [
-        ("logistics", ("visa", "embassy", "appointment", "document", "documents", "deadline", "usa", "immigration", "sos medica", "checklist", "submission")),
+        ("logistics", ("visa", "appointment", "document", "documents", "deadline", "immigration", "relocation", "checklist", "submission")),
         ("health", ("health", "heart", "body", "medical", "sleep", "pain", "energy")),
         ("money", ("money", "financial", "income", "saving", "rent", "travel", "spreadsheet")),
-        ("love", ("tumendari", "love", "girlfriend", "partner", "relationship", "support")),
+        ("love", ("love", "girlfriend", "boyfriend", "partner", "spouse", "relationship", "support")),
         ("family", ("family", "father", "mother", "sister", "parent", "brother")),
         ("timeline", ("timeline", "years", "year", "month", "date", "phase", "chapter", "attend", "attended")),
-        ("project", ("project", "velum", "prototype", "proof", "interaction", "gallery", "build", "app", "startup", "startups", "nft", "crispy")),
-        ("work", ("work", "role", "responsibility", "responsibilities", "genie", "job", "career", "team", "teammate", "teammates", "colleague")),
+        ("project", ("project", "prototype", "proof", "interaction", "gallery", "build", "app", "startup", "startups", "tool", "platform")),
+        ("work", ("work", "role", "responsibility", "responsibilities", "job", "career", "team", "teammate", "teammates", "colleague")),
         ("person", ("person", "people", "friend", "mentor", "colleague", "collaborator", "names", "roles")),
         ("taste", ("taste", "ui", "design", "music", "film", "reference", "sonic", "artist", "r&b", "hip-hop", "ballad", "production palette", "lyrical")),
         ("desire", ("desire", "want", "goal", "badly", "future", "next year")),
