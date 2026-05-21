@@ -15,6 +15,7 @@ links:
   - "[[00 System/Open Threads]]"
   - "[[10 Self/Identity]]"
   - "[[70 Timeline/Life Timeline]]"
+  - "[[70 Timeline/Public Milestones]]"
 sources: []
 ---
 
@@ -30,3 +31,4 @@ Fictional demo vault for public development.
 - [[30 Work/Projects/Lumen Sketch]]
 - [[50 Taste/Taste Profile]]
 - [[70 Timeline/Life Timeline]]
+- [[70 Timeline/Public Milestones]]

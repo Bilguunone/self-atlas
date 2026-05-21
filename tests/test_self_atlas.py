@@ -13,12 +13,14 @@ from pathlib import Path
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PLUGIN_ROOT / "scripts"))
 
+from public_release_check import scan_files
 from self_atlas_lib.export import build_export_graph
 from self_atlas_lib.extraction import build_extraction_plan
 from self_atlas_lib.init import init_vault
 from self_atlas_lib.questions import build_question_refresh, refresh_questions
 from self_atlas_lib.timeline import build_timeline
 from self_atlas_lib.vault import extract_section_bullets, parse_frontmatter_text
+from self_atlas_lib.cli import main as cli_main
 
 
 def note(
@@ -249,6 +251,17 @@ class SelfAtlasTests(unittest.TestCase):
         self.assertEqual(frontmatter["tags"], ["self-atlas/person", "self-atlas/friend"])
         self.assertEqual(frontmatter["sources"], ["90 Sources/Captures/example"])
 
+    def test_public_release_check_uses_local_privacy_patterns(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_name:
+            root = Path(tmp_name)
+            (root / ".privacy-patterns").write_text("secret-fixture-term\n", encoding="utf-8")
+            (root / "README.md").write_text("This mentions secret-fixture-term.", encoding="utf-8")
+
+            problems = scan_files(root)
+
+            self.assertEqual(len(problems), 1)
+            self.assertIn("secret-fixture-term", problems[0])
+
     def test_timeline_export_builds_items_threads_periods_and_rough_dates(self) -> None:
         with self.make_vault() as tmp_name:
             vault = Path(tmp_name)
@@ -279,6 +292,8 @@ class SelfAtlasTests(unittest.TestCase):
 
             data = build_timeline(vault)
 
+            self.assertEqual(data["vault"], {"name": vault.name})
+            self.assertNotIn(str(vault), json.dumps(data))
             self.assertEqual(data["counts"]["items"], 3)
             self.assertIn("education", {thread["id"] for thread in data["threads"]})
             self.assertIn("immigration", {thread["id"] for thread in data["threads"]})
@@ -320,12 +335,21 @@ class SelfAtlasTests(unittest.TestCase):
                 ),
             )
 
-            data = build_timeline(vault, exclude_sensitive=True)
+            data = build_timeline(vault)
             payload = json.dumps(data)
 
             self.assertEqual(data["counts"]["items"], 1)
             self.assertNotIn("River", payload)
             self.assertNotIn("25 Love", payload)
+
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                cli_main(["timeline-report", "--vault", str(vault)])
+            report = output.getvalue()
+
+            self.assertIn("Public Project", report)
+            self.assertNotIn("River", report)
+            self.assertNotIn("25 Love", report)
 
     def test_question_refresh_mixes_existing_queue_with_generated_prompts(self) -> None:
         with self.make_vault() as tmp_name:

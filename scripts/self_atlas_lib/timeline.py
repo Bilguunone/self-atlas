@@ -422,7 +422,7 @@ def build_periods(items: list[TimelineItem]) -> list[TimelinePeriod]:
         )
     return periods
 
-def build_timeline(vault: Path, exclude_sensitive: bool = False) -> dict[str, object]:
+def build_timeline(vault: Path, exclude_sensitive: bool = True) -> dict[str, object]:
     vault = require_vault(vault)
     notes = note_inventory(vault)
     by_key, by_base = link_indexes(notes)
@@ -451,7 +451,7 @@ def build_timeline(vault: Path, exclude_sensitive: bool = False) -> dict[str, ob
     return {
         "schema_version": EXPORT_SCHEMA_VERSION,
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
-        "vault": str(vault),
+        "vault": {"name": vault.name},
         "counts": {
             "items": len(sorted_items),
             "periods": len(periods),
@@ -470,11 +470,13 @@ def build_timeline(vault: Path, exclude_sensitive: bool = False) -> dict[str, ob
         "items": [item.to_json() for item in sorted_items],
     }
 
-def timeline_report(vault: Path, max_items: int, exclude_sensitive: bool = False) -> None:
+def timeline_report(vault: Path, max_items: int, exclude_sensitive: bool = True) -> None:
     data = build_timeline(vault, exclude_sensitive=exclude_sensitive)
+    vault_info = data["vault"]
+    vault_name = vault_info.get("name", "unknown") if isinstance(vault_info, dict) else str(vault_info)
     print("# Life Timeline")
     print()
-    print(f"Vault: {data['vault']}")
+    print(f"Vault: {vault_name}")
     print()
     print("## Summary")
     counts = data["counts"]
@@ -505,7 +507,7 @@ def timeline_report(vault: Path, max_items: int, exclude_sensitive: bool = False
     if len(data["items"]) > max_items:
         print(f"- ... {len(data['items']) - max_items} more")
 
-def timeline_export(vault: Path, out: Path | None, pretty: bool, exclude_sensitive: bool = False) -> None:
+def timeline_export(vault: Path, out: Path | None, pretty: bool, exclude_sensitive: bool = True) -> None:
     data = build_timeline(vault, exclude_sensitive=exclude_sensitive)
     indent = 2 if pretty else None
     payload = json.dumps(data, ensure_ascii=False, indent=indent)

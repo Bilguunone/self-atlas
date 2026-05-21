@@ -18,6 +18,7 @@ The point is not to make a giant questionnaire. That would be spiritually punish
 - `scripts/self_atlas.py` is the thin CLI entrypoint.
 - `scripts/self_atlas_lib/` contains the real implementation modules: vault IO, templates, questions, extraction, reports, migrations, export, and CLI wiring.
 - `scripts/install_local_plugin.py` can copy the repo into a local `~/plugins/self-atlas` folder and generate local-only plugin metadata for private Codex setups.
+- `pyproject.toml` provides the optional `self-atlas` console command for editable installs.
 - `assets/templates/` contains the starter Markdown template library.
 - `examples/demo-vault/` contains fictional fixture content for demos and tests.
 
@@ -57,6 +58,7 @@ python3 scripts/self_atlas.py suggest-question --vault "$DEMO_VAULT" --count 5 -
 python3 scripts/self_atlas.py refresh-questions --vault "$DEMO_VAULT" --mode mixed --count 8 --with-examples
 python3 scripts/self_atlas.py graph-summary --vault "$DEMO_VAULT"
 python3 scripts/self_atlas.py timeline-report --vault "$DEMO_VAULT"
+python3 scripts/self_atlas.py timeline-export --vault "$DEMO_VAULT" --pretty
 python3 scripts/self_atlas.py export-json --vault "$DEMO_VAULT" --pretty
 ```
 
@@ -68,6 +70,15 @@ VAULT="$HOME/Documents/Self-Atlas-Vault"
 python3 scripts/self_atlas.py ensure --vault "$VAULT" --yes
 python3 scripts/self_atlas.py sync-templates --vault "$VAULT"
 python3 scripts/self_atlas.py suggest-question --vault "$VAULT" --count 5 --with-examples
+```
+
+For the first complete loop, follow [10-Minute First Vault](docs/10-minute-first-vault.md).
+
+Optional editable CLI install:
+
+```bash
+python3 -m pip install -e .
+self-atlas --help
 ```
 
 To install it as a local Codex plugin instead of running from the clone:
@@ -85,11 +96,14 @@ Open the vault in any Markdown editor. Obsidian can visualize the links today, b
 Before publishing or opening a pull request:
 
 ```bash
+cp .privacy-patterns.example .privacy-patterns  # optional local-only private term scanner
 python3 scripts/public_release_check.py
 python3 tests/test_self_atlas.py
 ```
 
-The report commands are read-only. They do not change existing Atlas content. `source-hygiene` reports oversized captures, unextracted sources, Source Log gaps, and archive pressure so `90 Sources/Captures/` can grow without turning into a junk drawer. `extract-plan` turns one raw capture into a typed, reviewable plan: `RawCapture -> MemoryCandidate[] -> DurableNotePatch[] -> LinkPatch[] -> ReviewFlags`. It reads both current headings (`Extracted Notes`, `Follow-Up Threads`) and legacy headings (`Derived Notes`, `Open Questions`), and each memory candidate and durable patch carries `SourceEvidence` with the source path, section, line hint, raw excerpt, confidence, and sensitivity. It proposes note appends, source-lineage links, and review flags without writing them. `QuestionTemplate` drives the question layer with `domain`, `intent`, `why`, `hint`, `examples`, `target_note_types`, `sensitivity`, and `evidence_needed`, so prompts ask for dates, names, numbers, links, examples, values, places, and artifacts instead of mush. `timeline-report` and `timeline-export` build an app-ready life timeline from timeline notes and dated/era bullets: items, derived periods, threads, rough-date precision, pressure, emotional charge, turning points, linked people/projects/places, and sources. `timeline-export --exclude-sensitive` drops private/health/financial/intimate notes and skips items that point at hidden notes. `suggest-question` reads Question Queue and Open Threads before template fallback, rotates domains, and caps batches at eight. `refresh-questions` previews by default and can shuffle existing queue items, regenerate from the template library, or mix both; with `--apply`, it rewrites `00 System/Question Queue.md`, bumps `updated`, and preserves rotated-out questions under `Question Refresh History`. `sync-templates` only writes template files under `00 System/Templates`. `enrich-thin-notes` is report-only by default; with `--apply`, it appends targeted questions to `00 System/Question Queue.md` without inventing facts. `migrate-source-fields` is dry-run by default; with `--apply`, it derives frontmatter `sources` from existing source-capture links and creates a backup before writing. `migrate-relationship-fields` is dry-run by default; with `--apply`, it adds typed relationship frontmatter to person notes so love, friends, family, mentors, and collaborators export as different graph semantics. `migrate-app-fields` is dry-run by default; with `--apply`, it adds deterministic `id` and `schema_version` fields to note frontmatter and leaves note bodies and existing memory values alone. `export-json` reads the vault without modifying it; by default it excludes private/health/financial/intimate notes and omits note bodies. Use `--include-body` and `--include-sensitive` only for private, local exports you do not intend to share.
+The committed `.privacy-patterns.example` is synthetic. Put real local names, project names, places, clinics, employers, or source phrases only in untracked `.privacy-patterns`.
+
+The report commands are read-only. They do not change existing Atlas content. `source-hygiene` reports oversized captures, unextracted sources, Source Log gaps, and archive pressure so `90 Sources/Captures/` can grow without turning into a junk drawer. `extract-plan` turns one raw capture into a typed, reviewable plan: `RawCapture -> MemoryCandidate[] -> DurableNotePatch[] -> LinkPatch[] -> ReviewFlags`. It reads both current headings (`Extracted Notes`, `Follow-Up Threads`) and legacy headings (`Derived Notes`, `Open Questions`), and each memory candidate and durable patch carries `SourceEvidence` with the source path, section, line hint, raw excerpt, confidence, and sensitivity. It proposes note appends, source-lineage links, and review flags without writing them. `QuestionTemplate` drives the question layer with `domain`, `intent`, `why`, `hint`, `examples`, `target_note_types`, `sensitivity`, and `evidence_needed`, so prompts ask for dates, names, numbers, links, examples, values, places, and artifacts instead of mush. `timeline-report` and `timeline-export` build an app-ready life timeline from timeline notes and dated/era bullets: items, derived periods, threads, rough-date precision, pressure, emotional charge, turning points, linked people/projects/places, and sources. Both timeline commands exclude private/health/financial/intimate notes by default, omit absolute vault paths, and skip items that point at hidden notes; use `--include-sensitive` only for private local output. `suggest-question` reads Question Queue and Open Threads before template fallback, rotates domains, and caps batches at eight. `refresh-questions` previews by default and can shuffle existing queue items, regenerate from the template library, or mix both; with `--apply`, it rewrites `00 System/Question Queue.md`, bumps `updated`, and preserves rotated-out questions under `Question Refresh History`. `sync-templates` only writes template files under `00 System/Templates`. `enrich-thin-notes` is report-only by default; with `--apply`, it appends targeted questions to `00 System/Question Queue.md` without inventing facts. `migrate-source-fields` is dry-run by default; with `--apply`, it derives frontmatter `sources` from existing source-capture links and creates a backup before writing. `migrate-relationship-fields` is dry-run by default; with `--apply`, it adds typed relationship frontmatter to person notes so love, friends, family, mentors, and collaborators export as different graph semantics. `migrate-app-fields` is dry-run by default; with `--apply`, it adds deterministic `id` and `schema_version` fields to note frontmatter and leaves note bodies and existing memory values alone. `export-json` reads the vault without modifying it; by default it excludes private/health/financial/intimate notes and omits note bodies. Use `--include-body` and `--include-sensitive` only for private, local exports you do not intend to share.
 
 ## Plugin Behavior
 

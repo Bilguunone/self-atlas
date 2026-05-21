@@ -34,22 +34,6 @@ BLOCKED_TEXT = (
     "/" + "Users/",
 )
 
-PRIVATE_RESIDUE_PATTERNS = (
-    "tum" + "endari",
-    "gen" + "ie",
-    "vel" + "um",
-    "tw" + "ill",
-    "clo" + "zy",
-    "uni" + "vision",
-    "mst" + "ars",
-    "ard" + "art",
-    "seed" + "share",
-    "mon" + "arty",
-    "sos " + "medica",
-    "nose " + "surgery",
-    "no job and " + "no money",
-)
-
 BLOCKED_FILE_NAMES = {
     ".DS_Store",
     "self-atlas.graph.json",
@@ -84,7 +68,7 @@ def is_allowed_demo_capture(relative: Path) -> bool:
 
 def scan_files(root: Path) -> list[str]:
     problems = []
-    blocked_text = tuple(item.lower() for item in (*BLOCKED_TEXT, *PRIVATE_RESIDUE_PATTERNS, *load_local_patterns(root)))
+    blocked_text = tuple(item.lower() for item in (*BLOCKED_TEXT, *load_local_patterns(root)))
     for path in root.rglob("*"):
         relative = path.relative_to(root)
         if should_skip(relative):

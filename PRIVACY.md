@@ -23,8 +23,11 @@ Self Atlas is local-first. The repository contains the memory engine, templates,
 Run:
 
 ```bash
+cp .privacy-patterns.example .privacy-patterns  # optional, local-only
 python3 scripts/public_release_check.py
 python3 tests/test_self_atlas.py
 ```
+
+Put real denylist terms only in `.privacy-patterns`. That file is ignored by Git. The committed example file must stay synthetic.
 
 Then do one last manual search for private names, project names, places, and source-capture text. Automation helps; it does not replace taste or paranoia.

@@ -43,7 +43,7 @@ def parse_tags(raw: str | None) -> list[str]:
         return []
     return [tag.strip() for tag in raw.split(",") if tag.strip()]
 
-def main(argv: list[str]) -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Self Atlas vault helper")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -133,13 +133,15 @@ def main(argv: list[str]) -> int:
     timeline_report_parser = subparsers.add_parser("timeline-report", help="Summarize life timeline items, periods, and threads")
     timeline_report_parser.add_argument("--vault", required=True, type=Path)
     timeline_report_parser.add_argument("--max-items", type=int, default=40, help="Maximum timeline items to print")
-    timeline_report_parser.add_argument("--exclude-sensitive", action="store_true", help="Exclude private, health, financial, and intimate notes")
+    timeline_report_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes. Defaults to excluded.")
+    timeline_report_parser.add_argument("--exclude-sensitive", action="store_true", help="Deprecated compatibility flag; sensitive notes are excluded by default.")
 
     timeline_export_parser = subparsers.add_parser("timeline-export", help="Export an app-ready life timeline JSON snapshot")
     timeline_export_parser.add_argument("--vault", required=True, type=Path)
     timeline_export_parser.add_argument("--out", type=Path, default=None, help="Optional output file. Defaults to stdout.")
     timeline_export_parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON")
-    timeline_export_parser.add_argument("--exclude-sensitive", action="store_true", help="Exclude private, health, financial, and intimate notes")
+    timeline_export_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes. Defaults to excluded.")
+    timeline_export_parser.add_argument("--exclude-sensitive", action="store_true", help="Deprecated compatibility flag; sensitive notes are excluded by default.")
 
     list_question_templates_parser = subparsers.add_parser("list-question-templates", help="List structured question templates")
     list_question_templates_parser.add_argument("--json", action="store_true", dest="json_output", help="Print templates as JSON")
@@ -224,9 +226,11 @@ def main(argv: list[str]) -> int:
     elif args.command == "graph-summary":
         graph_summary(args.vault)
     elif args.command == "timeline-report":
-        timeline_report(args.vault, args.max_items, args.exclude_sensitive)
+        exclude_sensitive = args.exclude_sensitive or not args.include_sensitive
+        timeline_report(args.vault, args.max_items, exclude_sensitive)
     elif args.command == "timeline-export":
-        timeline_export(args.vault, args.out, args.pretty, args.exclude_sensitive)
+        exclude_sensitive = args.exclude_sensitive or not args.include_sensitive
+        timeline_export(args.vault, args.out, args.pretty, exclude_sensitive)
     elif args.command == "list-question-templates":
         list_question_templates(args.json_output)
     elif args.command == "list-templates":

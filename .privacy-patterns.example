@@ -1,0 +1,13 @@
+# Copy this file to `.privacy-patterns` and replace these examples with
+# real local-only terms that should never appear in the public repo.
+#
+# Keep `.privacy-patterns` untracked. Do not commit real names, project names,
+# clinic names, addresses, schools, employers, source-capture phrases, or other
+# private residue here. That would be hilariously backwards.
+
+private-person-name
+private-project-codename
+private-clinic-or-doctor
+private-school-or-employer
+private-place-or-address
+private-source-capture-phrase
