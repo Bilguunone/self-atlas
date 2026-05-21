@@ -1,0 +1,15 @@
+/* Optional compatibility snippet for reading Self Atlas vaults in Obsidian. */
+
+.markdown-preview-view .tag[href*="self-atlas"] {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.markdown-preview-view h1 {
+  letter-spacing: 0;
+}
+
+.markdown-preview-view blockquote {
+  border-left-color: #7c5c3b;
+}

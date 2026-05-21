@@ -1,0 +1,1 @@
+"""Self Atlas helper package."""
