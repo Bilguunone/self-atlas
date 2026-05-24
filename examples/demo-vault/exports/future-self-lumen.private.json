@@ -1,0 +1,73 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "private",
+  "hidden_sensitive": 0,
+  "query": "Lumen Sketch",
+  "horizon": "next chapter",
+  "note": "This is pattern simulation, not prophecy. Future-you is not a weather app.",
+  "trajectories": [
+    {
+      "name": "Continue Current Pattern",
+      "likelihood": "likely",
+      "description": "The current unresolved loops keep shaping the next chapter if nothing interrupts them.",
+      "supporting_signals": [
+        "Add one concrete scene to [[20 People/Friends/Ari]].",
+        "Clarify the April prototype timeline for [[30 Work/Projects/Lumen Sketch]].",
+        "Decide what kind of pressure belongs in [[80 Reflections/Pressure and Craft]] without turning the work dead.",
+        "Walk the thread from [[60 Interests/Music Identity]] to [[50 Taste/Taste Profile]] and export motion.",
+        "Confidence is `inferred`.",
+        "Confidence is `inferred`."
+      ],
+      "suggested_next_move": "Clear one high-priority open loop before adding new ambition."
+    },
+    {
+      "name": "Proof-First Path",
+      "likelihood": "available",
+      "description": "The healthier path is to convert pressure into a visible artifact instead of more planning smoke.",
+      "supporting_signals": [
+        "Lumen Sketch is a fictional creative tool about turning mood boards into small visual posters.",
+        "The proof moment is one export that feels worth saving without apologizing for it. Source: [[90 Sources/Captures/2026-05-21-demo-answer]].",
+        "Mira likes warm interfaces with visible craft, specific motion, and emotional texture.",
+        "Mira rejects generic dashboard polish when it has no real point of view.",
+        "Mira keeps returning to warm, slow, dramatic, replayable music while shaping visual tools.",
+        "The music reference is not decoration; it describes pacing, emotional temperature, and motion feel."
+      ],
+      "suggested_next_move": "Pick one artifact receipt that would make the next week feel real."
+    },
+    {
+      "name": "Taste-Protected Path",
+      "likelihood": "available",
+      "description": "The graph already knows some anti-taste; use it as a guardrail before shipping.",
+      "supporting_signals": [
+        "Mira notices the body difference between alive creative work and dead fake-polish work.",
+        "The note exists to test intimate export filtering and relationship graph semantics.",
+        "River noticed that Mira looked alive while tuning export motion and drained while writing fake onboarding copy.",
+        "Taste guardrail: warm, specific, useful, emotional, and never generic dashboard sludge.",
+        "Mira rejects generic dashboard polish when it has no real point of view.",
+        "The anti-pattern is fake onboarding copy trying to explain what the tool should have made obvious."
+      ],
+      "suggested_next_move": "Run `taste-autopilot` on the next artifact draft."
+    },
+    {
+      "name": "Drift Risk",
+      "likelihood": "low",
+      "description": "Loose captures and unanswered questions can turn into vague self-mythology if they never get receipts.",
+      "supporting_signals": [
+        "Confidence is `inferred`.",
+        "Confidence is `inferred`.",
+        "Confidence is `inferred`.",
+        "Confidence is `inferred`."
+      ],
+      "suggested_next_move": "Review one source or answer one queued question with dates/examples."
+    }
+  ],
+  "radar_counts": {
+    "confidence-review": 9,
+    "contradiction-signal": 4,
+    "open-thread": 4,
+    "queued-question": 5,
+    "total": 22
+  }
+}

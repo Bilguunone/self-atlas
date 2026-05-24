@@ -1,0 +1,52 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "share-safe",
+  "hidden_sensitive": 9,
+  "artifact": {
+    "label": "inline",
+    "characters": 74
+  },
+  "findings": [
+    {
+      "kind": "anti-taste-collision",
+      "severity": "high",
+      "message": "Artifact uses language Self Atlas already treats as taste-risky.",
+      "evidence": [
+        "generic"
+      ]
+    },
+    {
+      "kind": "weak-motion",
+      "severity": "medium",
+      "message": "No motion/rhythm/pacing language found.",
+      "evidence": []
+    },
+    {
+      "kind": "material-alignment",
+      "severity": "positive",
+      "message": "Artifact has material/emotional/tactile signals.",
+      "evidence": [
+        "export"
+      ]
+    },
+    {
+      "kind": "proof-alignment",
+      "severity": "positive",
+      "message": "Artifact includes proof-oriented language.",
+      "evidence": [
+        "proof",
+        "export"
+      ]
+    }
+  ],
+  "recommendation": "Revise before shipping; the guard found high-severity taste or proof issues.",
+  "taste_genome_counts": {
+    "taste_notes": 4,
+    "principles": 12,
+    "anti_taste": 4,
+    "references": 4,
+    "weak_spots": 3
+  }
+}

@@ -5,6 +5,7 @@ import re
 from collections import Counter
 from pathlib import Path
 
+from ..constants import WIKI_LINK_RE
 from ..models import EvidenceRef, LensSpec
 from ..vault import (
     as_list,
@@ -259,8 +260,42 @@ def note_bullets(note: dict[str, object], limit: int = 3) -> list[str]:
             break
     return useful
 
-def note_ref(note: dict[str, object], include_excerpt: bool = False) -> EvidenceRef:
-    excerpt = compact_excerpt(" ".join(note_bullets(note, 2))) if include_excerpt else ""
+def safe_note_bullets(
+    note: dict[str, object],
+    visible_notes: list[dict[str, object]],
+    include_sensitive: bool,
+    limit: int = 3,
+) -> list[str]:
+    bullets = note_bullets(note, max(limit * 4, limit))
+    if include_sensitive:
+        return bullets[:limit]
+    by_key, by_base = link_indexes(visible_notes)
+    safe = []
+    for bullet in bullets:
+        hidden_target = False
+        for match in WIKI_LINK_RE.finditer(bullet):
+            target_note, ambiguous = resolve_link_target(match.group(1), by_key, by_base)
+            if ambiguous or target_note is None:
+                hidden_target = True
+                break
+        if hidden_target:
+            continue
+        safe.append(bullet)
+        if len(safe) >= limit:
+            break
+    return safe
+
+def note_ref(
+    note: dict[str, object],
+    include_excerpt: bool = False,
+    visible_notes: list[dict[str, object]] | None = None,
+    include_sensitive: bool = True,
+) -> EvidenceRef:
+    if include_excerpt and visible_notes is not None:
+        bullets = safe_note_bullets(note, visible_notes, include_sensitive, 2)
+    else:
+        bullets = note_bullets(note, 2)
+    excerpt = compact_excerpt(" ".join(bullets)) if include_excerpt else ""
     return EvidenceRef(
         path=str(note["relative"]),
         title=str(note["title"]),

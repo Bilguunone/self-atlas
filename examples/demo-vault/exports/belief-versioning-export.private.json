@@ -1,0 +1,144 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "private",
+  "hidden_sensitive": 0,
+  "query": "export motion",
+  "lens": null,
+  "counts": {
+    "versions": 12,
+    "change_signals": 2
+  },
+  "versions": [
+    {
+      "text": "River noticed that Mira looked alive while tuning export motion and drained while writing fake onboarding copy.",
+      "date": "2026-05-21",
+      "path": "25 Love/River.md",
+      "title": "River",
+      "confidence": "inferred",
+      "sensitivity": "intimate",
+      "change_signal": null
+    },
+    {
+      "text": "The note exists to test intimate export filtering and relationship graph semantics.",
+      "date": "2026-05-21",
+      "path": "25 Love/River.md",
+      "title": "River",
+      "confidence": "inferred",
+      "sensitivity": "intimate",
+      "change_signal": null
+    },
+    {
+      "text": "This note is intimate by design and should disappear from share-safe exports.",
+      "date": "2026-05-21",
+      "path": "25 Love/River.md",
+      "title": "River",
+      "confidence": "inferred",
+      "sensitivity": "intimate",
+      "change_signal": null
+    },
+    {
+      "text": "Primary loop: collect references, tune mood, export one poster that feels personal.",
+      "date": "2026-05-21",
+      "path": "30 Work/Projects/Lumen Sketch.md",
+      "title": "Lumen Sketch",
+      "confidence": "inferred",
+      "sensitivity": "normal",
+      "change_signal": null
+    },
+    {
+      "text": "Taste guardrail: warm, specific, useful, emotional, and never generic dashboard sludge.",
+      "date": "2026-05-21",
+      "path": "30 Work/Projects/Lumen Sketch.md",
+      "title": "Lumen Sketch",
+      "confidence": "inferred",
+      "sensitivity": "normal",
+      "change_signal": null
+    },
+    {
+      "text": "The proof moment is one export that feels worth saving without apologizing for it. Source: [[90 Sources/Captures/2026-05-21-demo-answer]].",
+      "date": "2026-05-21",
+      "path": "30 Work/Projects/Lumen Sketch.md",
+      "title": "Lumen Sketch",
+      "confidence": "inferred",
+      "sensitivity": "normal",
+      "change_signal": null
+    },
+    {
+      "text": "Mira likes warm interfaces with visible craft, specific motion, and emotional texture.",
+      "date": "2026-05-21",
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "confidence": "inferred",
+      "sensitivity": "normal",
+      "change_signal": null
+    },
+    {
+      "text": "Mira rejects generic dashboard polish when it has no real point of view.",
+      "date": "2026-05-21",
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "confidence": "inferred",
+      "sensitivity": "normal",
+      "change_signal": null
+    },
+    {
+      "text": "The Lumen Sketch export should feel tactile, emotional, useful, and not embarrassed by being pretty.",
+      "date": "2026-05-21",
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "confidence": "inferred",
+      "sensitivity": "normal",
+      "change_signal": null
+    },
+    {
+      "text": "In 2026, Ari helped Mira see that the project needed one strong export instead of ten half-finished directions.",
+      "date": "2026-05-21",
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "confidence": "inferred",
+      "sensitivity": "private",
+      "change_signal": "contains `instead`"
+    },
+    {
+      "text": "In 2026, River noticed Mira looked alive while tuning export motion and drained while writing fake onboarding copy.",
+      "date": "2026-05-21",
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "confidence": "inferred",
+      "sensitivity": "private",
+      "change_signal": null
+    },
+    {
+      "text": "In May 2026, the pressure around the first export became a useful craft signal instead of only stress.",
+      "date": "2026-05-21",
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "confidence": "inferred",
+      "sensitivity": "private",
+      "change_signal": "contains `instead`"
+    }
+  ],
+  "arc": {
+    "earliest": {
+      "text": "River noticed that Mira looked alive while tuning export motion and drained while writing fake onboarding copy.",
+      "date": "2026-05-21",
+      "path": "25 Love/River.md",
+      "title": "River",
+      "confidence": "inferred",
+      "sensitivity": "intimate",
+      "change_signal": null
+    },
+    "latest": {
+      "text": "In May 2026, the pressure around the first export became a useful craft signal instead of only stress.",
+      "date": "2026-05-21",
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "confidence": "inferred",
+      "sensitivity": "private",
+      "change_signal": "contains `instead`"
+    },
+    "reading": "This is a version trail, not a final belief. Check source receipts before declaring an identity law."
+  }
+}

@@ -19,11 +19,16 @@ from self_atlas_lib.experience import build_answer_context, build_pulse, build_t
 from self_atlas_lib.extraction import apply_capture_review, build_capture_review, build_extraction_plan
 from self_atlas_lib.insight import (
     build_artifact_import,
+    build_belief_versioning,
     build_contradictions,
     build_decision_council,
+    build_decision_replay,
+    build_future_self,
     build_life_lenses,
     build_open_loop_radar,
+    build_proof_engine,
     build_share_capsule,
+    build_taste_autopilot,
     build_taste_genome,
     build_time_travel,
 )
@@ -869,6 +874,138 @@ class SelfAtlasTests(unittest.TestCase):
             self.assertTrue(any("Generic" in item or "generic" in item for item in data["anti_taste"]))
             self.assertTrue(any("export" in item for item in data["proof_examples"]))
 
+    def test_proof_engine_finds_receipts_and_hides_private_sources_by_default(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "30 Work/Public Project.md",
+                note(
+                    "project",
+                    "Public Project",
+                    "## What We Know\n\n- Export proof is the artifact worth saving.",
+                    sources=("90 Sources/Captures/private-proof",),
+                ),
+            )
+            write_note(
+                vault,
+                "90 Sources/Captures/private-proof.md",
+                note("source", "private-proof", "## Raw Capture\n\nThe export proof came from a private capture.", sensitivity="private"),
+            )
+
+            safe = build_proof_engine(vault, "export proof", lens_id=None, include_sensitive=False, max_items=5)
+            private = build_proof_engine(vault, "export proof", lens_id=None, include_sensitive=True, max_items=5)
+            safe_payload = json.dumps(safe)
+            private_payload = json.dumps(private)
+
+            self.assertEqual(safe["hidden_sensitive"], 1)
+            self.assertEqual(safe["source_receipts"], [])
+            self.assertIn("Public Project", safe_payload)
+            self.assertNotIn("private-proof", safe_payload)
+            self.assertIn("90 Sources/Captures/private-proof.md", private_payload)
+            self.assertNotIn(str(vault), private_payload)
+
+    def test_belief_versioning_traces_change_signals_and_hides_sensitive_notes(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "10 Self/Beliefs.md",
+                note(
+                    "identity",
+                    "Beliefs",
+                    "## What We Know\n\n- I used to think polish mattered, but now proof matters more.",
+                ),
+            )
+            write_note(
+                vault,
+                "10 Self/Private Belief.md",
+                note("identity", "Private Belief", "## What We Know\n\n- Secret proof belief.", sensitivity="private"),
+            )
+
+            data = build_belief_versioning(vault, "proof", lens_id=None, include_sensitive=False, max_items=8)
+            payload = json.dumps(data)
+
+            self.assertEqual(data["hidden_sensitive"], 1)
+            self.assertEqual(data["counts"]["change_signals"], 1)
+            self.assertIn("explicit then-now", payload)
+            self.assertNotIn("Secret proof belief", payload)
+
+    def test_taste_autopilot_flags_generic_proofless_artifacts(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "50 Taste/Taste Profile.md",
+                note(
+                    "preference",
+                    "Taste Profile",
+                    "## Evidence\n\n- Generic dashboard sludge is anti-taste.\n- Warm tactile export proof matters.",
+                    tags=("self-atlas/taste",),
+                ),
+            )
+
+            data = build_taste_autopilot(vault, "Generic onboarding dashboard copy.", "draft", include_sensitive=False, max_items=8)
+            kinds = {item["kind"] for item in data["findings"]}
+
+            self.assertIn("anti-taste-collision", kinds)
+            self.assertIn("missing-proof", kinds)
+            self.assertEqual(data["recommendation"], "Revise before shipping; the guard found high-severity taste or proof issues.")
+
+    def test_decision_replay_returns_outcome_signals_and_questions(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "30 Work/Public Project.md",
+                note(
+                    "project",
+                    "Public Project",
+                    "## What We Know\n\n- The export decision finished with one proof artifact worth saving.",
+                ),
+            )
+
+            data = build_decision_replay(vault, "export decision", include_sensitive=False, max_items=5)
+            payload = json.dumps(data)
+
+            self.assertTrue(data["receipts"])
+            self.assertTrue(any("proof artifact" in item for item in data["outcome_signals"]))
+            self.assertIn("What did you actually choose?", data["calibration_questions"])
+            self.assertNotIn(str(vault), payload)
+
+    def test_future_self_outputs_trajectories_without_absolute_paths(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "30 Work/Public Project.md",
+                note("project", "Public Project", "## What We Know\n\n- Export proof makes the project feel real."),
+            )
+            write_note(
+                vault,
+                "50 Taste/Taste Profile.md",
+                note(
+                    "preference",
+                    "Taste Profile",
+                    "## Evidence\n\n- Generic dashboard sludge is anti-taste.\n- Warm tactile export proof matters.",
+                    tags=("self-atlas/taste",),
+                ),
+            )
+            write_note(
+                vault,
+                "00 System/Question Queue.md",
+                note("question", "Question Queue", "## Next Questions\n\n- What proof would make [[30 Work/Public Project]] real?"),
+            )
+
+            data = build_future_self(vault, "export proof", horizon="next month", include_sensitive=False, max_items=6)
+            names = {item["name"] for item in data["trajectories"]}
+            payload = json.dumps(data)
+
+            self.assertIn("Proof-First Path", names)
+            self.assertIn("Drift Risk", names)
+            self.assertEqual(data["horizon"], "next month")
+            self.assertNotIn(str(vault), payload)
+
     def test_new_insight_commands_have_cli_smoke_paths(self) -> None:
         with self.make_vault() as tmp_name:
             vault = Path(tmp_name)
@@ -894,6 +1031,11 @@ class SelfAtlasTests(unittest.TestCase):
                 ["time-travel", "--vault", str(vault), "--json"],
                 ["share-capsule", "--vault", str(vault), "--query", "export", "--json"],
                 ["taste-genome", "--vault", str(vault), "--json"],
+                ["proof-engine", "--vault", str(vault), "--claim", "Export motion proof", "--json"],
+                ["belief-versioning", "--vault", str(vault), "--query", "export", "--json"],
+                ["taste-autopilot", "--vault", str(vault), "--text", "Generic onboarding dashboard copy.", "--json"],
+                ["decision-replay", "--vault", str(vault), "--decision", "Export motion", "--json"],
+                ["future-self", "--vault", str(vault), "--query", "export", "--json"],
             ]
 
             for command in commands:

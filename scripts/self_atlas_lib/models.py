@@ -325,6 +325,95 @@ class TasteGenomeReport:
         }
 
 @dataclass(frozen=True)
+class ProofSignal:
+    claim: str
+    strength: str
+    score: int
+    lens: str | None
+    evidence: tuple[EvidenceRef, ...]
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "claim": self.claim,
+            "strength": self.strength,
+            "score": self.score,
+            "lens": self.lens,
+            "evidence": [item.to_json() for item in self.evidence],
+        }
+
+@dataclass(frozen=True)
+class BeliefVersion:
+    text: str
+    date: str
+    path: str
+    title: str
+    confidence: str
+    sensitivity: str
+    change_signal: str | None = None
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "text": self.text,
+            "date": self.date,
+            "path": self.path,
+            "title": self.title,
+            "confidence": self.confidence,
+            "sensitivity": self.sensitivity,
+            "change_signal": self.change_signal,
+        }
+
+@dataclass(frozen=True)
+class TasteGuardFinding:
+    kind: str
+    severity: str
+    message: str
+    evidence: tuple[str, ...]
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "kind": self.kind,
+            "severity": self.severity,
+            "message": self.message,
+            "evidence": list(self.evidence),
+        }
+
+@dataclass(frozen=True)
+class DecisionReplayReport:
+    decision: str
+    mode: str
+    hidden_sensitive: int
+    receipts: tuple[EvidenceRef, ...]
+    outcome_signals: tuple[str, ...]
+    calibration_questions: tuple[str, ...]
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "decision": self.decision,
+            "mode": self.mode,
+            "hidden_sensitive": self.hidden_sensitive,
+            "receipts": [item.to_json() for item in self.receipts],
+            "outcome_signals": list(self.outcome_signals),
+            "calibration_questions": list(self.calibration_questions),
+        }
+
+@dataclass(frozen=True)
+class FutureTrajectory:
+    name: str
+    likelihood: str
+    description: str
+    supporting_signals: tuple[str, ...]
+    suggested_next_move: str
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "name": self.name,
+            "likelihood": self.likelihood,
+            "description": self.description,
+            "supporting_signals": list(self.supporting_signals),
+            "suggested_next_move": self.suggested_next_move,
+        }
+
+@dataclass(frozen=True)
 class MemoryCandidate:
     kind: str
     text: str

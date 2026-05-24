@@ -34,6 +34,11 @@ Useful demos:
 - `python3 scripts/self_atlas.py time-travel --vault examples/demo-vault --include-sensitive`
 - `python3 scripts/self_atlas.py share-capsule --vault examples/demo-vault --query "export motion" --lens taste --json`
 - `python3 scripts/self_atlas.py taste-genome --vault examples/demo-vault`
+- `python3 scripts/self_atlas.py proof-engine --vault examples/demo-vault --claim "Lumen Sketch proof moment is export motion" --include-sensitive`
+- `python3 scripts/self_atlas.py belief-versioning --vault examples/demo-vault --query "export motion" --include-sensitive`
+- `python3 scripts/self_atlas.py taste-autopilot --vault examples/demo-vault --text "A generic productivity dashboard with onboarding copy and no export proof."`
+- `python3 scripts/self_atlas.py decision-replay --vault examples/demo-vault --decision "export motion" --include-sensitive`
+- `python3 scripts/self_atlas.py future-self --vault examples/demo-vault --query "Lumen Sketch" --include-sensitive`
 - `python3 scripts/self_atlas.py artifact-import --vault examples/demo-vault --source https://example.com/lumen-sketch-reference --domain taste`
 - `python3 scripts/self_atlas.py capture-review --vault examples/demo-vault --source "90 Sources/Captures/2026-05-21-demo-answer"`
 - `python3 scripts/self_atlas.py apply-review --vault examples/demo-vault --source "90 Sources/Captures/2026-05-21-demo-answer"`

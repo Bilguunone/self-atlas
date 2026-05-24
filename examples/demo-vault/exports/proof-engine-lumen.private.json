@@ -1,0 +1,90 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "private",
+  "hidden_sensitive": 0,
+  "claim": {
+    "claim": "Lumen Sketch proof moment is export motion",
+    "strength": "strong",
+    "score": 48,
+    "lens": null,
+    "evidence": [
+      {
+        "path": "30 Work/Projects/Lumen Sketch.md",
+        "title": "Lumen Sketch",
+        "type": "project",
+        "sensitivity": "normal",
+        "confidence": "inferred",
+        "excerpt": "Lumen Sketch is a fictional creative tool about turning mood boards into small visual posters. The proof moment is one export that feels worth saving without apologizing for it. Source: [[90 Sources/Captures/2026-05-21-demo-answer]]."
+      },
+      {
+        "path": "50 Taste/Taste Profile.md",
+        "title": "Taste Profile",
+        "type": "preference",
+        "sensitivity": "normal",
+        "confidence": "inferred",
+        "excerpt": "Mira likes warm interfaces with visible craft, specific motion, and emotional texture. The Lumen Sketch export should feel tactile, emotional, useful, and not embarrassed by being pretty."
+      },
+      {
+        "path": "70 Timeline/Public Milestones.md",
+        "title": "Public Milestones",
+        "type": "index",
+        "sensitivity": "normal",
+        "confidence": "inferred",
+        "excerpt": "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments. In May 2026, the first useful export made the project feel like a real creative tool instead of a folder of almosts."
+      },
+      {
+        "path": "60 Interests/Music Identity.md",
+        "title": "Music Identity",
+        "type": "preference",
+        "sensitivity": "normal",
+        "confidence": "inferred",
+        "excerpt": "The music reference is not decoration; it describes pacing, emotional temperature, and motion feel. Lumen Sketch should borrow that feeling: tactile, memorable, and a little cinematic without becoming cheesy."
+      },
+      {
+        "path": "70 Timeline/Life Timeline.md",
+        "title": "Life Timeline",
+        "type": "index",
+        "sensitivity": "private",
+        "confidence": "inferred",
+        "excerpt": "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments. In 2026, Ari helped Mira see that the project needed one strong export instead of ten half-finished directions."
+      },
+      {
+        "path": "25 Love/River.md",
+        "title": "River",
+        "type": "person",
+        "sensitivity": "intimate",
+        "confidence": "inferred",
+        "excerpt": "The note exists to test intimate export filtering and relationship graph semantics. River noticed that Mira looked alive while tuning export motion and drained while writing fake onboarding copy."
+      },
+      {
+        "path": "80 Reflections/Pressure and Craft.md",
+        "title": "Pressure and Craft",
+        "type": "pattern",
+        "sensitivity": "private",
+        "confidence": "inferred",
+        "excerpt": "The good pressure is not panic. It is the moment where the work has to become real enough to save, show, or use. What kind of deadline or proof moment creates momentum without turning the work dead?"
+      },
+      {
+        "path": "10 Self/Identity.md",
+        "title": "Identity",
+        "type": "identity",
+        "sensitivity": "private",
+        "confidence": "inferred",
+        "excerpt": "Warmth matters, but warmth without proof turns into decoration."
+      }
+    ]
+  },
+  "source_receipts": [
+    {
+      "path": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "title": "2026-05-21 Demo Answer",
+      "type": "source",
+      "sensitivity": "private",
+      "confidence": "confirmed",
+      "excerpt": ""
+    }
+  ],
+  "review_flags": []
+}

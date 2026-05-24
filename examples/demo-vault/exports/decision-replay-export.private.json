@@ -1,0 +1,74 @@
+{
+  "decision": "export motion",
+  "mode": "private",
+  "hidden_sensitive": 0,
+  "receipts": [
+    {
+      "path": "25 Love/River.md",
+      "title": "River",
+      "type": "person",
+      "sensitivity": "intimate",
+      "confidence": "inferred",
+      "excerpt": "River is the fictional demo relationship note. The note exists to test intimate export filtering and relationship graph semantics."
+    },
+    {
+      "path": "30 Work/Projects/Lumen Sketch.md",
+      "title": "Lumen Sketch",
+      "type": "project",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "excerpt": "Lumen Sketch is a fictional creative tool about turning mood boards into small visual posters. The proof moment is one export that feels worth saving without apologizing for it. Source: [[90 Sources/Captures/2026-05-2..."
+    },
+    {
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "type": "preference",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "excerpt": "Mira likes warm interfaces with visible craft, specific motion, and emotional texture. Mira rejects generic dashboard polish when it has no real point of view."
+    },
+    {
+      "path": "60 Interests/Music Identity.md",
+      "title": "Music Identity",
+      "type": "preference",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "excerpt": "Mira keeps returning to warm, slow, dramatic, replayable music while shaping visual tools. The music reference is not decoration; it describes pacing, emotional temperature, and motion feel."
+    },
+    {
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "type": "index",
+      "sensitivity": "private",
+      "confidence": "inferred",
+      "excerpt": "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments. In 2026, Ari helped Mira see that the project needed one strong export instead of ten half-finished directions."
+    },
+    {
+      "path": "70 Timeline/Public Milestones.md",
+      "title": "Public Milestones",
+      "type": "index",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "excerpt": "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments. In May 2026, the first useful export made the project feel like a real creative tool instead of a folder of almosts."
+    }
+  ],
+  "outcome_signals": [
+    "The proof moment is one export that feels worth saving without apologizing for it. Source: [[90 Sources/Captures/2026-05-21-demo-answer]].",
+    "Taste guardrail: warm, specific, useful, emotional, and never generic dashboard sludge.",
+    "Mira rejects generic dashboard polish when it has no real point of view.",
+    "The Lumen Sketch export should feel tactile, emotional, useful, and not embarrassed by being pretty.",
+    "Feature lists that do not change the user’s feeling or artifact.",
+    "Visual polish with no proof moment underneath it.",
+    "In 2026, Ari helped Mira see that the project needed one strong export instead of ten half-finished directions.",
+    "In May 2026, the pressure around the first export became a useful craft signal instead of only stress."
+  ],
+  "calibration_questions": [
+    "What did you actually choose?",
+    "What happened after the choice, in concrete artifact or relationship terms?",
+    "What did the original decision brief overvalue or miss?",
+    "What should Self Atlas remember for the next similar decision?"
+  ],
+  "vault": {
+    "name": "demo-vault"
+  }
+}

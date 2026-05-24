@@ -17,11 +17,16 @@ from .extraction import build_extraction_plan, print_apply_capture_review, print
 from .insight import (
     available_lens_ids,
     print_artifact_import,
+    print_belief_versioning,
     print_contradictions,
     print_decision_council,
+    print_decision_replay,
+    print_future_self,
     print_life_lenses,
     print_open_loop_radar,
+    print_proof_engine,
     print_share_capsule,
+    print_taste_autopilot,
     print_taste_genome,
     print_time_travel,
 )
@@ -176,6 +181,46 @@ def main(argv: list[str] | None = None) -> int:
     taste_genome_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
     taste_genome_parser.add_argument("--max-items", type=int, default=12, help="Maximum rows per section")
     taste_genome_parser.add_argument("--json", action="store_true", dest="json_output", help="Print taste genome as JSON")
+
+    proof_engine_parser = subparsers.add_parser("proof-engine", help="Find receipt-backed proof for a claim")
+    proof_engine_parser.add_argument("--vault", required=True, type=Path)
+    proof_engine_parser.add_argument("--claim", required=True, help="Claim to prove from graph evidence")
+    proof_engine_parser.add_argument("--lens", choices=available_lens_ids(), default=None, help="Optional life lens")
+    proof_engine_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    proof_engine_parser.add_argument("--max-items", type=int, default=8, help="Maximum receipts")
+    proof_engine_parser.add_argument("--json", action="store_true", dest="json_output", help="Print proof report as JSON")
+
+    belief_versioning_parser = subparsers.add_parser("belief-versioning", help="Trace how a belief or preference appears to change over time")
+    belief_versioning_parser.add_argument("--vault", required=True, type=Path)
+    belief_versioning_parser.add_argument("--query", default="", help="Belief, topic, or phrase to trace")
+    belief_versioning_parser.add_argument("--lens", choices=available_lens_ids(), default=None, help="Optional life lens")
+    belief_versioning_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    belief_versioning_parser.add_argument("--max-items", type=int, default=12, help="Maximum belief versions")
+    belief_versioning_parser.add_argument("--json", action="store_true", dest="json_output", help="Print belief versions as JSON")
+
+    taste_autopilot_parser = subparsers.add_parser("taste-autopilot", help="Check an artifact draft against the Taste Genome")
+    taste_autopilot_parser.add_argument("--vault", required=True, type=Path)
+    taste_autopilot_input = taste_autopilot_parser.add_mutually_exclusive_group(required=True)
+    taste_autopilot_input.add_argument("--text", default=None, help="Inline artifact text to review")
+    taste_autopilot_input.add_argument("--file", type=Path, default=None, help="Text file to review")
+    taste_autopilot_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    taste_autopilot_parser.add_argument("--max-items", type=int, default=12, help="Maximum Taste Genome rows to inspect")
+    taste_autopilot_parser.add_argument("--json", action="store_true", dest="json_output", help="Print guard report as JSON")
+
+    decision_replay_parser = subparsers.add_parser("decision-replay", help="Replay a prior decision against later graph receipts")
+    decision_replay_parser.add_argument("--vault", required=True, type=Path)
+    decision_replay_parser.add_argument("--decision", required=True, help="Decision, project, or choice to replay")
+    decision_replay_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    decision_replay_parser.add_argument("--max-items", type=int, default=8, help="Maximum receipts and outcome signals")
+    decision_replay_parser.add_argument("--json", action="store_true", dest="json_output", help="Print replay as JSON")
+
+    future_self_parser = subparsers.add_parser("future-self", help="Simulate likely trajectories from current graph patterns")
+    future_self_parser.add_argument("--vault", required=True, type=Path)
+    future_self_parser.add_argument("--query", default="", help="Optional focus topic")
+    future_self_parser.add_argument("--horizon", default="next chapter", help="Human-readable time horizon")
+    future_self_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    future_self_parser.add_argument("--max-items", type=int, default=8, help="Maximum signals")
+    future_self_parser.add_argument("--json", action="store_true", dest="json_output", help="Print simulation as JSON")
 
     find_gaps_parser = subparsers.add_parser("find-gaps", help="Report thin areas, queued questions, and open threads")
     find_gaps_parser.add_argument("--vault", required=True, type=Path)
@@ -346,6 +391,16 @@ def main(argv: list[str] | None = None) -> int:
         print_share_capsule(args.vault, args.title, args.query, args.lens, args.include_sensitive, args.yes, max(1, args.max_notes), args.out, args.json_output)
     elif args.command == "taste-genome":
         print_taste_genome(args.vault, args.include_sensitive, max(1, args.max_items), args.json_output)
+    elif args.command == "proof-engine":
+        print_proof_engine(args.vault, args.claim, args.lens, args.include_sensitive, max(1, args.max_items), args.json_output)
+    elif args.command == "belief-versioning":
+        print_belief_versioning(args.vault, args.query, args.lens, args.include_sensitive, max(1, args.max_items), args.json_output)
+    elif args.command == "taste-autopilot":
+        print_taste_autopilot(args.vault, args.text, args.file, args.include_sensitive, max(1, args.max_items), args.json_output)
+    elif args.command == "decision-replay":
+        print_decision_replay(args.vault, args.decision, args.include_sensitive, max(1, args.max_items), args.json_output)
+    elif args.command == "future-self":
+        print_future_self(args.vault, args.query, args.horizon, args.include_sensitive, max(1, args.max_items), args.json_output)
     elif args.command == "find-gaps":
         find_gaps(args.vault)
     elif args.command == "enrich-thin-notes":
