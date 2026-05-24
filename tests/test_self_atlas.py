@@ -14,8 +14,9 @@ PLUGIN_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PLUGIN_ROOT / "scripts"))
 
 from public_release_check import scan_files
-from self_atlas_lib.export import build_export_graph
-from self_atlas_lib.extraction import build_extraction_plan
+from self_atlas_lib.export import build_export_graph, build_export_preview
+from self_atlas_lib.experience import build_answer_context, build_pulse, build_thread_walk
+from self_atlas_lib.extraction import apply_capture_review, build_capture_review, build_extraction_plan
 from self_atlas_lib.init import init_vault
 from self_atlas_lib.questions import build_question_refresh, refresh_questions
 from self_atlas_lib.timeline import build_timeline
@@ -228,6 +229,215 @@ class SelfAtlasTests(unittest.TestCase):
             }
 
             self.assertEqual(relationships["20 People/Collaborators/Ada.md"]["kind"], "collaborator")
+
+    def test_pulse_surfaces_queue_threads_unextracted_sources_and_hides_sensitive_by_default(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "00 System/Open Threads.md",
+                note(
+                    "question",
+                    "Open Threads",
+                    "## Active Threads\n\n- Clarify the proof moment for [[30 Work/Public Project]].",
+                    sensitivity="private",
+                ),
+            )
+            write_note(
+                vault,
+                "00 System/Question Queue.md",
+                note(
+                    "question",
+                    "Question Queue",
+                    "## Next Questions\n\n- What makes [[30 Work/Public Project]] worth saving?",
+                    sensitivity="private",
+                ),
+            )
+            write_note(
+                vault,
+                "30 Work/Public Project.md",
+                note("project", "Public Project", "## What We Know\n\n- It needs a proof moment."),
+            )
+            write_note(
+                vault,
+                "25 Love/River.md",
+                note("person", "River", "## What We Know\n\n- Private.", sensitivity="intimate"),
+            )
+            write_note(
+                vault,
+                "90 Sources/Captures/fresh.md",
+                note("source", "fresh", "## Raw Capture\n\nThis source has not been extracted yet."),
+            )
+
+            safe_pulse = build_pulse(vault, include_sensitive=False, max_items=5)
+            private_pulse = build_pulse(vault, include_sensitive=True, max_items=5)
+
+            self.assertEqual(safe_pulse["counts"]["hidden_sensitive"], 3)
+            self.assertEqual(safe_pulse["counts"]["queued_questions"], 0)
+            self.assertEqual(safe_pulse["counts"]["open_threads"], 0)
+            self.assertEqual(safe_pulse["counts"]["unextracted_sources"], 1)
+            self.assertEqual(safe_pulse["unextracted_sources"][0]["path"], "90 Sources/Captures/fresh.md")
+            self.assertEqual(private_pulse["counts"]["queued_questions"], 1)
+            self.assertEqual(private_pulse["counts"]["open_threads"], 1)
+
+    def test_thread_walk_starts_from_query_and_follows_links(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "30 Work/Public Project.md",
+                note(
+                    "project",
+                    "Public Project",
+                    "## What We Know\n\n- The proof moment links to [[50 Taste/Taste Profile]].",
+                    links=("[[50 Taste/Taste Profile]]",),
+                ),
+            )
+            write_note(
+                vault,
+                "50 Taste/Taste Profile.md",
+                note("preference", "Taste Profile", "## Evidence\n\n- Warmth, motion, and proof over decorative sludge."),
+            )
+
+            walk = build_thread_walk(vault, query="proof", include_sensitive=False, depth=2, max_notes=6)
+            paths = {item["path"] for item in walk["items"]}
+
+            self.assertIn("30 Work/Public Project.md", paths)
+            self.assertIn("50 Taste/Taste Profile.md", paths)
+            self.assertTrue(walk["edges"])
+
+    def test_capture_review_marks_sensitive_source_as_needing_consent(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "90 Sources/Captures/private.md",
+                note(
+                    "source",
+                    "private",
+                    textwrap.dedent(
+                        """
+                        ## Raw Capture
+
+                        River gave Mira feedback after the prototype demo.
+
+                        ## Extracted Notes
+
+                        - [[25 Love/River]] gave Mira feedback after the prototype demo.
+                        """
+                    ),
+                    sensitivity="intimate",
+                ),
+            )
+
+            review = build_capture_review(build_extraction_plan(vault, "90 Sources/Captures/private"))
+
+            self.assertEqual(review["status"], "needs_consent")
+            self.assertEqual(review["counts"]["durable_note_patches"], 1)
+            self.assertTrue(review["consent_notes"])
+
+    def test_apply_review_dry_run_consent_gate_and_apply_writes_reviewed_patches(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "30 Work/Public Project.md",
+                note("project", "Public Project", "## What We Know\n\n- Existing fact."),
+            )
+            write_note(
+                vault,
+                "00 System/Question Queue.md",
+                note("question", "Question Queue", "## Next Questions\n\n", sensitivity="private"),
+            )
+            write_note(
+                vault,
+                "00 System/Source Log.md",
+                note("index", "Source Log", "## Captures\n\n", sensitivity="private"),
+            )
+            write_note(
+                vault,
+                "90 Sources/Captures/private.md",
+                note(
+                    "source",
+                    "private",
+                    textwrap.dedent(
+                        """
+                        ## Raw Capture
+
+                        Mira proved the project with one save-worthy export.
+
+                        ## Extracted Notes
+
+                        - [[30 Work/Public Project]] had a proof moment: one save-worthy export.
+
+                        ## Follow-Up Threads
+
+                        - What did the export look like?
+                        """
+                    ),
+                    sensitivity="private",
+                ),
+            )
+
+            preview = apply_capture_review(vault, "90 Sources/Captures/private", apply=False, yes=False)
+            self.assertEqual(preview["counts"]["patches_to_append"], 2)
+            with self.assertRaises(SystemExit):
+                apply_capture_review(vault, "90 Sources/Captures/private", apply=True, yes=False)
+
+            result = apply_capture_review(vault, "90 Sources/Captures/private", apply=True, yes=True)
+            project_text = (vault / "30 Work/Public Project.md").read_text(encoding="utf-8")
+            queue_text = (vault / "00 System/Question Queue.md").read_text(encoding="utf-8")
+            source_log_text = (vault / "00 System/Source Log.md").read_text(encoding="utf-8")
+
+            self.assertEqual(result["counts"]["patches_appended"], 2)
+            self.assertIn("one save-worthy export", project_text)
+            self.assertIn("sources:", project_text)
+            self.assertIn("90 Sources/Captures/private", project_text)
+            self.assertIn("What did the export look like?", queue_text)
+            self.assertIn("Applied review", source_log_text)
+
+    def test_answer_context_hides_private_source_receipts_in_safe_mode(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "30 Work/Public Project.md",
+                note(
+                    "project",
+                    "Public Project",
+                    "## What We Know\n\n- The proof moment was one export.",
+                    sources=("90 Sources/Captures/private-source",),
+                ),
+            )
+            write_note(
+                vault,
+                "90 Sources/Captures/private-source.md",
+                note("source", "private-source", "## Raw Capture\n\nPrivate receipt.", sensitivity="private"),
+            )
+
+            safe_context = build_answer_context(vault, "proof export", include_sensitive=False, max_notes=5)
+            private_context = build_answer_context(vault, "proof export", include_sensitive=True, max_notes=5)
+
+            self.assertEqual(safe_context["counts"]["source_receipts"], 0)
+            self.assertEqual(safe_context["notes"][0]["sources"], [])
+            self.assertEqual(private_context["counts"]["source_receipts"], 1)
+
+    def test_export_preview_firewall_reports_hidden_sensitive_and_body_risk(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "25 Love/River.md",
+                note("person", "River", "## What We Know\n\n- Private.", sensitivity="intimate"),
+            )
+
+            safe_preview = build_export_preview(vault, include_body=False, include_sensitive=False, include_templates=False)
+            private_preview = build_export_preview(vault, include_body=True, include_sensitive=True, include_templates=False)
+
+            self.assertEqual(safe_preview["counts"]["hidden_sensitive"], 1)
+            self.assertEqual(safe_preview["hidden_sensitive_notes"][0]["path"], "25 Love/River.md")
+            self.assertIn("Sensitive notes are included", " ".join(private_preview["danger_flags"]))
+            self.assertIn("Full note bodies", " ".join(private_preview["danger_flags"]))
 
     def test_frontmatter_parser_handles_current_list_shapes(self) -> None:
         frontmatter, _ = parse_frontmatter_text(

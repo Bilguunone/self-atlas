@@ -19,6 +19,7 @@ tags:
   - self-atlas/love
 links:
   - "[[00 System/Home]]"
+  - "[[30 Work/Projects/Lumen Sketch]]"
 sources:
   - "90 Sources/Captures/2026-05-21-demo-answer"
 ---
@@ -29,3 +30,9 @@ sources:
 
 - River is the fictional demo relationship note.
 - The note exists to test intimate export filtering and relationship graph semantics.
+- River noticed that Mira looked alive while tuning export motion and drained while writing fake onboarding copy.
+
+## Care Signal
+
+- River pays attention to energy, not just output.
+- This note is intimate by design and should disappear from share-safe exports.

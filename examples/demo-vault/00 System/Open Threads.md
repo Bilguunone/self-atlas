@@ -21,3 +21,5 @@ sources: []
 
 - Clarify the April prototype timeline for [[30 Work/Projects/Lumen Sketch]].
 - Add one concrete scene to [[20 People/Friends/Ari]].
+- Walk the thread from [[60 Interests/Music Identity]] to [[50 Taste/Taste Profile]] and export motion.
+- Decide what kind of pressure belongs in [[80 Reflections/Pressure and Craft]] without turning the work dead.

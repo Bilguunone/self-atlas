@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "share-safe",
+  "options": {
+    "include_body": false,
+    "include_sensitive": false,
+    "include_templates": false
+  },
+  "counts": {
+    "total_notes": 16,
+    "export_nodes": 7,
+    "export_edges": 23,
+    "hidden_sensitive": 9,
+    "hidden_templates": 0,
+    "omitted_edges": 16,
+    "missing_edges": 0,
+    "broken_links": 0,
+    "warnings": 0,
+    "relationship_nodes": 0,
+    "source_nodes": 0
+  },
+  "sensitivity_counts": {
+    "intimate": 1,
+    "normal": 7,
+    "private": 8
+  },
+  "hidden_sensitive_notes": [
+    {
+      "path": "00 System/Open Threads.md",
+      "title": "Open Threads",
+      "sensitivity": "private",
+      "type": "question"
+    },
+    {
+      "path": "00 System/Question Queue.md",
+      "title": "Question Queue",
+      "sensitivity": "private",
+      "type": "question"
+    },
+    {
+      "path": "00 System/Source Log.md",
+      "title": "Source Log",
+      "sensitivity": "private",
+      "type": "index"
+    },
+    {
+      "path": "10 Self/Identity.md",
+      "title": "Identity",
+      "sensitivity": "private",
+      "type": "identity"
+    },
+    {
+      "path": "20 People/Friends/Ari.md",
+      "title": "Ari",
+      "sensitivity": "private",
+      "type": "person"
+    },
+    {
+      "path": "25 Love/River.md",
+      "title": "River",
+      "sensitivity": "intimate",
+      "type": "person"
+    },
+    {
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "sensitivity": "private",
+      "type": "index"
+    },
+    {
+      "path": "80 Reflections/Pressure and Craft.md",
+      "title": "Pressure and Craft",
+      "sensitivity": "private",
+      "type": "pattern"
+    },
+    {
+      "path": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "title": "2026-05-21 Demo Answer",
+      "sensitivity": "private",
+      "type": "source"
+    }
+  ],
+  "warnings": [],
+  "danger_flags": [
+    "Some edges were omitted because their targets are hidden or unsafe."
+  ]
+}

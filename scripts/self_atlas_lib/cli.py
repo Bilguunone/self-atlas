@@ -11,7 +11,9 @@ from .constants import (
     MAX_QUESTION_BATCH,
 )
 from .export import export_json
-from .extraction import build_extraction_plan, print_extraction_plan
+from .export import print_export_preview
+from .experience import print_answer_context, print_pulse, print_thread_walk
+from .extraction import build_extraction_plan, print_apply_capture_review, print_capture_review, print_extraction_plan
 from .init import ensure_vault, init_vault
 from .migrations import migrate_app_fields, migrate_relationship_fields, migrate_source_fields
 from .questions import (
@@ -76,6 +78,27 @@ def main(argv: list[str] | None = None) -> int:
     audit_parser = subparsers.add_parser("audit", help="Report overall vault health without changing files")
     audit_parser.add_argument("--vault", required=True, type=Path)
 
+    pulse_parser = subparsers.add_parser("pulse", help="Show the current graph pulse: threads, questions, captures, gaps, and next moves")
+    pulse_parser.add_argument("--vault", required=True, type=Path)
+    pulse_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes in the pulse")
+    pulse_parser.add_argument("--max-items", type=int, default=8, help="Maximum rows per pulse section")
+    pulse_parser.add_argument("--json", action="store_true", dest="json_output", help="Print pulse as JSON")
+
+    thread_walk_parser = subparsers.add_parser("thread-walk", help="Walk one topic across linked notes without changing files")
+    thread_walk_parser.add_argument("--vault", required=True, type=Path)
+    thread_walk_parser.add_argument("--query", required=True, help="Project, person, value, taste word, or thread to walk")
+    thread_walk_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    thread_walk_parser.add_argument("--depth", type=int, default=2, help="Link depth to walk from matched notes")
+    thread_walk_parser.add_argument("--max-notes", type=int, default=12, help="Maximum notes to include")
+    thread_walk_parser.add_argument("--json", action="store_true", dest="json_output", help="Print thread walk as JSON")
+
+    answer_context_parser = subparsers.add_parser("answer-context", help="Return receipt-backed context for answering a query without changing files")
+    answer_context_parser.add_argument("--vault", required=True, type=Path)
+    answer_context_parser.add_argument("--query", required=True, help="Question or topic to gather receipts for")
+    answer_context_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    answer_context_parser.add_argument("--max-notes", type=int, default=8, help="Maximum matching notes and receipts to include")
+    answer_context_parser.add_argument("--json", action="store_true", dest="json_output", help="Print context as JSON")
+
     find_gaps_parser = subparsers.add_parser("find-gaps", help="Report thin areas, queued questions, and open threads")
     find_gaps_parser.add_argument("--vault", required=True, type=Path)
 
@@ -104,6 +127,19 @@ def main(argv: list[str] | None = None) -> int:
     extract_plan_parser.add_argument("--vault", required=True, type=Path)
     extract_plan_parser.add_argument("--source", required=True, help="Source note path, with or without .md")
     extract_plan_parser.add_argument("--json", action="store_true", dest="json_output", help="Print the plan as JSON")
+
+    capture_review_parser = subparsers.add_parser("capture-review", help="Review proposed memory writes for one source capture without changing files")
+    capture_review_parser.add_argument("--vault", required=True, type=Path)
+    capture_review_parser.add_argument("--source", required=True, help="Source note path, with or without .md")
+    capture_review_parser.add_argument("--json", action="store_true", dest="json_output", help="Print the review as JSON")
+
+    apply_review_parser = subparsers.add_parser("apply-review", help="Apply an approved capture review to durable notes")
+    apply_review_parser.add_argument("--vault", required=True, type=Path)
+    apply_review_parser.add_argument("--source", required=True, help="Source note path, with or without .md")
+    apply_review_parser.add_argument("--apply", action="store_true", help="Write changes. Defaults to dry-run.")
+    apply_review_parser.add_argument("--yes", action="store_true", help="Confirm applying sensitive/private capture material")
+    apply_review_parser.add_argument("--backup-dir", type=Path, default=None, help="Backup directory for originals when applying")
+    apply_review_parser.add_argument("--json", action="store_true", dest="json_output", help="Print result as JSON")
 
     validate_links_parser = subparsers.add_parser("validate-links", help="Check wiki links and required frontmatter")
     validate_links_parser.add_argument("--vault", required=True, type=Path)
@@ -189,6 +225,13 @@ def main(argv: list[str] | None = None) -> int:
     export_json_parser.add_argument("--include-templates", action="store_true", help="Include template notes in the graph export")
     export_json_parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON")
 
+    export_preview_parser = subparsers.add_parser("export-preview", help="Preview graph export privacy shape without writing files")
+    export_preview_parser.add_argument("--vault", required=True, type=Path)
+    export_preview_parser.add_argument("--include-body", action="store_true", help="Preview including full note body text")
+    export_preview_parser.add_argument("--include-sensitive", action="store_true", help="Preview including private, health, financial, and intimate notes")
+    export_preview_parser.add_argument("--include-templates", action="store_true", help="Preview including template notes")
+    export_preview_parser.add_argument("--json", action="store_true", dest="json_output", help="Print preview as JSON")
+
     args = parser.parse_args(argv)
 
     if args.command == "init":
@@ -203,6 +246,12 @@ def main(argv: list[str] | None = None) -> int:
         search(args.vault, args.query)
     elif args.command == "audit":
         audit(args.vault)
+    elif args.command == "pulse":
+        print_pulse(args.vault, args.include_sensitive, args.max_items, args.json_output)
+    elif args.command == "thread-walk":
+        print_thread_walk(args.vault, args.query, args.include_sensitive, max(0, args.depth), max(1, args.max_notes), args.json_output)
+    elif args.command == "answer-context":
+        print_answer_context(args.vault, args.query, args.include_sensitive, max(1, args.max_notes), args.json_output)
     elif args.command == "find-gaps":
         find_gaps(args.vault)
     elif args.command == "enrich-thin-notes":
@@ -213,6 +262,10 @@ def main(argv: list[str] | None = None) -> int:
         refresh_questions(args.vault, args.count, args.mode, args.with_examples, args.apply, args.seed)
     elif args.command == "extract-plan":
         print_extraction_plan(build_extraction_plan(args.vault, args.source), args.json_output)
+    elif args.command == "capture-review":
+        print_capture_review(build_extraction_plan(args.vault, args.source), args.json_output)
+    elif args.command == "apply-review":
+        print_apply_capture_review(args.vault, args.source, args.apply, args.yes, args.backup_dir, args.json_output)
     elif args.command == "validate-links":
         print_validation_report(args.vault)
     elif args.command == "confidence-report":
@@ -251,4 +304,6 @@ def main(argv: list[str] | None = None) -> int:
         exclude_body = args.exclude_body or not args.include_body
         exclude_sensitive = args.exclude_sensitive or not args.include_sensitive
         export_json(args.vault, args.out, exclude_body, exclude_sensitive, args.pretty, args.include_templates)
+    elif args.command == "export-preview":
+        print_export_preview(args.vault, args.include_body, args.include_sensitive, args.include_templates, args.json_output)
     return 0

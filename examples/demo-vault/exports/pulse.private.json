@@ -1,0 +1,180 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "private",
+  "counts": {
+    "notes": 16,
+    "all_notes": 16,
+    "hidden_sensitive": 0,
+    "source_notes": 1,
+    "queued_questions": 5,
+    "open_threads": 4,
+    "unextracted_sources": 0,
+    "thin_notes": 9,
+    "uncertain_notes": 9,
+    "broken_links": 0
+  },
+  "open_threads": [
+    "Clarify the April prototype timeline for [[30 Work/Projects/Lumen Sketch]].",
+    "Add one concrete scene to [[20 People/Friends/Ari]].",
+    "Walk the thread from [[60 Interests/Music Identity]] to [[50 Taste/Taste Profile]] and export motion.",
+    "Decide what kind of pressure belongs in [[80 Reflections/Pressure and Craft]] without turning the work dead."
+  ],
+  "queued_questions": [
+    "What exact date did Mira start the Lumen Sketch prototype, and what made it feel real enough to save?",
+    "Which scene with [[20 People/Friends/Ari]] best explains the friendship instead of only labeling it?",
+    "What specific visual reference should shape the next [[30 Work/Projects/Lumen Sketch]] export?",
+    "What does [[25 Love/River]] need from Mira's support in one ordinary week?",
+    "What song or sonic palette should anchor [[60 Interests/Music Identity]] for the export motion?"
+  ],
+  "recent_captures": [
+    {
+      "path": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "title": "2026-05-21 Demo Answer",
+      "updated": "2026-05-21",
+      "words": 331,
+      "sensitivity": "private"
+    }
+  ],
+  "unextracted_sources": [],
+  "thin_notes": [
+    {
+      "path": "70 Timeline/Public Milestones.md",
+      "title": "Public Milestones",
+      "type": "index",
+      "words": 59
+    },
+    {
+      "path": "60 Interests/Music Identity.md",
+      "title": "Music Identity",
+      "type": "preference",
+      "words": 60
+    },
+    {
+      "path": "25 Love/River.md",
+      "title": "River",
+      "type": "person",
+      "words": 63
+    },
+    {
+      "path": "20 People/Friends/Ari.md",
+      "title": "Ari",
+      "type": "person",
+      "words": 72
+    },
+    {
+      "path": "80 Reflections/Pressure and Craft.md",
+      "title": "Pressure and Craft",
+      "type": "pattern",
+      "words": 73
+    },
+    {
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "type": "index",
+      "words": 77
+    },
+    {
+      "path": "10 Self/Identity.md",
+      "title": "Identity",
+      "type": "identity",
+      "words": 84
+    },
+    {
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "type": "preference",
+      "words": 84
+    }
+  ],
+  "uncertain_notes": [
+    {
+      "path": "10 Self/Identity.md",
+      "title": "Identity",
+      "confidence": "inferred"
+    },
+    {
+      "path": "20 People/Friends/Ari.md",
+      "title": "Ari",
+      "confidence": "inferred"
+    },
+    {
+      "path": "25 Love/River.md",
+      "title": "River",
+      "confidence": "inferred"
+    },
+    {
+      "path": "30 Work/Projects/Lumen Sketch.md",
+      "title": "Lumen Sketch",
+      "confidence": "inferred"
+    },
+    {
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "confidence": "inferred"
+    },
+    {
+      "path": "60 Interests/Music Identity.md",
+      "title": "Music Identity",
+      "confidence": "inferred"
+    },
+    {
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "confidence": "inferred"
+    },
+    {
+      "path": "70 Timeline/Public Milestones.md",
+      "title": "Public Milestones",
+      "confidence": "inferred"
+    }
+  ],
+  "hubs": [
+    {
+      "path": "30 Work/Projects/Lumen Sketch.md",
+      "title": "Lumen Sketch",
+      "inbound": 19
+    },
+    {
+      "path": "00 System/Home.md",
+      "title": "Self Atlas",
+      "inbound": 15
+    },
+    {
+      "path": "80 Reflections/Pressure and Craft.md",
+      "title": "Pressure and Craft",
+      "inbound": 10
+    },
+    {
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "inbound": 8
+    },
+    {
+      "path": "60 Interests/Music Identity.md",
+      "title": "Music Identity",
+      "inbound": 7
+    },
+    {
+      "path": "20 People/Friends/Ari.md",
+      "title": "Ari",
+      "inbound": 7
+    },
+    {
+      "path": "25 Love/River.md",
+      "title": "River",
+      "inbound": 7
+    },
+    {
+      "path": "10 Self/Identity.md",
+      "title": "Identity",
+      "inbound": 6
+    }
+  ],
+  "recommendations": [
+    "Walk one active thread with `thread-walk` instead of asking a generic question.",
+    "Ask the first queued question if the user wants momentum.",
+    "Use `enrich-thin-notes` on the thinnest important note."
+  ]
+}

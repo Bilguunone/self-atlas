@@ -300,3 +300,123 @@ def export_json(
         print(out)
     else:
         print(payload)
+
+def build_export_preview(
+    vault: Path,
+    include_body: bool,
+    include_sensitive: bool,
+    include_templates: bool,
+) -> dict[str, object]:
+    vault = require_vault(vault)
+    notes = note_inventory(vault)
+    exclude_sensitive = not include_sensitive
+    data = build_export_graph(
+        vault,
+        include_body=include_body,
+        exclude_sensitive=exclude_sensitive,
+        include_templates=include_templates,
+    )
+    sensitivity_counts = Counter(as_string(note["frontmatter"].get("sensitivity"), "normal") for note in notes)
+    hidden_sensitive = [
+        note
+        for note in notes
+        if exclude_sensitive and note_is_excluded_sensitive(note)
+    ]
+    hidden_templates = [
+        note
+        for note in notes
+        if note["is_template"] and not include_templates
+    ]
+    danger_flags = []
+    if include_sensitive:
+        danger_flags.append("Sensitive notes are included. Treat this as private local output.")
+    if include_body and include_sensitive:
+        danger_flags.append("Full note bodies and sensitive notes are both included. Do not publish this export.")
+    elif include_body and exclude_sensitive:
+        danger_flags.append("Body text was requested, but safe mode still omits bodies to prevent cross-note leakage.")
+    if include_templates:
+        danger_flags.append("Template notes are included for debugging; they are usually noise in app exports.")
+    if data["counts"]["omitted_edges"]:
+        danger_flags.append("Some edges were omitted because their targets are hidden or unsafe.")
+    if data["warnings"]:
+        danger_flags.append("Export warnings need review before sharing.")
+
+    return {
+        "schema_version": EXPORT_SCHEMA_VERSION,
+        "vault": {"name": vault.name},
+        "mode": "private" if include_sensitive else "share-safe",
+        "options": {
+            "include_body": include_body,
+            "include_sensitive": include_sensitive,
+            "include_templates": include_templates,
+        },
+        "counts": {
+            "total_notes": len(notes),
+            "export_nodes": data["counts"]["nodes"],
+            "export_edges": data["counts"]["edges"],
+            "hidden_sensitive": len(hidden_sensitive),
+            "hidden_templates": len(hidden_templates),
+            "omitted_edges": data["counts"]["omitted_edges"],
+            "missing_edges": data["counts"]["missing_edges"],
+            "broken_links": data["counts"]["broken_links"],
+            "warnings": len(data["warnings"]),
+            "relationship_nodes": data["counts"]["relationship_nodes"],
+            "source_nodes": data["counts"]["source_nodes"],
+        },
+        "sensitivity_counts": dict(sorted(sensitivity_counts.items())),
+        "hidden_sensitive_notes": [
+            {
+                "path": str(note["relative"]),
+                "title": str(note["title"]),
+                "sensitivity": as_string(note["frontmatter"].get("sensitivity"), "normal"),
+                "type": as_string(note["frontmatter"].get("type"), "missing"),
+            }
+            for note in hidden_sensitive[:20]
+        ],
+        "warnings": data["warnings"],
+        "danger_flags": danger_flags,
+    }
+
+def print_export_preview(
+    vault: Path,
+    include_body: bool,
+    include_sensitive: bool,
+    include_templates: bool,
+    json_output: bool,
+) -> None:
+    preview = build_export_preview(vault, include_body, include_sensitive, include_templates)
+    if json_output:
+        print(json.dumps(preview, ensure_ascii=False, indent=2))
+        return
+
+    print("# Export Preview")
+    print()
+    print("Mode: read-only. No files were written.")
+    print(f"Privacy: {preview['mode']}")
+    print(f"Vault: {preview['vault']['name']}")
+    print()
+    print("## Options")
+    for key, value in preview["options"].items():
+        print(f"- {key}: {value}")
+    print()
+    print("## Counts")
+    for key, value in preview["counts"].items():
+        print(f"- {key}: {value}")
+    print()
+    print("## Sensitivity")
+    for key, value in preview["sensitivity_counts"].items():
+        print(f"- {key}: {value}")
+    print()
+    print("## Hidden Sensitive Notes")
+    if preview["hidden_sensitive_notes"]:
+        for item in preview["hidden_sensitive_notes"]:
+            print(f"- {item['path']} ({item['sensitivity']}, {item['type']})")
+    else:
+        print("- None")
+    print()
+    print("## Firewall Notes")
+    if preview["danger_flags"]:
+        for item in preview["danger_flags"]:
+            print(f"- {item}")
+    else:
+        print("- Share-safe export shape. Still give it one human look before publishing, because paranoia has taste.")

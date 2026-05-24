@@ -20,4 +20,4 @@ sources: []
 
 ## Sources
 
-- [[90 Sources/Captures/2026-05-21-demo-answer]] - Fictional demo capture.
+- [[90 Sources/Captures/2026-05-21-demo-answer]] - Fictional demo capture that feeds project, taste, identity, relationship, music, and pressure-pattern notes.

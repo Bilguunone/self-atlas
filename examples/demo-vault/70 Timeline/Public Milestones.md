@@ -36,3 +36,4 @@ sources:
 
 - In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments.
 - In May 2026, the first useful export made the project feel like a real creative tool instead of a folder of almosts.
+- In May 2026, Lumen Sketch found its public proof moment: one poster export worth saving.

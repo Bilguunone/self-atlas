@@ -1,0 +1,378 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "query": "export motion",
+  "mode": "private",
+  "hidden_sensitive": 0,
+  "start_count": 5,
+  "items": [
+    {
+      "path": "25 Love/River.md",
+      "title": "River",
+      "type": "person",
+      "sensitivity": "intimate",
+      "confidence": "inferred",
+      "depth": 0,
+      "via": null,
+      "match_score": 2,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "River is the fictional demo relationship note.",
+        "The note exists to test intimate export filtering and relationship graph semantics."
+      ]
+    },
+    {
+      "path": "30 Work/Projects/Lumen Sketch.md",
+      "title": "Lumen Sketch",
+      "type": "project",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "depth": 0,
+      "via": null,
+      "match_score": 2,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "Lumen Sketch is a fictional creative tool about turning mood boards into small visual posters.",
+        "The proof moment is one export that feels worth saving without apologizing for it. Source: [[90 Sources/Captures/2026-05-21-demo-answer]]."
+      ]
+    },
+    {
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "type": "preference",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "depth": 0,
+      "via": null,
+      "match_score": 2,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "Mira likes warm interfaces with visible craft, specific motion, and emotional texture.",
+        "Mira rejects generic dashboard polish when it has no real point of view."
+      ]
+    },
+    {
+      "path": "60 Interests/Music Identity.md",
+      "title": "Music Identity",
+      "type": "preference",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "depth": 0,
+      "via": null,
+      "match_score": 2,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "Mira keeps returning to warm, slow, dramatic, replayable music while shaping visual tools.",
+        "The music reference is not decoration; it describes pacing, emotional temperature, and motion feel."
+      ]
+    },
+    {
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "type": "index",
+      "sensitivity": "private",
+      "confidence": "inferred",
+      "depth": 0,
+      "via": null,
+      "match_score": 2,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments.",
+        "In 2026, Ari helped Mira see that the project needed one strong export instead of ten half-finished directions."
+      ]
+    },
+    {
+      "path": "00 System/Home.md",
+      "title": "Self Atlas",
+      "type": "index",
+      "sensitivity": "normal",
+      "confidence": "confirmed",
+      "depth": 1,
+      "via": "25 Love/River.md",
+      "match_score": 0,
+      "match_reasons": [],
+      "bullets": [
+        "[[10 Self/Identity]]",
+        "[[20 People/Friends/Ari]]"
+      ]
+    },
+    {
+      "path": "00 System/Open Threads.md",
+      "title": "Open Threads",
+      "type": "question",
+      "sensitivity": "private",
+      "confidence": "confirmed",
+      "depth": 1,
+      "via": "30 Work/Projects/Lumen Sketch.md",
+      "match_score": 0,
+      "match_reasons": [],
+      "bullets": [
+        "Clarify the April prototype timeline for [[30 Work/Projects/Lumen Sketch]].",
+        "Add one concrete scene to [[20 People/Friends/Ari]]."
+      ]
+    },
+    {
+      "path": "00 System/Question Queue.md",
+      "title": "Question Queue",
+      "type": "question",
+      "sensitivity": "private",
+      "confidence": "confirmed",
+      "depth": 1,
+      "via": "25 Love/River.md",
+      "match_score": 0,
+      "match_reasons": [],
+      "bullets": [
+        "What exact date did Mira start the Lumen Sketch prototype, and what made it feel real enough to save?",
+        "Which scene with [[20 People/Friends/Ari]] best explains the friendship instead of only labeling it?"
+      ]
+    },
+    {
+      "path": "10 Self/Identity.md",
+      "title": "Identity",
+      "type": "identity",
+      "sensitivity": "private",
+      "confidence": "inferred",
+      "depth": 1,
+      "via": "30 Work/Projects/Lumen Sketch.md",
+      "match_score": 0,
+      "match_reasons": [],
+      "bullets": [
+        "Mira seems to focus best when a project has pressure, novelty, and a visible artifact to finish. Source: [[90 Sources/Captures/2026-05-21-demo-answer]]",
+        "Mira notices the body difference between alive creative work and dead fake-polish work."
+      ]
+    },
+    {
+      "path": "20 People/Friends/Ari.md",
+      "title": "Ari",
+      "type": "person",
+      "sensitivity": "private",
+      "confidence": "inferred",
+      "depth": 1,
+      "via": "30 Work/Projects/Lumen Sketch.md",
+      "match_score": 0,
+      "match_reasons": [],
+      "bullets": [
+        "Ari is a close friend in the fictional demo graph.",
+        "Mira associates Ari with honest creative feedback and practical encouragement."
+      ]
+    },
+    {
+      "path": "70 Timeline/Public Milestones.md",
+      "title": "Public Milestones",
+      "type": "index",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "depth": 1,
+      "via": "30 Work/Projects/Lumen Sketch.md",
+      "match_score": 0,
+      "match_reasons": [],
+      "bullets": [
+        "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments.",
+        "In May 2026, the first useful export made the project feel like a real creative tool instead of a folder of almosts."
+      ]
+    },
+    {
+      "path": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "title": "2026-05-21 Demo Answer",
+      "type": "source",
+      "sensitivity": "private",
+      "confidence": "confirmed",
+      "depth": 1,
+      "via": "25 Love/River.md",
+      "match_score": 0,
+      "match_reasons": [],
+      "bullets": [
+        "[[30 Work/Projects/Lumen Sketch]] started in April 2026 after a week of messy visual experiments.",
+        "[[20 People/Friends/Ari]] gave practical creative feedback that helped Mira focus."
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "00 System/Home.md",
+      "to": "00 System/Open Threads.md",
+      "label": "00 System/Open Threads"
+    },
+    {
+      "from": "00 System/Home.md",
+      "to": "00 System/Question Queue.md",
+      "label": "00 System/Question Queue"
+    },
+    {
+      "from": "00 System/Home.md",
+      "to": "10 Self/Identity.md",
+      "label": "10 Self/Identity"
+    },
+    {
+      "from": "00 System/Home.md",
+      "to": "20 People/Friends/Ari.md",
+      "label": "20 People/Friends/Ari"
+    },
+    {
+      "from": "00 System/Home.md",
+      "to": "30 Work/Projects/Lumen Sketch.md",
+      "label": "30 Work/Projects/Lumen Sketch"
+    },
+    {
+      "from": "00 System/Home.md",
+      "to": "50 Taste/Taste Profile.md",
+      "label": "50 Taste/Taste Profile"
+    },
+    {
+      "from": "00 System/Home.md",
+      "to": "60 Interests/Music Identity.md",
+      "label": "60 Interests/Music Identity"
+    },
+    {
+      "from": "00 System/Home.md",
+      "to": "70 Timeline/Life Timeline.md",
+      "label": "70 Timeline/Life Timeline"
+    },
+    {
+      "from": "00 System/Home.md",
+      "to": "70 Timeline/Public Milestones.md",
+      "label": "70 Timeline/Public Milestones"
+    },
+    {
+      "from": "00 System/Home.md",
+      "to": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "label": "90 Sources/Captures/2026-05-21-demo-answer"
+    },
+    {
+      "from": "00 System/Open Threads.md",
+      "to": "20 People/Friends/Ari.md",
+      "label": "20 People/Friends/Ari"
+    },
+    {
+      "from": "00 System/Open Threads.md",
+      "to": "30 Work/Projects/Lumen Sketch.md",
+      "label": "30 Work/Projects/Lumen Sketch"
+    },
+    {
+      "from": "00 System/Open Threads.md",
+      "to": "50 Taste/Taste Profile.md",
+      "label": "50 Taste/Taste Profile"
+    },
+    {
+      "from": "00 System/Open Threads.md",
+      "to": "60 Interests/Music Identity.md",
+      "label": "60 Interests/Music Identity"
+    },
+    {
+      "from": "00 System/Question Queue.md",
+      "to": "20 People/Friends/Ari.md",
+      "label": "20 People/Friends/Ari"
+    },
+    {
+      "from": "00 System/Question Queue.md",
+      "to": "60 Interests/Music Identity.md",
+      "label": "60 Interests/Music Identity"
+    },
+    {
+      "from": "25 Love/River.md",
+      "to": "00 System/Home.md",
+      "label": "00 System/Home"
+    },
+    {
+      "from": "25 Love/River.md",
+      "to": "00 System/Question Queue.md",
+      "label": "00 System/Question Queue"
+    },
+    {
+      "from": "25 Love/River.md",
+      "to": "30 Work/Projects/Lumen Sketch.md",
+      "label": "30 Work/Projects/Lumen Sketch"
+    },
+    {
+      "from": "25 Love/River.md",
+      "to": "70 Timeline/Life Timeline.md",
+      "label": "70 Timeline/Life Timeline"
+    },
+    {
+      "from": "25 Love/River.md",
+      "to": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "label": "90 Sources/Captures/2026-05-21-demo-answer"
+    },
+    {
+      "from": "30 Work/Projects/Lumen Sketch.md",
+      "to": "00 System/Question Queue.md",
+      "label": "00 System/Question Queue"
+    },
+    {
+      "from": "30 Work/Projects/Lumen Sketch.md",
+      "to": "10 Self/Identity.md",
+      "label": "10 Self/Identity"
+    },
+    {
+      "from": "30 Work/Projects/Lumen Sketch.md",
+      "to": "20 People/Friends/Ari.md",
+      "label": "20 People/Friends/Ari"
+    },
+    {
+      "from": "30 Work/Projects/Lumen Sketch.md",
+      "to": "50 Taste/Taste Profile.md",
+      "label": "50 Taste/Taste Profile"
+    },
+    {
+      "from": "30 Work/Projects/Lumen Sketch.md",
+      "to": "60 Interests/Music Identity.md",
+      "label": "60 Interests/Music Identity"
+    },
+    {
+      "from": "30 Work/Projects/Lumen Sketch.md",
+      "to": "70 Timeline/Life Timeline.md",
+      "label": "70 Timeline/Life Timeline"
+    },
+    {
+      "from": "30 Work/Projects/Lumen Sketch.md",
+      "to": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "label": "90 Sources/Captures/2026-05-21-demo-answer"
+    },
+    {
+      "from": "60 Interests/Music Identity.md",
+      "to": "50 Taste/Taste Profile.md",
+      "label": "50 Taste/Taste Profile"
+    },
+    {
+      "from": "70 Timeline/Life Timeline.md",
+      "to": "20 People/Friends/Ari.md",
+      "label": "20 People/Friends/Ari"
+    },
+    {
+      "from": "70 Timeline/Public Milestones.md",
+      "to": "30 Work/Projects/Lumen Sketch.md",
+      "label": "30 Work/Projects/Lumen Sketch"
+    },
+    {
+      "from": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "to": "10 Self/Identity.md",
+      "label": "10 Self/Identity"
+    },
+    {
+      "from": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "to": "20 People/Friends/Ari.md",
+      "label": "20 People/Friends/Ari"
+    },
+    {
+      "from": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "to": "50 Taste/Taste Profile.md",
+      "label": "50 Taste/Taste Profile"
+    },
+    {
+      "from": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "to": "60 Interests/Music Identity.md",
+      "label": "60 Interests/Music Identity"
+    }
+  ]
+}

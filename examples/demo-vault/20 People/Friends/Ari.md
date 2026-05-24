@@ -19,6 +19,7 @@ tags:
   - self-atlas/friend
 links:
   - "[[00 System/Home]]"
+  - "[[30 Work/Projects/Lumen Sketch]]"
 sources:
   - "90 Sources/Captures/2026-05-21-demo-answer"
 ---
@@ -29,3 +30,9 @@ sources:
 
 - Ari is a close friend in the fictional demo graph.
 - Mira associates Ari with honest creative feedback and practical encouragement.
+- Ari helped Mira stop hiding behind ten directions and commit to one artifact.
+
+## Friendship Signal
+
+- Ari is useful because the feedback is specific enough to sting and practical enough to act on.
+- The graph should eventually capture one concrete scene with Ari instead of only the abstract label.

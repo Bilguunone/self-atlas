@@ -1,0 +1,195 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "query": "what is Lumen Sketch proof moment",
+  "mode": "private",
+  "hidden_sensitive": 0,
+  "counts": {
+    "matching_notes": 9,
+    "returned_notes": 8,
+    "source_receipts": 1,
+    "linked_notes": 8,
+    "review_flags": 0
+  },
+  "confidence": {
+    "inferred": 8
+  },
+  "sensitivity": {
+    "normal": 4,
+    "private": 4
+  },
+  "notes": [
+    {
+      "path": "30 Work/Projects/Lumen Sketch.md",
+      "title": "Lumen Sketch",
+      "type": "project",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "score": 23,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "Lumen Sketch is a fictional creative tool about turning mood boards into small visual posters.",
+        "The proof moment is one export that feels worth saving without apologizing for it. Source: [[90 Sources/Captures/2026-05-21-demo-answer]].",
+        "The project should feel like a small creative ritual, not a productivity dashboard wearing perfume."
+      ],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    },
+    {
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "type": "preference",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "score": 5,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "Mira likes warm interfaces with visible craft, specific motion, and emotional texture.",
+        "Mira rejects generic dashboard polish when it has no real point of view.",
+        "The Lumen Sketch export should feel tactile, emotional, useful, and not embarrassed by being pretty."
+      ],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    },
+    {
+      "path": "70 Timeline/Public Milestones.md",
+      "title": "Public Milestones",
+      "type": "index",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "score": 5,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments.",
+        "In May 2026, the first useful export made the project feel like a real creative tool instead of a folder of almosts.",
+        "In May 2026, Lumen Sketch found its public proof moment: one poster export worth saving."
+      ],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    },
+    {
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "type": "index",
+      "sensitivity": "private",
+      "confidence": "inferred",
+      "score": 3,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments.",
+        "In 2026, Ari helped Mira see that the project needed one strong export instead of ten half-finished directions.",
+        "In 2026, River noticed Mira looked alive while tuning export motion and drained while writing fake onboarding copy."
+      ],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    },
+    {
+      "path": "80 Reflections/Pressure and Craft.md",
+      "title": "Pressure and Craft",
+      "type": "pattern",
+      "sensitivity": "private",
+      "confidence": "inferred",
+      "score": 3,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "Mira focuses better when pressure has a visible artifact attached to it.",
+        "Ten directions can become a hiding place when one finished artifact would expose the taste judgment.",
+        "The good pressure is not panic. It is the moment where the work has to become real enough to save, show, or use."
+      ],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    },
+    {
+      "path": "10 Self/Identity.md",
+      "title": "Identity",
+      "type": "identity",
+      "sensitivity": "private",
+      "confidence": "inferred",
+      "score": 2,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "Mira seems to focus best when a project has pressure, novelty, and a visible artifact to finish. Source: [[90 Sources/Captures/2026-05-21-demo-answer]]",
+        "Mira notices the body difference between alive creative work and dead fake-polish work.",
+        "Mira's best work seems to appear when taste judgment is unavoidable instead of endlessly postponed."
+      ],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    },
+    {
+      "path": "60 Interests/Music Identity.md",
+      "title": "Music Identity",
+      "type": "preference",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "score": 2,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "Mira keeps returning to warm, slow, dramatic, replayable music while shaping visual tools.",
+        "The music reference is not decoration; it describes pacing, emotional temperature, and motion feel.",
+        "Lumen Sketch should borrow that feeling: tactile, memorable, and a little cinematic without becoming cheesy."
+      ],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    },
+    {
+      "path": "20 People/Friends/Ari.md",
+      "title": "Ari",
+      "type": "person",
+      "sensitivity": "private",
+      "confidence": "inferred",
+      "score": 1,
+      "match_reasons": [
+        "body"
+      ],
+      "bullets": [
+        "Ari is a close friend in the fictional demo graph.",
+        "Mira associates Ari with honest creative feedback and practical encouragement.",
+        "Ari helped Mira stop hiding behind ten directions and commit to one artifact."
+      ],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    }
+  ],
+  "source_receipts": [
+    {
+      "path": "90 Sources/Captures/2026-05-21-demo-answer.md",
+      "title": "2026-05-21 Demo Answer",
+      "sensitivity": "private",
+      "confidence": "confirmed"
+    }
+  ],
+  "linked_notes": [
+    "00 System/Home.md",
+    "10 Self/Identity.md",
+    "20 People/Friends/Ari.md",
+    "25 Love/River.md",
+    "30 Work/Projects/Lumen Sketch.md",
+    "50 Taste/Taste Profile.md",
+    "60 Interests/Music Identity.md",
+    "80 Reflections/Pressure and Craft.md"
+  ],
+  "review_flags": []
+}

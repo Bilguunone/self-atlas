@@ -2,14 +2,19 @@ from __future__ import annotations
 
 import json
 import re
+import datetime as dt
+from collections import Counter
 from pathlib import Path
 
 from .constants import DOMAIN_CONFIG, WIKI_LINK_RE
 from .models import DurableNotePatch, ExtractionPlan, LinkPatch, MemoryCandidate, RawCapture, ReviewFlag, SourceEvidence
 from .questions import has_any_keyword, infer_question_domain
 from .vault import (
+    append_under_heading,
+    apply_source_fields_to_text,
     as_list,
     as_string,
+    backup_note,
     bullet_lines,
     extract_section_text,
     normalized_source_key,
@@ -20,6 +25,8 @@ from .vault import (
     require_vault,
     wiki_link,
 )
+
+SENSITIVE_LEVELS = {"private", "health", "financial", "intimate"}
 
 
 def wiki_targets_from_text(text: str) -> list[str]:
@@ -353,7 +360,7 @@ def build_extraction_plan(vault: Path, source: str) -> ExtractionPlan:
             )
         )
 
-    if raw_capture.sensitivity in {"private", "health", "financial", "intimate"}:
+    if raw_capture.sensitivity in SENSITIVE_LEVELS:
         review_flags.append(ReviewFlag("sensitive", f"Source sensitivity is `{raw_capture.sensitivity}`; review before applying patches.", relative))
 
     return ExtractionPlan(
@@ -403,3 +410,299 @@ def print_extraction_plan(plan: ExtractionPlan, json_output: bool) -> None:
         print(f"- [{flag['level']}] {flag['message']}")
         if flag["evidence"]:
             print(f"  Evidence: {flag['evidence']}")
+
+def build_capture_review(plan: ExtractionPlan) -> dict[str, object]:
+    candidates = plan.memory_candidates
+    patches = plan.durable_note_patches
+    targetless = [candidate for candidate in candidates if not candidate.target_hint]
+    questions = [candidate for candidate in candidates if candidate.kind == "question"]
+    kind_counts = Counter(candidate.kind for candidate in candidates)
+    patch_targets = Counter(patch.target for patch in patches)
+    sensitive = plan.raw_capture.sensitivity in {"private", "health", "financial", "intimate"}
+    missing_raw = any(flag.message.startswith("Source note has no") for flag in plan.review_flags)
+    missing_candidates = any("No `Extracted Notes`" in flag.message for flag in plan.review_flags)
+
+    if missing_raw or missing_candidates:
+        status = "needs_source_work"
+    elif targetless:
+        status = "needs_target_decisions"
+    elif sensitive:
+        status = "needs_consent"
+    else:
+        status = "ready_for_review"
+
+    consent_notes = []
+    if sensitive:
+        consent_notes.append(f"Source is `{plan.raw_capture.sensitivity}`; ask before applying patches.")
+    if questions:
+        consent_notes.append("Follow-up questions should be queued only if the user wants this thread reopened.")
+    if targetless:
+        consent_notes.append("Some candidates need a durable-note target before anything should be written.")
+
+    return {
+        "source": {
+            "path": plan.raw_capture.path,
+            "title": plan.raw_capture.title,
+            "sensitivity": plan.raw_capture.sensitivity,
+            "confidence": plan.raw_capture.confidence,
+            "raw_words": len(plan.raw_capture.raw_text.split()),
+        },
+        "status": status,
+        "counts": {
+            "memory_candidates": len(candidates),
+            "durable_note_patches": len(patches),
+            "link_patches": len(plan.link_patches),
+            "review_flags": len(plan.review_flags),
+            "targetless_candidates": len(targetless),
+            "follow_up_questions": len(questions),
+        },
+        "candidate_kinds": dict(sorted(kind_counts.items())),
+        "patch_targets": dict(sorted(patch_targets.items())),
+        "ready_patches": [
+            {
+                "target": patch.target,
+                "section": patch.section,
+                "content": patch.content,
+                "evidence": patch.evidence.to_json(),
+            }
+            for patch in patches
+        ],
+        "needs_target": [
+            {
+                "kind": candidate.kind,
+                "text": candidate.text,
+                "evidence": candidate.evidence.to_json(),
+            }
+            for candidate in targetless
+        ],
+        "review_flags": [flag.to_json() for flag in plan.review_flags],
+        "consent_notes": consent_notes,
+    }
+
+def print_capture_review(plan: ExtractionPlan, json_output: bool) -> None:
+    review = build_capture_review(plan)
+    if json_output:
+        print(json.dumps(review, ensure_ascii=False, indent=2))
+        return
+
+    print("# Capture Review")
+    print()
+    print("Mode: review-only. No files were changed.")
+    print(f"Source: {review['source']['path']}")
+    print(f"Title: {review['source']['title']}")
+    print(f"Sensitivity: {review['source']['sensitivity']}")
+    print(f"Confidence: {review['source']['confidence']}")
+    print(f"Status: {review['status']}")
+    print()
+    print("## Counts")
+    for key, value in review["counts"].items():
+        print(f"- {key}: {value}")
+    print()
+    print("## Candidate Kinds")
+    for key, value in review["candidate_kinds"].items():
+        print(f"- {key}: {value}")
+    print()
+    print("## Proposed Durable Patches")
+    if review["ready_patches"]:
+        for patch in review["ready_patches"]:
+            evidence = patch["evidence"]
+            source = evidence["source_path"]
+            if evidence["section"]:
+                source += f"#{evidence['section']}"
+            if evidence["line_hint"]:
+                source += f":{evidence['line_hint']}"
+            print(f"- `{patch['target']}` -> {patch['section']}")
+            print(f"  {patch['content']}")
+            print(f"  Evidence: {source}")
+    else:
+        print("- None")
+    print()
+    print("## Needs Target Decision")
+    if review["needs_target"]:
+        for item in review["needs_target"]:
+            print(f"- [{item['kind']}] {item['text']}")
+    else:
+        print("- None")
+    print()
+    print("## Consent And Review Notes")
+    if review["consent_notes"]:
+        for item in review["consent_notes"]:
+            print(f"- {item}")
+    else:
+        print("- No sensitive write blockers. Still review it, because autopilot memory is how dumb little myths get born.")
+    if review["review_flags"]:
+        print()
+        print("## Review Flags")
+        for flag in review["review_flags"]:
+            print(f"- [{flag['level']}] {flag['message']}")
+            if flag["evidence"]:
+                print(f"  Evidence: {flag['evidence']}")
+
+def target_note_path(vault: Path, target: str) -> Path:
+    target = target.removesuffix(".md")
+    return vault / f"{target}.md"
+
+def backup_once(vault: Path, path: Path, backup_root: Path, backed_up: set[Path]) -> None:
+    resolved = path.resolve()
+    if resolved in backed_up:
+        return
+    backup_note(vault, path, backup_root)
+    backed_up.add(resolved)
+
+def apply_capture_review(
+    vault: Path,
+    source: str,
+    apply: bool,
+    yes: bool,
+    backup_dir: Path | None = None,
+) -> dict[str, object]:
+    vault = require_vault(vault)
+    plan = build_extraction_plan(vault, source)
+    review = build_capture_review(plan)
+    sensitive = plan.raw_capture.sensitivity in SENSITIVE_LEVELS
+    if apply and sensitive and not yes:
+        raise SystemExit(
+            f"Source sensitivity is `{plan.raw_capture.sensitivity}`. "
+            "Review the plan, then re-run with --apply --yes if you want these writes."
+        )
+
+    timestamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+    backup_root = (backup_dir or (vault.parent / f"{vault.name}-Backups" / f"apply-review-{timestamp}")).expanduser().resolve()
+    changed_files: set[str] = set()
+    backed_up: set[Path] = set()
+    appended_patches = 0
+    skipped_existing_patches = 0
+    missing_targets = []
+    source_field_updates = 0
+    source_field_skips = 0
+    source_field_errors = []
+
+    for patch in plan.durable_note_patches:
+        path = target_note_path(vault, patch.target)
+        if not path.exists():
+            missing_targets.append(patch.target)
+            continue
+        if not apply:
+            if patch.content in path.read_text(encoding="utf-8"):
+                skipped_existing_patches += 1
+            else:
+                appended_patches += 1
+            continue
+        before = path.read_text(encoding="utf-8")
+        backup_once(vault, path, backup_root, backed_up)
+        did_append = append_under_heading(path, patch.section, patch.content)
+        if did_append:
+            appended_patches += 1
+            changed_files.add(path.relative_to(vault).as_posix())
+        else:
+            skipped_existing_patches += 1
+        if path.read_text(encoding="utf-8") == before and did_append:
+            skipped_existing_patches += 1
+
+    for link_patch in plan.link_patches:
+        if link_patch.action != "ensure_source_frontmatter":
+            continue
+        path = target_note_path(vault, link_patch.source)
+        if not path.exists():
+            missing_targets.append(link_patch.source)
+            continue
+        text = path.read_text(encoding="utf-8")
+        updated, did_change, error = apply_source_fields_to_text(text, [link_patch.target])
+        if error:
+            source_field_errors.append((link_patch.source, error))
+            continue
+        if not did_change:
+            source_field_skips += 1
+            continue
+        source_field_updates += 1
+        if apply:
+            backup_once(vault, path, backup_root, backed_up)
+            path.write_text(updated, encoding="utf-8")
+            changed_files.add(path.relative_to(vault).as_posix())
+
+    source_log_path = vault / "00 System" / "Source Log.md"
+    source_log_line = (
+        f"- {dt.date.today().isoformat()} - Applied review for "
+        f"{wiki_link(plan.raw_capture.path, plan.raw_capture.title)}"
+    )
+    source_log_changed = False
+    if source_log_path.exists():
+        if apply:
+            backup_once(vault, source_log_path, backup_root, backed_up)
+            source_log_changed = append_under_heading(source_log_path, "Captures", source_log_line)
+            if source_log_changed:
+                changed_files.add(source_log_path.relative_to(vault).as_posix())
+        else:
+            source_log_changed = source_log_line not in source_log_path.read_text(encoding="utf-8")
+
+    return {
+        "source": review["source"],
+        "status": review["status"],
+        "mode": "apply" if apply else "dry-run",
+        "sensitive": sensitive,
+        "backup": str(backup_root) if apply and changed_files else None,
+        "counts": {
+            "patches_to_append" if not apply else "patches_appended": appended_patches,
+            "patches_already_present": skipped_existing_patches,
+            "source_fields_to_update" if not apply else "source_fields_updated": source_field_updates,
+            "source_fields_already_present": source_field_skips,
+            "missing_targets": len(set(missing_targets)),
+            "source_field_errors": len(source_field_errors),
+            "source_log_to_update" if not apply else "source_log_updated": 1 if source_log_changed else 0,
+            "changed_files": len(changed_files),
+        },
+        "changed_files": sorted(changed_files),
+        "missing_targets": sorted(set(missing_targets)),
+        "source_field_errors": [
+            {"target": target, "error": error}
+            for target, error in source_field_errors
+        ],
+        "consent_notes": review["consent_notes"],
+    }
+
+def print_apply_capture_review(
+    vault: Path,
+    source: str,
+    apply: bool,
+    yes: bool,
+    backup_dir: Path | None,
+    json_output: bool,
+) -> None:
+    result = apply_capture_review(vault, source, apply, yes, backup_dir)
+    if json_output:
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+
+    print("# Apply Review")
+    print()
+    print(f"Mode: {result['mode']}")
+    print(f"Source: {result['source']['path']}")
+    print(f"Sensitivity: {result['source']['sensitivity']}")
+    if result["backup"]:
+        print(f"Backup: {result['backup']}")
+    print()
+    print("## Counts")
+    for key, value in result["counts"].items():
+        print(f"- {key}: {value}")
+    print()
+    print("## Changed Files")
+    for path in result["changed_files"] or ["None"]:
+        print(f"- {path}")
+    if result["missing_targets"]:
+        print()
+        print("## Missing Targets")
+        for target in result["missing_targets"]:
+            print(f"- {target}")
+    if result["source_field_errors"]:
+        print()
+        print("## Source Field Errors")
+        for item in result["source_field_errors"]:
+            print(f"- {item['target']}: {item['error']}")
+    if result["consent_notes"] and not apply:
+        print()
+        print("## Consent Notes")
+        for item in result["consent_notes"]:
+            print(f"- {item}")
+    if not apply:
+        print()
+        print("Dry run only. Re-run with --apply, and add --yes for sensitive sources.")
