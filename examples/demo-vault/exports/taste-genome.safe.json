@@ -1,0 +1,108 @@
+{
+  "mode": "share-safe",
+  "hidden_sensitive": 9,
+  "principles": [
+    "Lumen Sketch is a fictional creative tool about turning mood boards into small visual posters.",
+    "The proof moment is one export that feels worth saving without apologizing for it. Source: [[90 Sources/Captures/2026-05-21-demo-answer]].",
+    "The project should feel like a small creative ritual, not a productivity dashboard wearing perfume.",
+    "Ari pushed Mira away from ten vague directions toward one honest artifact.",
+    "Primary loop: collect references, tune mood, export one poster that feels personal.",
+    "Main risk: too much setup copy, not enough tactile making.",
+    "Mira likes warm interfaces with visible craft, specific motion, and emotional texture.",
+    "The Lumen Sketch export should feel tactile, emotional, useful, and not embarrassed by being pretty.",
+    "Feature lists that do not change the user’s feeling or artifact.",
+    "Visual polish with no proof moment underneath it.",
+    "Mira keeps returning to warm, slow, dramatic, replayable music while shaping visual tools.",
+    "The music reference is not decoration; it describes pacing, emotional temperature, and motion feel."
+  ],
+  "anti_taste": [
+    "Taste guardrail: warm, specific, useful, emotional, and never generic dashboard sludge.",
+    "Mira rejects generic dashboard polish when it has no real point of view.",
+    "The anti-pattern is fake onboarding copy trying to explain what the tool should have made obvious.",
+    "Productivity theater."
+  ],
+  "references": [
+    "Primary loop: collect references, tune mood, export one poster that feels personal.",
+    "Mira keeps returning to warm, slow, dramatic, replayable music while shaping visual tools.",
+    "The music reference is not decoration; it describes pacing, emotional temperature, and motion feel.",
+    "Name the exact song or sonic palette that best explains the export motion."
+  ],
+  "motion_words": [
+    "motion",
+    "pacing",
+    "cinematic",
+    "slow",
+    "dramatic",
+    "replayable"
+  ],
+  "material_words": [
+    "warm",
+    "tactile",
+    "texture",
+    "visual",
+    "poster",
+    "artifact",
+    "export",
+    "emotional"
+  ],
+  "proof_examples": [
+    "The proof moment is one export that feels worth saving without apologizing for it. Source: [[90 Sources/Captures/2026-05-21-demo-answer]].",
+    "Ari pushed Mira away from ten vague directions toward one honest artifact.",
+    "Primary loop: collect references, tune mood, export one poster that feels personal.",
+    "The Lumen Sketch export should feel tactile, emotional, useful, and not embarrassed by being pretty.",
+    "Feature lists that do not change the user’s feeling or artifact.",
+    "Visual polish with no proof moment underneath it.",
+    "Name the exact song or sonic palette that best explains the export motion.",
+    "In May 2026, the first useful export made the project feel like a real creative tool instead of a folder of almosts.",
+    "In May 2026, Lumen Sketch found its public proof moment: one poster export worth saving."
+  ],
+  "weak_spots": [
+    "Main risk: too much setup copy, not enough tactile making.",
+    "Taste guardrail: warm, specific, useful, emotional, and never generic dashboard sludge.",
+    "Mira rejects generic dashboard polish when it has no real point of view."
+  ],
+  "source_notes": [
+    {
+      "path": "30 Work/Projects/Lumen Sketch.md",
+      "title": "Lumen Sketch",
+      "type": "project",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "excerpt": ""
+    },
+    {
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "type": "preference",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "excerpt": ""
+    },
+    {
+      "path": "60 Interests/Music Identity.md",
+      "title": "Music Identity",
+      "type": "preference",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "excerpt": ""
+    },
+    {
+      "path": "70 Timeline/Public Milestones.md",
+      "title": "Public Milestones",
+      "type": "index",
+      "sensitivity": "normal",
+      "confidence": "inferred",
+      "excerpt": ""
+    }
+  ],
+  "vault": {
+    "name": "demo-vault"
+  },
+  "counts": {
+    "taste_notes": 4,
+    "principles": 12,
+    "anti_taste": 4,
+    "references": 4,
+    "weak_spots": 3
+  }
+}

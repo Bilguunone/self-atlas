@@ -17,6 +17,16 @@ from public_release_check import scan_files
 from self_atlas_lib.export import build_export_graph, build_export_preview
 from self_atlas_lib.experience import build_answer_context, build_pulse, build_thread_walk
 from self_atlas_lib.extraction import apply_capture_review, build_capture_review, build_extraction_plan
+from self_atlas_lib.insight import (
+    build_artifact_import,
+    build_contradictions,
+    build_decision_council,
+    build_life_lenses,
+    build_open_loop_radar,
+    build_share_capsule,
+    build_taste_genome,
+    build_time_travel,
+)
 from self_atlas_lib.init import init_vault
 from self_atlas_lib.questions import build_question_refresh, refresh_questions
 from self_atlas_lib.timeline import build_timeline
@@ -637,6 +647,260 @@ class SelfAtlasTests(unittest.TestCase):
             self.assertIn("## Question Refresh History", after)
             self.assertIn("Rotated out:", after)
             self.assertIn("Has Mira confirmed the archive appointments by email yet?", after)
+
+    def test_life_lenses_filters_relationships_and_hides_sensitive_by_default(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "20 People/Friends/Ari.md",
+                note(
+                    "person",
+                    "Ari",
+                    "## What We Know\n\n- Ari gives honest feedback.",
+                    sensitivity="private",
+                    tags=("self-atlas/person", "self-atlas/friend"),
+                ),
+            )
+
+            safe = build_life_lenses(vault, "relationships", "", include_sensitive=False, max_notes=5)
+            private = build_life_lenses(vault, "relationships", "", include_sensitive=True, max_notes=5)
+
+            self.assertEqual(safe["selection"][0]["notes"], [])
+            self.assertEqual(private["selection"][0]["notes"][0]["path"], "20 People/Friends/Ari.md")
+            self.assertEqual(safe["hidden_sensitive"], 1)
+
+    def test_contradictions_reports_status_and_confidence_review_signals(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "30 Work/Projects/Archived Project.md",
+                note(
+                    "project",
+                    "Archived Project",
+                    "## What We Know\n\n- This is no longer active and needs clarification.",
+                    confidence="confirmed",
+                ),
+            )
+
+            data = build_contradictions(vault, query="", lens_id=None, include_sensitive=False, max_items=10)
+            kinds = {signal["kind"] for signal in data["signals"]}
+
+            self.assertIn("status-conflict", kinds)
+            self.assertIn("confidence-conflict", kinds)
+
+    def test_open_loop_radar_combines_questions_sources_and_contradictions(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "00 System/Question Queue.md",
+                note(
+                    "question",
+                    "Question Queue",
+                    "## Next Questions\n\n- What would make [[30 Work/Public Project]] real?",
+                ),
+            )
+            write_note(
+                vault,
+                "30 Work/Public Project.md",
+                note("project", "Public Project", "## What We Know\n\n- It is no longer active."),
+            )
+            write_note(
+                vault,
+                "90 Sources/Captures/unextracted.md",
+                note("source", "unextracted", "## Raw Capture\n\nEvidence waiting for review."),
+            )
+
+            data = build_open_loop_radar(vault, lens_id=None, include_sensitive=False, stale_days=1, max_items=20)
+            kinds = {loop["kind"] for loop in data["loops"]}
+
+            self.assertIn("queued-question", kinds)
+            self.assertIn("unextracted-source", kinds)
+            self.assertIn("contradiction-signal", kinds)
+
+    def test_decision_council_scores_options_from_graph_evidence(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "30 Work/Projects/Lumen Sketch.md",
+                note(
+                    "project",
+                    "Lumen Sketch",
+                    "## What We Know\n\n- Export motion is the proof moment.\n- Onboarding copy is a risk.",
+                    tags=("self-atlas/project",),
+                ),
+            )
+            write_note(
+                vault,
+                "50 Taste/Taste Profile.md",
+                note(
+                    "preference",
+                    "Taste Profile",
+                    "## Evidence\n\n- Motion and tactile export quality matter more than explanation.",
+                    tags=("self-atlas/taste",),
+                ),
+            )
+
+            data = build_decision_council(
+                vault,
+                "Should Lumen Sketch focus on export motion or onboarding copy?",
+                "Export motion|Onboarding copy",
+                include_sensitive=False,
+                max_notes=4,
+            )
+
+            self.assertIn("Export motion", data["recommendation"])
+            self.assertGreater(data["option_scores"]["Export motion"], data["option_scores"]["Onboarding copy"])
+
+    def test_artifact_import_dry_run_and_apply_create_source_capture_only(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            artifact = vault.parent / "artifact.txt"
+            artifact.write_text("A tiny artifact about export motion.", encoding="utf-8")
+            write_note(vault, "00 System/Source Log.md", note("source", "Source Log", "## Captures\n\n"))
+
+            preview = build_artifact_import(
+                vault,
+                [str(artifact)],
+                domain="taste",
+                sensitivity="normal",
+                apply=False,
+                max_files=10,
+                max_chars=40000,
+            )
+            target = preview["plans"][0]["target_path"]
+            self.assertEqual(preview["counts"]["ready"], 1)
+            self.assertFalse((vault / target).exists())
+
+            with contextlib.redirect_stdout(io.StringIO()):
+                result = build_artifact_import(
+                    vault,
+                    [str(artifact)],
+                    domain="taste",
+                    sensitivity="normal",
+                    apply=True,
+                    max_files=10,
+                    max_chars=40000,
+                )
+            applied = result["applied_paths"][0]
+            capture_text = (vault / applied).read_text(encoding="utf-8")
+            source_log_text = (vault / "00 System/Source Log.md").read_text(encoding="utf-8")
+
+            self.assertEqual(result["counts"]["imported"], 1)
+            self.assertIn("type: source", capture_text)
+            self.assertIn("Raw Capture", capture_text)
+            self.assertIn(applied.removesuffix(".md"), source_log_text)
+
+    def test_time_travel_groups_timeline_without_absolute_paths(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "70 Timeline/Life Timeline.md",
+                note(
+                    "index",
+                    "Life Timeline",
+                    "## What We Know\n\n- In April 2026, Mira started [[30 Work/Public Project]].",
+                    tags=("self-atlas/timeline",),
+                ),
+            )
+            write_note(vault, "30 Work/Public Project.md", note("project", "Public Project", "## What We Know\n\n- Public."))
+
+            data = build_time_travel(vault, query="", thread="career", include_sensitive=False, max_items=5)
+            payload = json.dumps(data)
+
+            self.assertEqual(data["counts"]["items"], 1)
+            self.assertNotIn(str(vault), payload)
+
+    def test_share_capsule_omits_sensitive_notes_hidden_links_and_absolute_paths(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "30 Work/Public Project.md",
+                note(
+                    "project",
+                    "Public Project",
+                    "## What We Know\n\n- Public proof moment.\n- Private link to [[25 Love/River]].",
+                ),
+            )
+            write_note(
+                vault,
+                "25 Love/River.md",
+                note("person", "River", "## What We Know\n\n- Private.", sensitivity="intimate"),
+            )
+
+            data = build_share_capsule(
+                vault,
+                "Public Capsule",
+                query="proof",
+                lens_id=None,
+                include_sensitive=False,
+                yes=False,
+                max_notes=5,
+            )
+            payload = json.dumps(data)
+
+            self.assertIn("Public Project", payload)
+            self.assertNotIn("River", payload)
+            self.assertNotIn(str(vault), payload)
+            self.assertEqual(data["hidden_sensitive"], 1)
+
+    def test_taste_genome_extracts_principles_anti_taste_and_motion_language(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "50 Taste/Taste Profile.md",
+                note(
+                    "preference",
+                    "Taste Profile",
+                    "## Evidence\n\n- Warm tactile motion matters.\n- Generic dashboard sludge is anti-taste.\n- The proof is one export worth saving.",
+                    tags=("self-atlas/taste",),
+                ),
+            )
+
+            data = build_taste_genome(vault, include_sensitive=False, max_items=8)
+
+            self.assertIn("motion", data["motion_words"])
+            self.assertTrue(any("Generic" in item or "generic" in item for item in data["anti_taste"]))
+            self.assertTrue(any("export" in item for item in data["proof_examples"]))
+
+    def test_new_insight_commands_have_cli_smoke_paths(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            artifact = vault.parent / "artifact.md"
+            artifact.write_text("# Artifact\n\nExport motion note.", encoding="utf-8")
+            write_note(
+                vault,
+                "30 Work/Public Project.md",
+                note("project", "Public Project", "## What We Know\n\n- Export motion proof."),
+            )
+            write_note(
+                vault,
+                "70 Timeline/Life Timeline.md",
+                note("index", "Life Timeline", "## What We Know\n\n- In 2026, Mira started [[30 Work/Public Project]].", tags=("self-atlas/timeline",)),
+            )
+
+            commands = [
+                ["life-lenses", "--vault", str(vault), "--json"],
+                ["contradictions", "--vault", str(vault), "--json"],
+                ["decision-council", "--vault", str(vault), "--question", "Export motion?", "--options", "Yes|No", "--json"],
+                ["open-loop-radar", "--vault", str(vault), "--json"],
+                ["artifact-import", "--vault", str(vault), "--source", str(artifact), "--json"],
+                ["time-travel", "--vault", str(vault), "--json"],
+                ["share-capsule", "--vault", str(vault), "--query", "export", "--json"],
+                ["taste-genome", "--vault", str(vault), "--json"],
+            ]
+
+            for command in commands:
+                output = io.StringIO()
+                with contextlib.redirect_stdout(output):
+                    self.assertEqual(cli_main(command), 0, command)
+                self.assertTrue(output.getvalue().strip(), command)
 
 
 if __name__ == "__main__":

@@ -14,6 +14,17 @@ from .export import export_json
 from .export import print_export_preview
 from .experience import print_answer_context, print_pulse, print_thread_walk
 from .extraction import build_extraction_plan, print_apply_capture_review, print_capture_review, print_extraction_plan
+from .insight import (
+    available_lens_ids,
+    print_artifact_import,
+    print_contradictions,
+    print_decision_council,
+    print_life_lenses,
+    print_open_loop_radar,
+    print_share_capsule,
+    print_taste_genome,
+    print_time_travel,
+)
 from .init import ensure_vault, init_vault
 from .migrations import migrate_app_fields, migrate_relationship_fields, migrate_source_fields
 from .questions import (
@@ -98,6 +109,73 @@ def main(argv: list[str] | None = None) -> int:
     answer_context_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
     answer_context_parser.add_argument("--max-notes", type=int, default=8, help="Maximum matching notes and receipts to include")
     answer_context_parser.add_argument("--json", action="store_true", dest="json_output", help="Print context as JSON")
+
+    life_lenses_parser = subparsers.add_parser("life-lenses", help="List or apply reusable graph lenses")
+    life_lenses_parser.add_argument("--vault", required=True, type=Path)
+    life_lenses_parser.add_argument("--lens", choices=available_lens_ids(), default=None, help="Lens to apply")
+    life_lenses_parser.add_argument("--query", default="", help="Optional query within the lens")
+    life_lenses_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    life_lenses_parser.add_argument("--max-notes", type=int, default=8, help="Maximum matching notes")
+    life_lenses_parser.add_argument("--json", action="store_true", dest="json_output", help="Print lenses as JSON")
+
+    contradictions_parser = subparsers.add_parser("contradictions", help="Report potential conflicts, stale claims, and then-vs-now tensions")
+    contradictions_parser.add_argument("--vault", required=True, type=Path)
+    contradictions_parser.add_argument("--query", default="", help="Optional query to narrow review")
+    contradictions_parser.add_argument("--lens", choices=available_lens_ids(), default=None, help="Optional life lens")
+    contradictions_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    contradictions_parser.add_argument("--max-items", type=int, default=12, help="Maximum signals")
+    contradictions_parser.add_argument("--json", action="store_true", dest="json_output", help="Print signals as JSON")
+
+    decision_council_parser = subparsers.add_parser("decision-council", help="Build a receipt-backed decision brief from graph evidence")
+    decision_council_parser.add_argument("--vault", required=True, type=Path)
+    decision_council_parser.add_argument("--question", required=True, help="Decision question")
+    decision_council_parser.add_argument("--options", default=None, help="Optional pipe-separated options, e.g. 'A|B|C'")
+    decision_council_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    decision_council_parser.add_argument("--max-notes", type=int, default=6, help="Maximum notes per council")
+    decision_council_parser.add_argument("--json", action="store_true", dest="json_output", help="Print brief as JSON")
+
+    open_loop_parser = subparsers.add_parser("open-loop-radar", help="Combine queues, open threads, source gaps, uncertainty, and contradiction signals")
+    open_loop_parser.add_argument("--vault", required=True, type=Path)
+    open_loop_parser.add_argument("--lens", choices=available_lens_ids(), default=None, help="Optional life lens")
+    open_loop_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    open_loop_parser.add_argument("--stale-days", type=int, default=30, help="Age threshold for stale unextracted sources")
+    open_loop_parser.add_argument("--max-items", type=int, default=20, help="Maximum loops")
+    open_loop_parser.add_argument("--json", action="store_true", dest="json_output", help="Print radar as JSON")
+
+    artifact_import_parser = subparsers.add_parser("artifact-import", help="Import local files or URL metadata into source captures")
+    artifact_import_parser.add_argument("--vault", required=True, type=Path)
+    artifact_import_parser.add_argument("--source", required=True, action="append", help="File, directory, or URL to import. Repeatable.")
+    artifact_import_parser.add_argument("--domain", default="identity", help="Capture domain/map to attach")
+    artifact_import_parser.add_argument("--sensitivity", default="normal", help="Sensitivity for created source captures")
+    artifact_import_parser.add_argument("--apply", action="store_true", help="Write source captures. Defaults to dry-run.")
+    artifact_import_parser.add_argument("--max-files", type=int, default=40, help="Maximum files when importing directories")
+    artifact_import_parser.add_argument("--max-chars", type=int, default=40000, help="Maximum characters per imported artifact")
+    artifact_import_parser.add_argument("--json", action="store_true", dest="json_output", help="Print import plan/result as JSON")
+
+    time_travel_parser = subparsers.add_parser("time-travel", help="Compare timeline eras, threads, pressure, people, and turning points")
+    time_travel_parser.add_argument("--vault", required=True, type=Path)
+    time_travel_parser.add_argument("--query", default="", help="Optional search over timeline items")
+    time_travel_parser.add_argument("--thread", default=None, help="Optional timeline thread id")
+    time_travel_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate timeline items")
+    time_travel_parser.add_argument("--max-items", type=int, default=8, help="Maximum chapters/items")
+    time_travel_parser.add_argument("--json", action="store_true", dest="json_output", help="Print time travel report as JSON")
+
+    share_capsule_parser = subparsers.add_parser("share-capsule", help="Create a safe Markdown or JSON bundle from a query or lens")
+    share_capsule_parser.add_argument("--vault", required=True, type=Path)
+    share_capsule_parser.add_argument("--title", default="Self Atlas Share Capsule")
+    share_capsule_parser.add_argument("--query", default="", help="Optional query")
+    share_capsule_parser.add_argument("--lens", choices=available_lens_ids(), default=None, help="Optional life lens")
+    share_capsule_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    share_capsule_parser.add_argument("--yes", action="store_true", help="Confirm private capsule output when including sensitive notes")
+    share_capsule_parser.add_argument("--max-notes", type=int, default=8, help="Maximum notes")
+    share_capsule_parser.add_argument("--out", type=Path, default=None, help="Optional output file. Defaults to stdout.")
+    share_capsule_parser.add_argument("--json", action="store_true", dest="json_output", help="Print capsule as JSON instead of Markdown")
+
+    taste_genome_parser = subparsers.add_parser("taste-genome", help="Extract taste principles, anti-taste, references, and craft signals")
+    taste_genome_parser.add_argument("--vault", required=True, type=Path)
+    taste_genome_parser.add_argument("--include-sensitive", action="store_true", help="Include private, health, financial, and intimate notes")
+    taste_genome_parser.add_argument("--max-items", type=int, default=12, help="Maximum rows per section")
+    taste_genome_parser.add_argument("--json", action="store_true", dest="json_output", help="Print taste genome as JSON")
 
     find_gaps_parser = subparsers.add_parser("find-gaps", help="Report thin areas, queued questions, and open threads")
     find_gaps_parser.add_argument("--vault", required=True, type=Path)
@@ -252,6 +330,22 @@ def main(argv: list[str] | None = None) -> int:
         print_thread_walk(args.vault, args.query, args.include_sensitive, max(0, args.depth), max(1, args.max_notes), args.json_output)
     elif args.command == "answer-context":
         print_answer_context(args.vault, args.query, args.include_sensitive, max(1, args.max_notes), args.json_output)
+    elif args.command == "life-lenses":
+        print_life_lenses(args.vault, args.lens, args.query, args.include_sensitive, max(1, args.max_notes), args.json_output)
+    elif args.command == "contradictions":
+        print_contradictions(args.vault, args.query, args.lens, args.include_sensitive, max(1, args.max_items), args.json_output)
+    elif args.command == "decision-council":
+        print_decision_council(args.vault, args.question, args.options, args.include_sensitive, max(1, args.max_notes), args.json_output)
+    elif args.command == "open-loop-radar":
+        print_open_loop_radar(args.vault, args.lens, args.include_sensitive, max(1, args.stale_days), max(1, args.max_items), args.json_output)
+    elif args.command == "artifact-import":
+        print_artifact_import(args.vault, args.source, args.domain, args.sensitivity, args.apply, max(1, args.max_files), max(1000, args.max_chars), args.json_output)
+    elif args.command == "time-travel":
+        print_time_travel(args.vault, args.query, args.thread, args.include_sensitive, max(1, args.max_items), args.json_output)
+    elif args.command == "share-capsule":
+        print_share_capsule(args.vault, args.title, args.query, args.lens, args.include_sensitive, args.yes, max(1, args.max_notes), args.out, args.json_output)
+    elif args.command == "taste-genome":
+        print_taste_genome(args.vault, args.include_sensitive, max(1, args.max_items), args.json_output)
     elif args.command == "find-gaps":
         find_gaps(args.vault)
     elif args.command == "enrich-thin-notes":

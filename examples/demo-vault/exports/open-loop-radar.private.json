@@ -1,0 +1,284 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "private",
+  "hidden_sensitive": 0,
+  "lens": null,
+  "stale_days": 30,
+  "counts": {
+    "confidence-review": 9,
+    "contradiction-signal": 4,
+    "open-thread": 4,
+    "queued-question": 5,
+    "total": 22
+  },
+  "loops": [
+    {
+      "kind": "open-thread",
+      "priority": "high",
+      "path": "00 System/Open Threads.md",
+      "title": "Open Threads",
+      "description": "Add one concrete scene to [[20 People/Friends/Ari]].",
+      "lens": null,
+      "evidence": []
+    },
+    {
+      "kind": "open-thread",
+      "priority": "high",
+      "path": "00 System/Open Threads.md",
+      "title": "Open Threads",
+      "description": "Clarify the April prototype timeline for [[30 Work/Projects/Lumen Sketch]].",
+      "lens": null,
+      "evidence": []
+    },
+    {
+      "kind": "open-thread",
+      "priority": "high",
+      "path": "00 System/Open Threads.md",
+      "title": "Open Threads",
+      "description": "Decide what kind of pressure belongs in [[80 Reflections/Pressure and Craft]] without turning the work dead.",
+      "lens": null,
+      "evidence": []
+    },
+    {
+      "kind": "open-thread",
+      "priority": "high",
+      "path": "00 System/Open Threads.md",
+      "title": "Open Threads",
+      "description": "Walk the thread from [[60 Interests/Music Identity]] to [[50 Taste/Taste Profile]] and export motion.",
+      "lens": null,
+      "evidence": []
+    },
+    {
+      "kind": "confidence-review",
+      "priority": "medium",
+      "path": "10 Self/Identity.md",
+      "title": "Identity",
+      "description": "Confidence is `inferred`.",
+      "lens": "identity",
+      "evidence": [
+        {
+          "path": "10 Self/Identity.md",
+          "title": "Identity",
+          "type": "identity",
+          "sensitivity": "private",
+          "confidence": "inferred",
+          "excerpt": ""
+        }
+      ]
+    },
+    {
+      "kind": "confidence-review",
+      "priority": "medium",
+      "path": "20 People/Friends/Ari.md",
+      "title": "Ari",
+      "description": "Confidence is `inferred`.",
+      "lens": "relationships",
+      "evidence": [
+        {
+          "path": "20 People/Friends/Ari.md",
+          "title": "Ari",
+          "type": "person",
+          "sensitivity": "private",
+          "confidence": "inferred",
+          "excerpt": ""
+        }
+      ]
+    },
+    {
+      "kind": "confidence-review",
+      "priority": "medium",
+      "path": "25 Love/River.md",
+      "title": "River",
+      "description": "Confidence is `inferred`.",
+      "lens": "relationships",
+      "evidence": [
+        {
+          "path": "25 Love/River.md",
+          "title": "River",
+          "type": "person",
+          "sensitivity": "intimate",
+          "confidence": "inferred",
+          "excerpt": ""
+        }
+      ]
+    },
+    {
+      "kind": "confidence-review",
+      "priority": "medium",
+      "path": "30 Work/Projects/Lumen Sketch.md",
+      "title": "Lumen Sketch",
+      "description": "Confidence is `inferred`.",
+      "lens": "creative",
+      "evidence": [
+        {
+          "path": "30 Work/Projects/Lumen Sketch.md",
+          "title": "Lumen Sketch",
+          "type": "project",
+          "sensitivity": "normal",
+          "confidence": "inferred",
+          "excerpt": ""
+        }
+      ]
+    },
+    {
+      "kind": "confidence-review",
+      "priority": "medium",
+      "path": "50 Taste/Taste Profile.md",
+      "title": "Taste Profile",
+      "description": "Confidence is `inferred`.",
+      "lens": "taste",
+      "evidence": [
+        {
+          "path": "50 Taste/Taste Profile.md",
+          "title": "Taste Profile",
+          "type": "preference",
+          "sensitivity": "normal",
+          "confidence": "inferred",
+          "excerpt": ""
+        }
+      ]
+    },
+    {
+      "kind": "confidence-review",
+      "priority": "medium",
+      "path": "60 Interests/Music Identity.md",
+      "title": "Music Identity",
+      "description": "Confidence is `inferred`.",
+      "lens": "taste",
+      "evidence": [
+        {
+          "path": "60 Interests/Music Identity.md",
+          "title": "Music Identity",
+          "type": "preference",
+          "sensitivity": "normal",
+          "confidence": "inferred",
+          "excerpt": ""
+        }
+      ]
+    },
+    {
+      "kind": "confidence-review",
+      "priority": "medium",
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "description": "Confidence is `inferred`.",
+      "lens": "timeline",
+      "evidence": [
+        {
+          "path": "70 Timeline/Life Timeline.md",
+          "title": "Life Timeline",
+          "type": "index",
+          "sensitivity": "private",
+          "confidence": "inferred",
+          "excerpt": ""
+        }
+      ]
+    },
+    {
+      "kind": "confidence-review",
+      "priority": "medium",
+      "path": "70 Timeline/Public Milestones.md",
+      "title": "Public Milestones",
+      "description": "Confidence is `inferred`.",
+      "lens": "timeline",
+      "evidence": [
+        {
+          "path": "70 Timeline/Public Milestones.md",
+          "title": "Public Milestones",
+          "type": "index",
+          "sensitivity": "normal",
+          "confidence": "inferred",
+          "excerpt": ""
+        }
+      ]
+    },
+    {
+      "kind": "confidence-review",
+      "priority": "medium",
+      "path": "80 Reflections/Pressure and Craft.md",
+      "title": "Pressure and Craft",
+      "description": "Confidence is `inferred`.",
+      "lens": "creative",
+      "evidence": [
+        {
+          "path": "80 Reflections/Pressure and Craft.md",
+          "title": "Pressure and Craft",
+          "type": "pattern",
+          "sensitivity": "private",
+          "confidence": "inferred",
+          "excerpt": ""
+        }
+      ]
+    },
+    {
+      "kind": "contradiction-signal",
+      "priority": "medium",
+      "path": "10 Self/Identity.md",
+      "title": "Identity",
+      "description": "Body contains tension, reversal, or then-vs-now language worth reviewing.",
+      "lens": null,
+      "evidence": []
+    },
+    {
+      "kind": "contradiction-signal",
+      "priority": "medium",
+      "path": "20 People/Friends/Ari.md",
+      "title": "Ari",
+      "description": "Body contains tension, reversal, or then-vs-now language worth reviewing.",
+      "lens": null,
+      "evidence": []
+    },
+    {
+      "kind": "contradiction-signal",
+      "priority": "medium",
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "description": "Body contains tension, reversal, or then-vs-now language worth reviewing.",
+      "lens": null,
+      "evidence": []
+    },
+    {
+      "kind": "contradiction-signal",
+      "priority": "medium",
+      "path": "70 Timeline/Public Milestones.md",
+      "title": "Public Milestones",
+      "description": "Body contains tension, reversal, or then-vs-now language worth reviewing.",
+      "lens": null,
+      "evidence": []
+    },
+    {
+      "kind": "queued-question",
+      "priority": "medium",
+      "path": "00 System/Question Queue.md",
+      "title": "Question Queue",
+      "description": "What does [[25 Love/River]] need from Mira's support in one ordinary week?",
+      "lens": null,
+      "evidence": []
+    },
+    {
+      "kind": "queued-question",
+      "priority": "medium",
+      "path": "00 System/Question Queue.md",
+      "title": "Question Queue",
+      "description": "What exact date did Mira start the Lumen Sketch prototype, and what made it feel real enough to save?",
+      "lens": null,
+      "evidence": []
+    },
+    {
+      "kind": "queued-question",
+      "priority": "medium",
+      "path": "00 System/Question Queue.md",
+      "title": "Question Queue",
+      "description": "What song or sonic palette should anchor [[60 Interests/Music Identity]] for the export motion?",
+      "lens": null,
+      "evidence": []
+    }
+  ],
+  "recommendations": [
+    "Walk one active thread before adding another question.",
+    "Review the highest-severity contradiction signal before treating the note as settled.",
+    "Ask one queued question that can update multiple notes."
+  ]
+}

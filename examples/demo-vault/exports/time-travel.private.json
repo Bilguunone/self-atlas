@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "private",
+  "query": "",
+  "thread": null,
+  "counts": {
+    "items": 6,
+    "chapters": 3,
+    "hidden_sensitive": 0
+  },
+  "chapters": [
+    {
+      "id": "2026",
+      "item_count": 2,
+      "threads": [
+        "life"
+      ],
+      "pressure_level": "unknown",
+      "emotional_charge": "positive",
+      "first_item": {
+        "id": "timeline:70-timeline-life-timeline:002:in-2026-ari-helped-mira-see-that-the-project-needed-one-stro",
+        "title": "In 2026 Ari Helped Mira See That The",
+        "text": "In 2026, Ari helped Mira see that the project needed one strong export instead of ten half-finished directions.",
+        "source_note": "70 Timeline/Life Timeline.md",
+        "source_section": "What We Know",
+        "date_label": "In 2026",
+        "date_start": "2026",
+        "date_end": null,
+        "date_precision": "year",
+        "sort_key": "2026",
+        "life_period": null,
+        "threads": [
+          "life"
+        ],
+        "people": [],
+        "projects": [],
+        "places": [],
+        "emotional_charge": "positive",
+        "pressure_level": "unknown",
+        "turning_point": false,
+        "confidence": "inferred",
+        "sensitivity": "private",
+        "links": [],
+        "sources": [
+          "90 Sources/Captures/2026-05-21-demo-answer"
+        ]
+      },
+      "last_item": {
+        "id": "timeline:70-timeline-life-timeline:003:in-2026-river-noticed-mira-looked-alive-while-tuning-export",
+        "title": "In 2026 River Noticed Mira Looked Alive While",
+        "text": "In 2026, River noticed Mira looked alive while tuning export motion and drained while writing fake onboarding copy.",
+        "source_note": "70 Timeline/Life Timeline.md",
+        "source_section": "What We Know",
+        "date_label": "In 2026",
+        "date_start": "2026",
+        "date_end": null,
+        "date_precision": "year",
+        "sort_key": "2026",
+        "life_period": null,
+        "threads": [
+          "life"
+        ],
+        "people": [],
+        "projects": [],
+        "places": [],
+        "emotional_charge": "unknown",
+        "pressure_level": "unknown",
+        "turning_point": false,
+        "confidence": "inferred",
+        "sensitivity": "private",
+        "links": [],
+        "sources": [
+          "90 Sources/Captures/2026-05-21-demo-answer"
+        ]
+      }
+    },
+    {
+      "id": "2026-05",
+      "item_count": 3,
+      "threads": [
+        "money_pressure",
+        "product",
+        "creative_identity"
+      ],
+      "pressure_level": "unknown",
+      "emotional_charge": "unknown",
+      "first_item": {
+        "id": "timeline:70-timeline-life-timeline:004:in-may-2026-the-pressure-around-the-first-export-became-a-us",
+        "title": "In May 2026 The Pressure Around The First",
+        "text": "In May 2026, the pressure around the first export became a useful craft signal instead of only stress.",
+        "source_note": "70 Timeline/Life Timeline.md",
+        "source_section": "What We Know",
+        "date_label": "May 2026",
+        "date_start": "2026-05",
+        "date_end": null,
+        "date_precision": "month",
+        "sort_key": "2026-05",
+        "life_period": null,
+        "threads": [
+          "money_pressure"
+        ],
+        "people": [],
+        "projects": [],
+        "places": [],
+        "emotional_charge": "heavy",
+        "pressure_level": "high",
+        "turning_point": false,
+        "confidence": "inferred",
+        "sensitivity": "private",
+        "links": [],
+        "sources": [
+          "90 Sources/Captures/2026-05-21-demo-answer"
+        ]
+      },
+      "last_item": {
+        "id": "timeline:70-timeline-public-milestones:003:in-may-2026-lumen-sketch-found-its-public-proof-moment-one-p",
+        "title": "In May 2026 Lumen Sketch Found Its Public",
+        "text": "In May 2026, Lumen Sketch found its public proof moment: one poster export worth saving.",
+        "source_note": "70 Timeline/Public Milestones.md",
+        "source_section": "What We Know",
+        "date_label": "May 2026",
+        "date_start": "2026-05",
+        "date_end": null,
+        "date_precision": "month",
+        "sort_key": "2026-05",
+        "life_period": null,
+        "threads": [
+          "creative_identity"
+        ],
+        "people": [],
+        "projects": [],
+        "places": [],
+        "emotional_charge": "unknown",
+        "pressure_level": "unknown",
+        "turning_point": false,
+        "confidence": "inferred",
+        "sensitivity": "normal",
+        "links": [],
+        "sources": [
+          "90 Sources/Captures/2026-05-21-demo-answer"
+        ]
+      }
+    },
+    {
+      "id": "career-era",
+      "item_count": 1,
+      "threads": [
+        "career"
+      ],
+      "pressure_level": "unknown",
+      "emotional_charge": "unknown",
+      "first_item": {
+        "id": "timeline:70-timeline-life-timeline:001:in-april-2026-mira-started-lumen-sketch-after-a-week-of-mess",
+        "title": "In April 2026 Mira Started Lumen Sketch After",
+        "text": "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments.",
+        "source_note": "70 Timeline/Life Timeline.md",
+        "source_section": "What We Know",
+        "date_label": "April 2026",
+        "date_start": "2026-04",
+        "date_end": null,
+        "date_precision": "month",
+        "sort_key": "2026-04",
+        "life_period": "career-era",
+        "threads": [
+          "career"
+        ],
+        "people": [],
+        "projects": [
+          "30 Work/Projects/Lumen Sketch"
+        ],
+        "places": [],
+        "emotional_charge": "unknown",
+        "pressure_level": "unknown",
+        "turning_point": true,
+        "confidence": "inferred",
+        "sensitivity": "private",
+        "links": [
+          "30 Work/Projects/Lumen Sketch"
+        ],
+        "sources": [
+          "90 Sources/Captures/2026-05-21-demo-answer"
+        ]
+      },
+      "last_item": {
+        "id": "timeline:70-timeline-life-timeline:001:in-april-2026-mira-started-lumen-sketch-after-a-week-of-mess",
+        "title": "In April 2026 Mira Started Lumen Sketch After",
+        "text": "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments.",
+        "source_note": "70 Timeline/Life Timeline.md",
+        "source_section": "What We Know",
+        "date_label": "April 2026",
+        "date_start": "2026-04",
+        "date_end": null,
+        "date_precision": "month",
+        "sort_key": "2026-04",
+        "life_period": "career-era",
+        "threads": [
+          "career"
+        ],
+        "people": [],
+        "projects": [
+          "30 Work/Projects/Lumen Sketch"
+        ],
+        "places": [],
+        "emotional_charge": "unknown",
+        "pressure_level": "unknown",
+        "turning_point": true,
+        "confidence": "inferred",
+        "sensitivity": "private",
+        "links": [
+          "30 Work/Projects/Lumen Sketch"
+        ],
+        "sources": [
+          "90 Sources/Captures/2026-05-21-demo-answer"
+        ]
+      }
+    }
+  ],
+  "turning_points": [
+    {
+      "id": "timeline:70-timeline-life-timeline:001:in-april-2026-mira-started-lumen-sketch-after-a-week-of-mess",
+      "title": "In April 2026 Mira Started Lumen Sketch After",
+      "text": "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments.",
+      "source_note": "70 Timeline/Life Timeline.md",
+      "source_section": "What We Know",
+      "date_label": "April 2026",
+      "date_start": "2026-04",
+      "date_end": null,
+      "date_precision": "month",
+      "sort_key": "2026-04",
+      "life_period": "career-era",
+      "threads": [
+        "career"
+      ],
+      "people": [],
+      "projects": [
+        "30 Work/Projects/Lumen Sketch"
+      ],
+      "places": [],
+      "emotional_charge": "unknown",
+      "pressure_level": "unknown",
+      "turning_point": true,
+      "confidence": "inferred",
+      "sensitivity": "private",
+      "links": [
+        "30 Work/Projects/Lumen Sketch"
+      ],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    }
+  ],
+  "then_now": {
+    "then": {
+      "id": "timeline:70-timeline-life-timeline:002:in-2026-ari-helped-mira-see-that-the-project-needed-one-stro",
+      "title": "In 2026 Ari Helped Mira See That The",
+      "text": "In 2026, Ari helped Mira see that the project needed one strong export instead of ten half-finished directions.",
+      "source_note": "70 Timeline/Life Timeline.md",
+      "source_section": "What We Know",
+      "date_label": "In 2026",
+      "date_start": "2026",
+      "date_end": null,
+      "date_precision": "year",
+      "sort_key": "2026",
+      "life_period": null,
+      "threads": [
+        "life"
+      ],
+      "people": [],
+      "projects": [],
+      "places": [],
+      "emotional_charge": "positive",
+      "pressure_level": "unknown",
+      "turning_point": false,
+      "confidence": "inferred",
+      "sensitivity": "private",
+      "links": [],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    },
+    "now": {
+      "id": "timeline:70-timeline-public-milestones:003:in-may-2026-lumen-sketch-found-its-public-proof-moment-one-p",
+      "title": "In May 2026 Lumen Sketch Found Its Public",
+      "text": "In May 2026, Lumen Sketch found its public proof moment: one poster export worth saving.",
+      "source_note": "70 Timeline/Public Milestones.md",
+      "source_section": "What We Know",
+      "date_label": "May 2026",
+      "date_start": "2026-05",
+      "date_end": null,
+      "date_precision": "month",
+      "sort_key": "2026-05",
+      "life_period": null,
+      "threads": [
+        "creative_identity"
+      ],
+      "people": [],
+      "projects": [],
+      "places": [],
+      "emotional_charge": "unknown",
+      "pressure_level": "unknown",
+      "turning_point": false,
+      "confidence": "inferred",
+      "sensitivity": "normal",
+      "links": [],
+      "sources": [
+        "90 Sources/Captures/2026-05-21-demo-answer"
+      ]
+    },
+    "shift": "Compare the first and latest receipts before narrating the arc."
+  }
+}

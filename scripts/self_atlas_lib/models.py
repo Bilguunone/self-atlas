@@ -147,6 +147,184 @@ class TimelinePeriod:
         }
 
 @dataclass(frozen=True)
+class LensSpec:
+    id: str
+    title: str
+    description: str
+    note_types: tuple[str, ...]
+    path_prefixes: tuple[str, ...]
+    tags: tuple[str, ...]
+    keywords: tuple[str, ...]
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "note_types": list(self.note_types),
+            "path_prefixes": list(self.path_prefixes),
+            "tags": list(self.tags),
+            "keywords": list(self.keywords),
+        }
+
+@dataclass(frozen=True)
+class EvidenceRef:
+    path: str
+    title: str
+    type: str
+    sensitivity: str
+    confidence: str
+    excerpt: str = ""
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "path": self.path,
+            "title": self.title,
+            "type": self.type,
+            "sensitivity": self.sensitivity,
+            "confidence": self.confidence,
+            "excerpt": self.excerpt,
+        }
+
+@dataclass(frozen=True)
+class OpenLoop:
+    kind: str
+    priority: str
+    path: str
+    title: str
+    description: str
+    lens: str | None
+    evidence: tuple[EvidenceRef, ...] = ()
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "kind": self.kind,
+            "priority": self.priority,
+            "path": self.path,
+            "title": self.title,
+            "description": self.description,
+            "lens": self.lens,
+            "evidence": [item.to_json() for item in self.evidence],
+        }
+
+@dataclass(frozen=True)
+class ContradictionSignal:
+    kind: str
+    severity: str
+    path: str
+    title: str
+    signal: str
+    evidence: tuple[EvidenceRef, ...] = ()
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "kind": self.kind,
+            "severity": self.severity,
+            "path": self.path,
+            "title": self.title,
+            "signal": self.signal,
+            "evidence": [item.to_json() for item in self.evidence],
+        }
+
+@dataclass(frozen=True)
+class DecisionBrief:
+    question: str
+    options: tuple[str, ...]
+    mode: str
+    hidden_sensitive: int
+    councils: tuple[dict[str, object], ...]
+    recommendation: str
+    review_flags: tuple[str, ...]
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "question": self.question,
+            "options": list(self.options),
+            "mode": self.mode,
+            "hidden_sensitive": self.hidden_sensitive,
+            "councils": list(self.councils),
+            "recommendation": self.recommendation,
+            "review_flags": list(self.review_flags),
+        }
+
+@dataclass(frozen=True)
+class ImportPlan:
+    source: str
+    source_type: str
+    title: str
+    domain: str
+    sensitivity: str
+    target_path: str
+    word_count: int
+    status: str
+    applied: bool
+    reason: str = ""
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "source": self.source,
+            "source_type": self.source_type,
+            "title": self.title,
+            "domain": self.domain,
+            "sensitivity": self.sensitivity,
+            "target_path": self.target_path,
+            "word_count": self.word_count,
+            "status": self.status,
+            "applied": self.applied,
+            "reason": self.reason,
+        }
+
+@dataclass(frozen=True)
+class ShareCapsule:
+    title: str
+    mode: str
+    query: str | None
+    lens: str | None
+    hidden_sensitive: int
+    notes: tuple[dict[str, object], ...]
+    sources: tuple[EvidenceRef, ...]
+    warnings: tuple[str, ...]
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "title": self.title,
+            "mode": self.mode,
+            "query": self.query,
+            "lens": self.lens,
+            "hidden_sensitive": self.hidden_sensitive,
+            "notes": list(self.notes),
+            "sources": [item.to_json() for item in self.sources],
+            "warnings": list(self.warnings),
+        }
+
+@dataclass(frozen=True)
+class TasteGenomeReport:
+    mode: str
+    hidden_sensitive: int
+    principles: tuple[str, ...]
+    anti_taste: tuple[str, ...]
+    references: tuple[str, ...]
+    motion_words: tuple[str, ...]
+    material_words: tuple[str, ...]
+    proof_examples: tuple[str, ...]
+    weak_spots: tuple[str, ...]
+    source_notes: tuple[EvidenceRef, ...]
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "mode": self.mode,
+            "hidden_sensitive": self.hidden_sensitive,
+            "principles": list(self.principles),
+            "anti_taste": list(self.anti_taste),
+            "references": list(self.references),
+            "motion_words": list(self.motion_words),
+            "material_words": list(self.material_words),
+            "proof_examples": list(self.proof_examples),
+            "weak_spots": list(self.weak_spots),
+            "source_notes": [item.to_json() for item in self.source_notes],
+        }
+
+@dataclass(frozen=True)
 class MemoryCandidate:
     kind: str
     text: str

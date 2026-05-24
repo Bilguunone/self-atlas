@@ -1,0 +1,276 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "share-safe",
+  "hidden_sensitive": 9,
+  "query": "",
+  "lens": null,
+  "lenses": [
+    {
+      "id": "identity",
+      "title": "Identity",
+      "description": "Self-story, values, desires, fears, and recurring inner patterns.",
+      "note_types": [
+        "identity",
+        "value",
+        "desire",
+        "pattern",
+        "tension"
+      ],
+      "path_prefixes": [
+        "10 Self/",
+        "80 Reflections/"
+      ],
+      "tags": [
+        "self-atlas/identity",
+        "self-atlas/value",
+        "self-atlas/desire",
+        "self-atlas/pattern"
+      ],
+      "keywords": [
+        "identity",
+        "value",
+        "desire",
+        "fear",
+        "pattern",
+        "tension",
+        "misunderstand"
+      ],
+      "visible_notes": 3
+    },
+    {
+      "id": "career",
+      "title": "Career",
+      "description": "Work, projects, skills, proof, roles, collaborators, and pressure points.",
+      "note_types": [
+        "work",
+        "project",
+        "skill"
+      ],
+      "path_prefixes": [
+        "30 Work/"
+      ],
+      "tags": [
+        "self-atlas/work",
+        "self-atlas/project",
+        "self-atlas/skill"
+      ],
+      "keywords": [
+        "work",
+        "career",
+        "project",
+        "role",
+        "skill",
+        "proof",
+        "prototype",
+        "swift",
+        "swiftui"
+      ],
+      "visible_notes": 5
+    },
+    {
+      "id": "creative",
+      "title": "Creative",
+      "description": "Creative identity, artifacts, references, product feel, and craft pressure.",
+      "note_types": [
+        "project",
+        "preference",
+        "creative_reference",
+        "pattern"
+      ],
+      "path_prefixes": [
+        "30 Work/Projects/",
+        "50 Taste/",
+        "60 Interests/",
+        "80 Reflections/"
+      ],
+      "tags": [
+        "self-atlas/project",
+        "self-atlas/taste",
+        "self-atlas/craft",
+        "self-atlas/music"
+      ],
+      "keywords": [
+        "creative",
+        "artifact",
+        "design",
+        "music",
+        "motion",
+        "export",
+        "poster",
+        "visual",
+        "craft"
+      ],
+      "visible_notes": 6
+    },
+    {
+      "id": "taste",
+      "title": "Taste",
+      "description": "Taste, anti-taste, references, motion, material, and proof moments.",
+      "note_types": [
+        "preference",
+        "creative_reference"
+      ],
+      "path_prefixes": [
+        "50 Taste/",
+        "60 Interests/"
+      ],
+      "tags": [
+        "self-atlas/taste",
+        "self-atlas/music",
+        "self-atlas/reference"
+      ],
+      "keywords": [
+        "taste",
+        "anti",
+        "reference",
+        "motion",
+        "material",
+        "warm",
+        "generic",
+        "soulless",
+        "tactile"
+      ],
+      "visible_notes": 5
+    },
+    {
+      "id": "relationships",
+      "title": "Relationships",
+      "description": "People, closeness, family, friendship, love, mentorship, and collaborators.",
+      "note_types": [
+        "person"
+      ],
+      "path_prefixes": [
+        "20 People/",
+        "25 Love/"
+      ],
+      "tags": [
+        "self-atlas/person",
+        "self-atlas/friend",
+        "self-atlas/family",
+        "self-atlas/love"
+      ],
+      "keywords": [
+        "friend",
+        "family",
+        "love",
+        "relationship",
+        "mentor",
+        "collaborator",
+        "support"
+      ],
+      "visible_notes": 2
+    },
+    {
+      "id": "health",
+      "title": "Health",
+      "description": "Health observations, metrics, body context, energy, sleep, and triggers.",
+      "note_types": [
+        "health_observation",
+        "health_metric"
+      ],
+      "path_prefixes": [
+        "40 Health/"
+      ],
+      "tags": [
+        "self-atlas/health"
+      ],
+      "keywords": [
+        "health",
+        "body",
+        "sleep",
+        "energy",
+        "pain",
+        "metric",
+        "trigger",
+        "frequency"
+      ],
+      "visible_notes": 0
+    },
+    {
+      "id": "money",
+      "title": "Money",
+      "description": "Financial context, income, obligations, tuition, support, and pressure.",
+      "note_types": [
+        "money_context"
+      ],
+      "path_prefixes": [
+        "75 Money/"
+      ],
+      "tags": [
+        "self-atlas/money",
+        "self-atlas/financial"
+      ],
+      "keywords": [
+        "money",
+        "financial",
+        "salary",
+        "tuition",
+        "income",
+        "rent",
+        "budget",
+        "paid",
+        "support"
+      ],
+      "visible_notes": 1
+    },
+    {
+      "id": "logistics",
+      "title": "Logistics",
+      "description": "Documents, deadlines, visas, travel, admin, and practical open threads.",
+      "note_types": [
+        "logistics_thread"
+      ],
+      "path_prefixes": [
+        "00 System/Open Threads",
+        "75 Logistics/"
+      ],
+      "tags": [
+        "self-atlas/logistics",
+        "self-atlas/open-threads"
+      ],
+      "keywords": [
+        "visa",
+        "deadline",
+        "document",
+        "appointment",
+        "travel",
+        "archive",
+        "admin",
+        "confirm"
+      ],
+      "visible_notes": 0
+    },
+    {
+      "id": "timeline",
+      "title": "Timeline",
+      "description": "Events, periods, milestones, turning points, eras, and dated life threads.",
+      "note_types": [
+        "event",
+        "life_period",
+        "milestone"
+      ],
+      "path_prefixes": [
+        "70 Timeline/"
+      ],
+      "tags": [
+        "self-atlas/timeline",
+        "self-atlas/event",
+        "self-atlas/milestone"
+      ],
+      "keywords": [
+        "timeline",
+        "date",
+        "year",
+        "phase",
+        "chapter",
+        "period",
+        "started",
+        "turned"
+      ],
+      "visible_notes": 3
+    }
+  ],
+  "selection": []
+}

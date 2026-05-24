@@ -1,0 +1,28 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "dry-run",
+  "counts": {
+    "sources": 1,
+    "ready": 1,
+    "imported": 0,
+    "skipped": 0
+  },
+  "plans": [
+    {
+      "source": "https://example.com/lumen-sketch-reference",
+      "source_type": "url",
+      "title": "Lumen Sketch Reference",
+      "domain": "taste",
+      "sensitivity": "normal",
+      "target_path": "90 Sources/Captures/2026-05-25-artifact-lumen-sketch-reference.md",
+      "word_count": 40,
+      "status": "ready",
+      "applied": false,
+      "reason": ""
+    }
+  ],
+  "applied_paths": [],
+  "note": "Imported artifacts are source captures only. Use capture-review before durable memory writes."
+}

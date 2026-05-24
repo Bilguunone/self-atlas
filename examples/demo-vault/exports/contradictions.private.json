@@ -1,0 +1,83 @@
+{
+  "vault": {
+    "name": "demo-vault"
+  },
+  "mode": "private",
+  "hidden_sensitive": 0,
+  "query": "",
+  "lens": null,
+  "counts": {
+    "signals": 4
+  },
+  "signals": [
+    {
+      "kind": "tension-language",
+      "severity": "low",
+      "path": "10 Self/Identity.md",
+      "title": "Identity",
+      "signal": "Body contains tension, reversal, or then-vs-now language worth reviewing.",
+      "evidence": [
+        {
+          "path": "10 Self/Identity.md",
+          "title": "Identity",
+          "type": "identity",
+          "sensitivity": "private",
+          "confidence": "inferred",
+          "excerpt": "Mira seems to focus best when a project has pressure, novelty, and a visible artifact to finish. Source: [[90 Sources/Captures/2026-05-21-demo-answer]] Mira notices the body difference between alive creative work and..."
+        }
+      ]
+    },
+    {
+      "kind": "tension-language",
+      "severity": "low",
+      "path": "20 People/Friends/Ari.md",
+      "title": "Ari",
+      "signal": "Body contains tension, reversal, or then-vs-now language worth reviewing.",
+      "evidence": [
+        {
+          "path": "20 People/Friends/Ari.md",
+          "title": "Ari",
+          "type": "person",
+          "sensitivity": "private",
+          "confidence": "inferred",
+          "excerpt": "Ari is a close friend in the fictional demo graph. Mira associates Ari with honest creative feedback and practical encouragement."
+        }
+      ]
+    },
+    {
+      "kind": "tension-language",
+      "severity": "low",
+      "path": "70 Timeline/Life Timeline.md",
+      "title": "Life Timeline",
+      "signal": "Body contains tension, reversal, or then-vs-now language worth reviewing.",
+      "evidence": [
+        {
+          "path": "70 Timeline/Life Timeline.md",
+          "title": "Life Timeline",
+          "type": "index",
+          "sensitivity": "private",
+          "confidence": "inferred",
+          "excerpt": "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments. In 2026, Ari helped Mira see that the project needed one strong export instead of ten half-finished directions."
+        }
+      ]
+    },
+    {
+      "kind": "tension-language",
+      "severity": "low",
+      "path": "70 Timeline/Public Milestones.md",
+      "title": "Public Milestones",
+      "signal": "Body contains tension, reversal, or then-vs-now language worth reviewing.",
+      "evidence": [
+        {
+          "path": "70 Timeline/Public Milestones.md",
+          "title": "Public Milestones",
+          "type": "index",
+          "sensitivity": "normal",
+          "confidence": "inferred",
+          "excerpt": "In April 2026, Mira started [[30 Work/Projects/Lumen Sketch]] after a week of messy visual experiments. In May 2026, the first useful export made the project feel like a real creative tool instead of a folder of almosts."
+        }
+      ]
+    }
+  ],
+  "note": "Signals are review leads, not automatic truth judgments."
+}
