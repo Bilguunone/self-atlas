@@ -1,6 +1,6 @@
 ---
 name: self-atlas
-description: Build, query, and refine a private Markdown life graph about the user. Use when the user summons Self Atlas, asks to capture/search personal context, asks personal-memory questions, wants smart onboarding questions, or casually states durable personal facts such as things bought/owned/wanted, preferences, people, work, health, money, contact details, credentials/account logistics, goals, hobbies, or life-pattern context.
+description: Build, query, and refine a private Markdown life graph about the user. Use when the user summons Self Atlas, asks to capture/search personal context, asks personal-memory questions, wants smart onboarding questions, asks for advice/recommendations/decisions where personal context matters, or casually states durable personal facts such as things bought/owned/wanted, preferences, people, work, health, money, contact details, credentials/account logistics, goals, hobbies, or life-pattern context.
 ---
 
 # Self Atlas
@@ -50,6 +50,43 @@ Do not become a creepy vacuum:
 - If the user gives a dense message with many facts, capture the strongest durable facts first, then summarize what was captured and what remains open. Do not atomize every sentence into a note just to look busy.
 - If the assistant gives meaningful advice and the user reacts as if it should become part of their long-term context, capture the advice, rationale, and current decision state as source-backed context. Do not save every throwaway suggestion; save advice that affects future choices.
 - If the user is in the middle of a coding/design task and casually drops a durable fact, keep the main task moving; capture the fact in the background workflow and mention it briefly at the end.
+
+## Contextual Advice Mode
+
+Self Atlas is not only a memory-gathering tool. It should also make Codex's ordinary advice feel like it knows the user's taste, history, goals, constraints, and patterns.
+
+Use Self Atlas for context before answering when the user asks for advice, judgment, recommendations, or a choice that depends on personal context. Strong triggers include:
+
+- "Should I buy this?"
+- "Is this worth it for me?"
+- "Which one should I choose?"
+- "Does this fit my taste?"
+- "What do you think I should do?"
+- "Is this a good career move?"
+- "Should I take this job / project / tool / class / trip / subscription?"
+- "Help me decide."
+- "Would I actually use this?"
+- "Does this match what I am trying to build?"
+
+Context routing for advice:
+
+- purchase/tool/gear/subscription decisions: read `75 Things/Things.md`, relevant `thing` notes, `50 Taste/Taste Profile.md`, money context, active projects, and related source captures
+- career/job/portfolio advice: read `30 Work/Career.md`, `30 Work/Skills.md`, current project/employer notes, values/desires, and relevant timeline/work source captures
+- product/design/code advice: read the active project note, `50 Taste/Taste Profile.md`, anti-taste/references, product principles, and recurring project patterns
+- music/creative advice: read `50 Taste/Music Identity.md`, influences, things/tools, obsessions, and taste references
+- relationship or people advice: read the relevant person/love/family/friend notes and relationship patterns, with sensitivity awareness
+- health/body advice: read health observations/metrics for context but do not diagnose; suggest practical tracking or professional care when appropriate
+- money/logistics advice: read money context, logistics threads, deadlines, and source captures; keep numbers and dates concrete
+
+Good answer shape:
+
+- Give a clear verdict when evidence supports it.
+- Name what Self Atlas evidence you used: taste, money, project direction, past behavior, existing tools, current goals, or constraints.
+- Separate "fits you" from "generically good." Generic recommendations are not the point.
+- Include the condition that would change the answer.
+- If the answer creates a new durable decision, preference, or purchase intent, capture that afterward.
+
+Do not turn every advice request into a report. Use the graph quietly, then answer like a sharp friend. Mention sources only when useful or when the user asks why.
 
 ## Example-Led Questions
 

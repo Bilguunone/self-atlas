@@ -130,6 +130,8 @@ The report commands are read-only. They do not change existing Atlas content. `p
 
 Codex should treat clear first-person durable life facts, work updates, career direction, decisions, advice, preferences, taste signals, relationships, contact details, credentials/account logistics, goals, constraints, and recurring patterns as implicit Self Atlas capture intent, not wait for a perfect "save this" incantation. Phrases like "I bought...", "I own...", "I want...", "I am considering...", "I realized...", "I am into...", "I hate/love...", "at work...", "for my career...", "my address is...", "their phone number is...", "the login uses...", "the account is...", "I decided...", "your advice is...", or "future me should know..." should trigger the Self Atlas workflow when they contain stable personal context.
 
+Self Atlas should also run as a context engine for advice, not only as a memory collector. When the user asks "should I buy this?", "which one should I choose?", "does this fit my taste?", "is this a good career move?", "would I actually use this?", or similar context-dependent questions, Codex should read the relevant graph surfaces before answering. Purchase advice should consider Things, Taste, Money, active projects, past usage, and current goals. Career advice should consider Career, Skills, Projects, values, timeline, and work evidence. Creative/product advice should consider Taste Profile, anti-taste, active projects, references, and product principles. The answer should distinguish "fits you" from "generically good," because generic advice is the exact bland oatmeal this project exists to avoid.
+
 When Self Atlas is triggered explicitly or implicitly, Codex should:
 
 1. Find the vault or ask to create a minimal one before saving.
