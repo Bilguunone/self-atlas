@@ -225,6 +225,14 @@ class SelfAtlasTests(unittest.TestCase):
     def test_things_question_and_extraction_routing(self) -> None:
         self.assertEqual(infer_question_domain("What did I buy and what gear am I wanting next?"), "things")
         self.assertEqual(infer_candidate_kind("Bought a small MIDI controller for music workflow."), "thing")
+        self.assertEqual(
+            infer_candidate_kind("I bought this and love it; I race every day and the 5Nm direct drive torque feels strong."),
+            "thing",
+        )
+        self.assertEqual(
+            infer_candidate_kind("Thrustmaster T598 renewed for 1,714,694 MNT feels like a bargain even if the wheel is plasticky."),
+            "thing",
+        )
         self.assertTrue(question_templates_for_domain("things"))
 
     def test_contact_and_credentials_routing(self) -> None:

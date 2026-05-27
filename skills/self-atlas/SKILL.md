@@ -29,6 +29,8 @@ The capture pass applies to inputs and outputs:
 
 - user input: facts, preferences, goals, plans, worries, constraints, decisions, updates, corrections, tastes, relationships, purchases, work details, project direction, values, repeated patterns, contact/logistics details, and "remember this for later" energy
 - assistant output: advice the user is likely to reuse, decisions reached together, project/product rules, career positioning, taste judgments, personal strategy, system behavior rules, and explanations that become future context
+- attachments/screenshots: visible text in screenshots, pasted images, PDFs, receipts, order confirmations, chat screenshots, and file previews counts as input when it contains durable context. If the user says "this should have triggered" and the attachment contains "I bought this", "I love it", pricing, usage, dates, or object details, capture it instead of treating the attachment as decorative wallpaper.
+- cross-message resolution: if the user says "this" and the assistant output, title, receipt, filename, or nearby visible context names the object, use that context to identify the note target. Do not let pronoun ambiguity kill an obvious capture.
 
 Do not save everything just because words happened:
 
@@ -96,6 +98,7 @@ Do not become a creepy vacuum:
 - Ask before writing if the fact is ambiguous, legally risky, medically detailed beyond simple observation, intimate in a way that could harm someone, third-party contact data from someone the user barely knows, or if saving it would surprise a reasonable version of the user.
 - If the user gives a dense message with many facts, capture the strongest durable facts first, then summarize what was captured and what remains open. Do not atomize every sentence into a note just to look busy.
 - If the assistant gives meaningful advice and the user reacts as if it should become part of their long-term context, capture the advice, rationale, and current decision state as source-backed context. Do not save every throwaway suggestion; save advice that affects future choices.
+- If the user praises or criticizes something they bought/own/use frequently, capture the object, usage pattern, taste signal, money/value judgment, and any practical caveats. "I bought this and fucking love it", "I use it almost every day", "it feels like a bargain", "this feels plasticky but still worth it", and similar language are strong Things triggers.
 - If the user is in the middle of a coding/design task and casually drops a durable fact, keep the main task moving; capture the fact in the background workflow and mention it briefly at the end.
 
 ## Contextual Advice Mode
