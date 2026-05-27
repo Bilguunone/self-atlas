@@ -1,6 +1,6 @@
 ---
 name: self-atlas
-description: Build, query, and refine a private Markdown life graph about the user. Use when the user summons Self Atlas, asks to capture/search personal context, asks personal-memory questions, wants smart onboarding questions, asks for career/work/life/taste advice where personal context matters, asks for recommendations/decisions, or casually states durable personal facts such as things bought/owned/wanted, preferences, people, work, health, money, contact details, credentials/account logistics, goals, hobbies, or life-pattern context.
+description: Build, query, and refine a private Markdown life graph about the user. Use by default for nearly any conversation turn that may contain durable personal context, useful assistant advice, project/work direction, preferences, decisions, plans, outputs worth retaining, personal-memory questions, smart onboarding questions, career/work/life/taste advice, recommendations, or facts such as things bought/owned/wanted, people, health, money, contact details, credentials/account logistics, goals, hobbies, and life-pattern context.
 ---
 
 # Self Atlas
@@ -12,6 +12,32 @@ Self Atlas is a local-first personal memory workflow. It turns conversation into
 This should feel like a sharp friend slowly building a real map of a life, not a creepy HR intake form. Be warm, specific, and curious. Ask less, extract more. One good answer should create several useful memories.
 
 Do not spray fifty questions at the user. That is lazy and rude.
+
+## Always-On Capture Layer
+
+The user's desired default is for Self Atlas to be opportunistic across almost every meaningful input and output, not only obvious "save this" turns, career advice, or purchase decisions.
+
+For each normal Codex turn with this user, do a quiet Self Atlas pass:
+
+1. Scan the user's message for durable personal context.
+2. If the answer depends on personal context, read the relevant graph before answering.
+3. Scan the assistant's planned/final output for advice, decisions, product direction, career strategy, taste principles, project commitments, useful explanations, or other context that should shape future answers.
+4. Capture or update the vault when the turn contains durable value.
+5. Briefly mention important writes at the end without making the conversation feel like paperwork.
+
+The capture pass applies to inputs and outputs:
+
+- user input: facts, preferences, goals, plans, worries, constraints, decisions, updates, corrections, tastes, relationships, purchases, work details, project direction, values, repeated patterns, contact/logistics details, and "remember this for later" energy
+- assistant output: advice the user is likely to reuse, decisions reached together, project/product rules, career positioning, taste judgments, personal strategy, system behavior rules, and explanations that become future context
+
+Do not save everything just because words happened:
+
+- Skip purely mechanical command requests, transient logs, stack traces, one-off formatting, temporary debugging chatter, throwaway jokes, duplicate facts, and generic explanations with no personal or project consequence.
+- Skip or ask first for ambiguous sensitive material, legally risky details, medical detail beyond simple observation, intimate third-party detail, or anything that would surprise a reasonable version of the user.
+- Honor opt-outs immediately: "do not save this", "just chatting", "off the record", "don't put this in the vault", "hypothetical", and similar phrases mean no write.
+- Raw secrets still need the separate plaintext warning and explicit confirmation.
+
+Good default behavior: write compact source-backed updates, not enormous transcripts. Self Atlas should feel like a living context engine, not a surveillance clipboard with a hobby.
 
 ## Self Atlas First For Personal Advice
 
