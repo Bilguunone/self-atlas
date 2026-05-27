@@ -620,6 +620,76 @@ class SelfAtlasTests(unittest.TestCase):
             self.assertNotIn("River", report)
             self.assertNotIn("25 Love", report)
 
+    def test_timeline_derives_dated_thing_events(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "75 Things/Mini Keyboard.md",
+                note(
+                    "thing",
+                    "Mini Keyboard",
+                    textwrap.dedent(
+                        """
+                        ## Status
+
+                        - State: bought / own
+                        - Bought date: 2026-05-26
+                        - Price and currency: 99 USD
+
+                        ## Why It Matters
+
+                        - It makes software and music feel more tactile.
+                        """
+                    ),
+                    tags=("self-atlas/things", "self-atlas/thing", "self-atlas/music"),
+                ),
+            )
+
+            data = build_timeline(vault)
+            thing_items = [item for item in data["items"] if item["source_note"] == "75 Things/Mini Keyboard.md"]
+
+            self.assertEqual(len(thing_items), 1)
+            self.assertEqual(thing_items[0]["date_start"], "2026-05-26")
+            self.assertEqual(thing_items[0]["date_precision"], "exact")
+            self.assertIn("bought [[75 Things/Mini Keyboard|Mini Keyboard]]", thing_items[0]["text"])
+            self.assertIn("things", thing_items[0]["threads"])
+            self.assertIn("creative_identity", thing_items[0]["threads"])
+            self.assertIn("75 Things/Mini Keyboard", thing_items[0]["links"])
+
+    def test_timeline_derives_approximate_thing_usage_start(self) -> None:
+        with self.make_vault() as tmp_name:
+            vault = Path(tmp_name)
+            write_note(
+                vault,
+                "75 Things/Texture Plugin.md",
+                note(
+                    "thing",
+                    "Texture Plugin",
+                    textwrap.dedent(
+                        """
+                        ## Status
+
+                        - State: used / loved
+                        - Bought date:
+
+                        ## Usage Pattern
+
+                        - Approximate start: around eight years before 2026-05-27. Treat the timeline as uncertain until confirmed.
+                        """
+                    ),
+                    tags=("self-atlas/things", "self-atlas/thing", "self-atlas/music"),
+                ),
+            )
+
+            data = build_timeline(vault)
+            thing_items = [item for item in data["items"] if item["source_note"] == "75 Things/Texture Plugin.md"]
+
+            self.assertEqual(len(thing_items), 1)
+            self.assertEqual(thing_items[0]["date_start"], "2018")
+            self.assertEqual(thing_items[0]["date_precision"], "approximate")
+            self.assertIn("began using [[75 Things/Texture Plugin|Texture Plugin]]", thing_items[0]["text"])
+
     def test_question_refresh_mixes_existing_queue_with_generated_prompts(self) -> None:
         with self.make_vault() as tmp_name:
             vault = Path(tmp_name)

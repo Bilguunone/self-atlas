@@ -51,6 +51,7 @@ THREAD_KEYWORDS = {
     "money_pressure": ("money", "paid", "pay", "salary", "tuition", "provide", "unemployed", "pressure"),
     "confidence": ("potential", "confidence", "confident", "capable", "admired", "best at this work", "realized"),
     "product": ("product", "app", "prototype", "ar", "ios", "tool", "platform"),
+    "things": ("thing", "things", "bought", "ordered", "owned", "gear", "controller", "instrument", "hardware", "subscription"),
 }
 
 PRESSURE_HIGH = (
@@ -95,6 +96,9 @@ def timeline_note(note: dict[str, object]) -> bool:
         or "self-atlas/timeline" in tags
         or note_type in {"event", "life_period", "milestone"}
     )
+
+def note_kind(note: dict[str, object]) -> str:
+    return as_string(note["frontmatter"].get("type"))
 
 def clean_timeline_text(text: str) -> str:
     text = re.sub(r"\s+Source:.*$", "", text).strip()
@@ -267,6 +271,103 @@ def item_title(text: str) -> str:
 def timeline_item_id(source_key: str, text: str, index: int) -> str:
     return f"timeline:{slugify(source_key)}:{index:03d}:{slugify(clean_bullet(text)[:60])}"
 
+def thing_link(note: dict[str, object]) -> str:
+    return f"[[{note['key']}|{note['title']}]]"
+
+def thing_status_value(note: dict[str, object], label: str) -> str:
+    status = extract_section_text(str(note["body"]), "Status")
+    label_prefix = f"{label.lower()}:"
+    for bullet in bullet_lines(status):
+        if bullet.lower().startswith(label_prefix):
+            return bullet.split(":", 1)[1].strip()
+    return ""
+
+def useful_thing_context(note: dict[str, object]) -> str:
+    for section_name in ("Why It Matters", "Taste Signal", "Life It Enables"):
+        for bullet in bullet_lines(extract_section_text(str(note["body"]), section_name)):
+            if bullet.strip():
+                return clean_timeline_text(bullet)
+    return ""
+
+def thing_event_text(note: dict[str, object], verb: str, date_value: str) -> str:
+    text = f"On {date_value}, Bilguun {verb} {thing_link(note)}."
+    context = useful_thing_context(note)
+    if context:
+        text += f" {context}"
+    return text
+
+def approximate_years_before(text: str) -> int | None:
+    number_words = {
+        "one": 1,
+        "two": 2,
+        "three": 3,
+        "four": 4,
+        "five": 5,
+        "six": 6,
+        "seven": 7,
+        "eight": 8,
+        "nine": 9,
+        "ten": 10,
+        "eleven": 11,
+        "twelve": 12,
+        "thirteen": 13,
+        "fourteen": 14,
+        "fifteen": 15,
+    }
+    match = re.search(r"\baround\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen)\s+years?\s+before\s+((?:20|19)\d{2})", text, re.I)
+    if not match:
+        return None
+    amount_token = match.group(1).lower()
+    amount = int(amount_token) if amount_token.isdigit() else number_words.get(amount_token)
+    if amount is None:
+        return None
+    return int(match.group(2)) - amount
+
+def thing_usage_timeline_texts(note: dict[str, object]) -> list[str]:
+    texts = []
+    usage = extract_section_text(str(note["body"]), "Usage Pattern")
+    for bullet in bullet_lines(usage):
+        lowered = bullet.lower()
+        approximate_year = approximate_years_before(bullet)
+        if approximate_year:
+            texts.append(f"Around {approximate_year}, Bilguun began using {thing_link(note)}. {clean_timeline_text(bullet)}")
+        elif re.search(r"\bage\s+\d{1,2}\b", lowered) or re.search(r"\b\d+(?:st|nd|rd|th)\s+grade\b", lowered):
+            texts.append(f"{clean_timeline_text(bullet)} Related thing: {thing_link(note)}.")
+    return texts
+
+def thing_timeline_items_from_note(
+    note: dict[str, object],
+    by_key: dict[str, dict[str, object]],
+    by_base: dict[str, list[dict[str, object]]],
+    visible_keys: set[str],
+    skip_hidden_targets: bool,
+) -> list[TimelineItem]:
+    if note["is_template"] or note["is_source"] or note_kind(note) != "thing":
+        return []
+    items = []
+    index = 1
+    dated_events = (
+        ("Bought date", "bought"),
+        ("Ordered date", "ordered"),
+        ("Sold date", "sold"),
+        ("Returned date", "returned"),
+    )
+    for label, verb in dated_events:
+        date_value = thing_status_value(note, label)
+        if not date_value or date_value.lower() in {"unknown", "n/a", "none", "todo"}:
+            continue
+        text = thing_event_text(note, verb, date_value)
+        if skip_hidden_targets and hidden_or_unresolved_targets(text, by_key, by_base, visible_keys):
+            continue
+        items.append(item_from_bullet(note, "Status", text, index, by_key, by_base, visible_keys))
+        index += 1
+    for text in thing_usage_timeline_texts(note):
+        if skip_hidden_targets and hidden_or_unresolved_targets(text, by_key, by_base, visible_keys):
+            continue
+        items.append(item_from_bullet(note, "Usage Pattern", text, index, by_key, by_base, visible_keys))
+        index += 1
+    return items
+
 def filtered_targets(
     targets: tuple[str, ...],
     by_key: dict[str, dict[str, object]],
@@ -356,6 +457,8 @@ def timeline_items_from_note(
     visible_keys: set[str],
     skip_hidden_targets: bool,
 ) -> list[TimelineItem]:
+    if note_kind(note) == "thing":
+        return thing_timeline_items_from_note(note, by_key, by_base, visible_keys, skip_hidden_targets)
     if note["is_template"] or note["is_source"] or not timeline_note(note):
         return []
     items = []

@@ -406,6 +406,8 @@ Both commands default to share-safe output. Use `--include-sensitive` only when 
 
 Use `life-lenses` to list or apply reusable views of the graph: identity, career, creative, taste, relationships, health, money, things, logistics, credentials, and timeline.
 
+Timeline exports include more than `70 Timeline/` notes. Dated `type: thing` notes should contribute purchase/order/sold/returned events and meaningful usage-start anchors, so gear, tools, plugins, subscriptions, and other objects can show up as part of the life timeline instead of being trapped in the Things drawer like receipt confetti.
+
 Use `open-loop-radar` when the user wants to know what is unresolved. It combines queued questions, open threads, unextracted sources, uncertainty, source-log gaps, and contradiction signals.
 
 Use `contradictions` when the user asks what does not line up, what changed, what feels stale, or what needs review. Treat results as leads, not verdicts.
