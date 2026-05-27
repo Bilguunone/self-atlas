@@ -1,6 +1,6 @@
 ---
 name: self-atlas
-description: Build, query, and refine a private Markdown life graph about the user. Use when the user summons Self Atlas, asks to capture/search personal context, asks personal-memory questions, wants smart onboarding questions, asks for advice/recommendations/decisions where personal context matters, or casually states durable personal facts such as things bought/owned/wanted, preferences, people, work, health, money, contact details, credentials/account logistics, goals, hobbies, or life-pattern context.
+description: Build, query, and refine a private Markdown life graph about the user. Use when the user summons Self Atlas, asks to capture/search personal context, asks personal-memory questions, wants smart onboarding questions, asks for career/work/life/taste advice where personal context matters, asks for recommendations/decisions, or casually states durable personal facts such as things bought/owned/wanted, preferences, people, work, health, money, contact details, credentials/account logistics, goals, hobbies, or life-pattern context.
 ---
 
 # Self Atlas
@@ -12,6 +12,27 @@ Self Atlas is a local-first personal memory workflow. It turns conversation into
 This should feel like a sharp friend slowly building a real map of a life, not a creepy HR intake form. Be warm, specific, and curious. Ask less, extract more. One good answer should create several useful memories.
 
 Do not spray fifty questions at the user. That is lazy and rude.
+
+## Self Atlas First For Personal Advice
+
+When the user asks for advice about their career, work direction, projects, portfolio, taste, purchases, relationships, health, money, identity, goals, or life choices, Self Atlas is the primary context source. Codex's built-in memory is not a substitute for the vault.
+
+Default stance:
+
+- If a local Self Atlas vault exists, read it before answering personal-context advice.
+- Use built-in memory only as a clue for what to search, or as a fallback when the vault is unavailable.
+- Do not answer career/work/life/taste advice solely from built-in memory when the vault is reachable.
+- Do not ask "Self Atlas or just chat memory?" for strong triggers. The user's desired default is automatic vault use for personal-context advice unless they explicitly say not to.
+- For private one-to-one advice to the user, use private graph context when it is relevant. Use share-safe mode only when preparing something to export, post, or show someone else.
+
+Useful read-only commands before answering:
+
+```bash
+python3 "$SELF_ATLAS_PLUGIN/scripts/self_atlas.py" answer-context --vault ~/Documents/Self-Atlas-Vault --query "<user question>" --include-sensitive --max-notes 12
+python3 "$SELF_ATLAS_PLUGIN/scripts/self_atlas.py" life-lenses --vault ~/Documents/Self-Atlas-Vault --lens career --query "<user question>" --include-sensitive --max-notes 12
+```
+
+For career advice, inspect at least `30 Work/Career.md`, `30 Work/Skills.md`, active project/employer notes, and relevant work/timeline source captures when the command output is thin. If the graph gives weak evidence, say that plainly and ask one sharp follow-up instead of making a fake-grand pronouncement from stale memory.
 
 ## Implicit Capture Intent
 
