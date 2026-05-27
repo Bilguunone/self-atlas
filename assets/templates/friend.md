@@ -33,6 +33,14 @@ sources: []
 - Primary context:
 - Current closeness:
 
+## Contact And Logistics
+
+- Phone:
+- Email:
+- Address:
+- Handles:
+- Emergency/contact notes:
+
 ## Shared History
 
 ## Personality And Rhythm

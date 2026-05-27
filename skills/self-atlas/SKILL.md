@@ -1,6 +1,6 @@
 ---
 name: self-atlas
-description: Build, query, and refine a private Markdown life graph about the user. Use when the user summons Self Atlas, asks to capture personal context, asks personal-memory questions, wants smart onboarding questions, or wants Codex to search a personal Markdown vault for identity, family, work, taste, health, goals, hobbies, and life-pattern context.
+description: Build, query, and refine a private Markdown life graph about the user. Use when the user summons Self Atlas, asks to capture/search personal context, asks personal-memory questions, wants smart onboarding questions, or casually states durable personal facts such as things bought/owned/wanted, preferences, people, work, health, money, contact details, credentials/account logistics, goals, hobbies, or life-pattern context.
 ---
 
 # Self Atlas
@@ -12,6 +12,44 @@ Self Atlas is a local-first personal memory workflow. It turns conversation into
 This should feel like a sharp friend slowly building a real map of a life, not a creepy HR intake form. Be warm, specific, and curious. Ask less, extract more. One good answer should create several useful memories.
 
 Do not spray fifty questions at the user. That is lazy and rude.
+
+## Implicit Capture Intent
+
+The user wants Self Atlas to notice durable personal context without needing the phrase "save this to Self Atlas." This is not only for things. Treat clear first-person life facts, work updates, career direction, decisions, advice, preferences, taste signals, relationships, goals, constraints, and recurring patterns as capture/update intent by default.
+
+Default stance:
+
+- If the user states a durable personal fact, preference, purchase, relationship detail, contact detail, account/credential logistics, project fact, work fact, health/body pattern, money/logistics fact, goal, fear, desire, creative reference, decision, advice received, advice accepted, or recurring pattern, assume it probably belongs in Self Atlas.
+- "I bought...", "I own...", "I want...", "I am considering...", "I returned/sold...", "I am into...", "I hate/love...", "I realized...", "I started/stopped...", "I need to remember...", "future me should know...", "at work...", "for my career...", "my address is...", "their phone number is...", "the login uses...", "the account is...", "I decided...", "I should...", "your advice is...", and "document this..." are strong capture triggers.
+- For normal/private non-dangerous facts, proceed with a compact capture/update without asking for a separate "save it" confirmation.
+- Mention the write briefly after doing it: "Captured that to Self Atlas" plus the target note path if useful. Do not derail the main task with ceremony.
+- If the user says "do not save this", "just discussing", "hypothetically", "don't put this in the vault", or clearly asks for read-only brainstorming, do not write.
+
+Route implicit captures by content:
+
+- things bought, owned, wanted, returned, sold, subscriptions, gear, objects, tools, apps, clothes, books, devices -> `75 Things/Things.md` and a `type: thing` note when the object has enough identity to stand alone
+- taste, anti-taste, references, music/art/design/film/UI preferences -> `50 Taste/`
+- people, family, friends, collaborators, love, relationship dynamics -> `20 People/` or `25 Love/`
+- home addresses, phone numbers, email addresses, social handles, emergency contacts, birthdays, and practical contact details for the user or known people -> the relevant person/self note under `Contact And Logistics`, marked `sensitivity: private` or stronger when appropriate
+- work, roles, projects, skills, employers, proof, career moves -> `30 Work/`
+- career advice, accepted recommendations, work direction, portfolio strategy, job goals, interview positioning, and professional self-knowledge -> `30 Work/Career.md`, `30 Work/Skills.md`, or a dedicated career-thread note
+- product/design/code advice that should shape future work -> the relevant project note plus `50 Taste/` or `80 Reflections/` when it reveals a principle
+- body, health observations, symptoms, metrics, sleep, energy -> `40 Health/`
+- money numbers, income, costs, obligations, purchases with material financial weight -> `75 Money/` or the relevant `thing` note with `sensitivity: financial` when needed
+- dates, milestones, eras, major turning points -> `70 Timeline/`
+- logistics, documents, deadlines, appointments, travel, visa/admin tasks -> `00 System/Open Threads.md` or a logistics note
+- account names, login emails, recovery routes, license/transfer workflows, and where a secret lives -> a credential/account logistics note or relevant project/thing/logistics note; mark sensitive and avoid printing the secret value back in chat
+- values, desires, fears, identity, tensions, recurring patterns -> `10 Self/` or `80 Reflections/`
+
+Do not become a creepy vacuum:
+
+- The user is comfortable saving private contact/logistics details in the local vault, including home addresses and phone numbers for themself and known people, when they intentionally provide them.
+- Do not capture raw passwords, API keys, transfer IDs, private tokens, exact card/bank numbers, government ID numbers, or secret recovery codes from casual conversation. Prefer a credential reference: account, purpose, login email, recovery route, where the secret is stored, and safe workflow.
+- If the user explicitly says to store a raw secret anyway, warn once that Markdown is plaintext, then only proceed if the user confirms. Mark the note as private/financial as appropriate, avoid putting the raw secret in Source Log summaries, and do not echo the secret in the final response.
+- Ask before writing if the fact is ambiguous, legally risky, medically detailed beyond simple observation, intimate in a way that could harm someone, third-party contact data from someone the user barely knows, or if saving it would surprise a reasonable version of the user.
+- If the user gives a dense message with many facts, capture the strongest durable facts first, then summarize what was captured and what remains open. Do not atomize every sentence into a note just to look busy.
+- If the assistant gives meaningful advice and the user reacts as if it should become part of their long-term context, capture the advice, rationale, and current decision state as source-backed context. Do not save every throwaway suggestion; save advice that affects future choices.
+- If the user is in the middle of a coding/design task and casually drops a durable fact, keep the main task moving; capture the fact in the background workflow and mention it briefly at the end.
 
 ## Example-Led Questions
 
@@ -113,6 +151,8 @@ Create domain folders and map-of-content notes only when capture needs them:
 40 Health/Health Overview.md
 50 Taste/Taste Profile.md
 60 Interests/Obsessions.md
+75 Things/Things.md
+75 Credentials/Credentials.md
 80 Reflections/<Emergent Pattern>.md
 ```
 
@@ -149,7 +189,7 @@ Use YAML frontmatter for durable notes:
 ---
 id: note:path-slug
 schema_version: 1
-type: index | identity | person | work | project | skill | preference | value | desire | pattern | event | life_period | milestone | source | question | creative_reference | money_context | logistics_thread | health_observation | health_metric
+type: index | identity | person | work | project | skill | preference | value | desire | thing | pattern | event | life_period | milestone | source | question | creative_reference | money_context | logistics_thread | credential_reference | health_observation | health_metric
 relationship_kind: person | friend | family | mentor | collaborator | love
 relationship_context: unknown | social | family | mentorship | work | romantic
 date_start: YYYY-MM-DD | YYYY-MM | YYYY | ""
@@ -202,9 +242,9 @@ Use `list-templates` to inspect the current library and `sync-templates` to copy
 - work: projects, employers, roles, skills, career threads
 - taste and creative direction: preferences, anti-taste, references, music identity, product principles
 - inner life: identity, values, desires, fears, patterns, tensions
-- timeline and practical life: events, periods, milestones, money, logistics, health observations, health metrics
+- timeline and practical life: events, periods, milestones, things bought/owned/wanted, money, logistics, credential/account references, health observations, health metrics
 
-Person templates may include practical fields such as birthday, met date/context, personality/temperament, communication style, gift/care notes, and important dates. Keep those in the body unless the app truly needs them as structured fields.
+Person templates may include practical fields such as birthday, met date/context, personality/temperament, communication style, phone, email, address, handles, gift/care notes, and important dates. Keep those in the body unless the app truly needs them as structured fields.
 
 ## Linking Rules
 
@@ -244,7 +284,7 @@ Answer with local Markdown path references when useful.
 
 ## Capture Workflow
 
-When the user answers a question or says to capture something:
+When the user answers a question, says to capture something, or states a durable personal fact that triggers implicit capture:
 
 1. Preserve the raw answer in `90 Sources/Captures/`.
 2. For existing source captures, prefer a `capture-review` or `extract-plan` pass before editing durable notes. `capture-review` is the consent-aware surface; `extract-plan` is the lower-level typed plan. The intended struct is `RawCapture -> MemoryCandidate[] -> DurableNotePatch[] -> LinkPatch[] -> ReviewFlags`.
@@ -280,7 +320,7 @@ Both commands default to share-safe output. Use `--include-sensitive` only when 
 
 ## Insight Commands
 
-Use `life-lenses` to list or apply reusable views of the graph: identity, career, creative, taste, relationships, health, money, logistics, and timeline.
+Use `life-lenses` to list or apply reusable views of the graph: identity, career, creative, taste, relationships, health, money, things, logistics, credentials, and timeline.
 
 Use `open-loop-radar` when the user wants to know what is unresolved. It combines queued questions, open threads, unextracted sources, uncertainty, source-log gaps, and contradiction signals.
 

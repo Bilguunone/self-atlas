@@ -16,7 +16,7 @@ sys.path.insert(0, str(PLUGIN_ROOT / "scripts"))
 from public_release_check import scan_files
 from self_atlas_lib.export import build_export_graph, build_export_preview
 from self_atlas_lib.experience import build_answer_context, build_pulse, build_thread_walk
-from self_atlas_lib.extraction import apply_capture_review, build_capture_review, build_extraction_plan
+from self_atlas_lib.extraction import apply_capture_review, build_capture_review, build_extraction_plan, infer_candidate_kind
 from self_atlas_lib.insight import (
     build_artifact_import,
     build_belief_versioning,
@@ -33,7 +33,8 @@ from self_atlas_lib.insight import (
     build_time_travel,
 )
 from self_atlas_lib.init import init_vault
-from self_atlas_lib.questions import build_question_refresh, refresh_questions
+from self_atlas_lib.questions import build_question_refresh, infer_question_domain, question_templates_for_domain, refresh_questions
+from self_atlas_lib.templates import template_files
 from self_atlas_lib.timeline import build_timeline
 from self_atlas_lib.vault import extract_section_bullets, parse_frontmatter_text
 from self_atlas_lib.cli import main as cli_main
@@ -188,6 +189,49 @@ class SelfAtlasTests(unittest.TestCase):
             self.assertEqual(default_data["counts"]["template_nodes"], 0)
             self.assertEqual(default_data["counts"]["excluded_templates"], 1)
             self.assertEqual(debug_data["counts"]["template_nodes"], 1)
+
+    def test_thing_template_tracks_owned_bought_and_wanted_items(self) -> None:
+        files = template_files()
+        thing_template = files["00 System/Templates/thing.md"]
+        source_template = files["00 System/Templates/source-capture.md"]
+        asset_template = (PLUGIN_ROOT / "assets/templates/thing.md").read_text(encoding="utf-8")
+
+        self.assertEqual(asset_template, thing_template)
+        self.assertIn("type: thing", thing_template)
+        self.assertIn("## Status", thing_template)
+        self.assertIn("- State: bought | own | want | considering | borrowed | sold | returned", thing_template)
+        self.assertIn("## Taste Signal", thing_template)
+        self.assertIn("## Wanting Notes", thing_template)
+        self.assertIn("- Things bought, owned, or wanted:", source_template)
+        self.assertIn("- Contact details:", source_template)
+        self.assertIn("- Credential or account logistics:", source_template)
+        self.assertIn("type: thing", asset_template)
+
+    def test_private_contact_and_credential_templates_exist(self) -> None:
+        files = template_files()
+        person_template = files["00 System/Templates/person.md"]
+        credential_template = files["00 System/Templates/credential-reference.md"]
+        credential_asset = (PLUGIN_ROOT / "assets/templates/credential-reference.md").read_text(encoding="utf-8")
+
+        self.assertIn("## Contact And Logistics", person_template)
+        self.assertIn("- Phone:", person_template)
+        self.assertIn("- Address:", person_template)
+        self.assertEqual(credential_asset, credential_template)
+        self.assertIn("type: credential_reference", credential_template)
+        self.assertIn("## Access Context", credential_template)
+        self.assertIn("- Where the secret lives:", credential_template)
+        self.assertIn("## Do Not Store Here", credential_template)
+
+    def test_things_question_and_extraction_routing(self) -> None:
+        self.assertEqual(infer_question_domain("What did I buy and what gear am I wanting next?"), "things")
+        self.assertEqual(infer_candidate_kind("Bought a small MIDI controller for music workflow."), "thing")
+        self.assertTrue(question_templates_for_domain("things"))
+
+    def test_contact_and_credentials_routing(self) -> None:
+        self.assertEqual(infer_question_domain("The account login uses this email."), "credentials")
+        self.assertEqual(infer_question_domain("Their phone number and home address changed."), "person")
+        self.assertEqual(infer_candidate_kind("The account recovery route uses a login email."), "credential_reference")
+        self.assertEqual(infer_candidate_kind("Their phone number changed."), "person")
 
     def test_extraction_reads_legacy_headings_and_preserves_uncertain_confidence(self) -> None:
         with self.make_vault() as tmp_name:
@@ -797,6 +841,9 @@ class SelfAtlasTests(unittest.TestCase):
             self.assertEqual(result["counts"]["imported"], 1)
             self.assertIn("type: source", capture_text)
             self.assertIn("Raw Capture", capture_text)
+            self.assertIn("- Things bought, owned, or wanted:", capture_text)
+            self.assertIn("- Contact details:", capture_text)
+            self.assertIn("- Credential or account logistics:", capture_text)
             self.assertIn(applied.removesuffix(".md"), source_log_text)
 
     def test_time_travel_groups_timeline_without_absolute_paths(self) -> None:

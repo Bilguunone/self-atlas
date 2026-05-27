@@ -112,6 +112,8 @@ def full_domain_files() -> dict[str, str]:
         "60 Interests/Obsessions.md": ("Obsessions", "obsession", "normal"),
         "60 Interests/Media.md": ("Media", "taste", "normal"),
         "70 Timeline/Life Timeline.md": ("Life Timeline", "event", "normal"),
+        "75 Things/Things.md": ("Things", "things", "private"),
+        "75 Credentials/Credentials.md": ("Credentials", "credentials", "private"),
         "80 Reflections/Patterns.md": ("Patterns", "identity", "normal"),
         "80 Reflections/Tensions.md": ("Tensions", "identity", "normal"),
     }

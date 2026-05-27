@@ -144,8 +144,67 @@ def infer_candidate_kind(text: str) -> str:
             return "health_observation"
         if target.startswith("50 Taste/"):
             return "preference"
+        if target.startswith("75 Things/"):
+            return "thing"
+        if target.startswith("75 Credentials/"):
+            return "credential_reference"
         if target.startswith("80 Reflections/"):
             return "pattern"
+    if has_any_keyword(
+        text,
+        (
+            "credential",
+            "credentials",
+            "account",
+            "login",
+            "password",
+            "api key",
+            "token",
+            "recovery code",
+            "license",
+            "serial",
+            "transfer id",
+        ),
+    ):
+        return "credential_reference"
+    if has_any_keyword(
+        text,
+        (
+            "address",
+            "home address",
+            "phone",
+            "phone number",
+            "email",
+            "contact",
+            "emergency contact",
+            "handle",
+        ),
+    ):
+        return "person"
+    if has_any_keyword(
+        text,
+        (
+            "bought",
+            "buy",
+            "purchased",
+            "ordered",
+            "own",
+            "owned",
+            "gear",
+            "device",
+            "keyboard",
+            "controller",
+            "instrument",
+            "plugin",
+            "hardware",
+            "wishlist",
+            "wanting",
+            "want to buy",
+            "thinking of buying",
+            "receipt",
+        ),
+    ):
+        return "thing"
     if has_any_keyword(
         text,
         (
@@ -195,6 +254,8 @@ def likely_patch_section(candidate_kind: str) -> str:
         "project": "What We Know",
         "work": "What We Know",
         "preference": "Evidence",
+        "thing": "Status",
+        "credential_reference": "Access Context",
         "health_observation": "Context",
         "logistics_thread": "Current Status",
         "question": "Open Questions",
@@ -223,6 +284,8 @@ def candidate_target_hint(candidate: str, source_links: list[str], domain: str, 
         "question": "00 System/Question Queue",
         "pattern": "80 Reflections/Patterns",
         "preference": "50 Taste/Taste Profile",
+        "thing": "75 Things/Things",
+        "credential_reference": "75 Credentials/Credentials",
         "health_observation": "40 Health/Health Overview",
         "logistics_thread": "00 System/Open Threads",
     }

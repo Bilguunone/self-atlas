@@ -85,6 +85,15 @@ LIFE_LENSES: tuple[LensSpec, ...] = (
         keywords=("money", "financial", "salary", "tuition", "income", "rent", "budget", "paid", "support"),
     ),
     LensSpec(
+        id="things",
+        title="Things",
+        description="Objects, gear, tools, subscriptions, purchases, owned items, and wanted items with taste or life meaning.",
+        note_types=("thing",),
+        path_prefixes=("75 Things/",),
+        tags=("self-atlas/things", "self-atlas/thing"),
+        keywords=("thing", "things", "bought", "purchased", "owned", "gear", "tool", "wishlist", "receipt", "wanting"),
+    ),
+    LensSpec(
         id="logistics",
         title="Logistics",
         description="Documents, deadlines, visas, travel, admin, and practical open threads.",
@@ -92,6 +101,15 @@ LIFE_LENSES: tuple[LensSpec, ...] = (
         path_prefixes=("00 System/Open Threads", "75 Logistics/"),
         tags=("self-atlas/logistics", "self-atlas/open-threads"),
         keywords=("visa", "deadline", "document", "appointment", "travel", "archive", "admin", "confirm"),
+    ),
+    LensSpec(
+        id="credentials",
+        title="Credentials",
+        description="Account access context, login emails, recovery routes, license workflows, and where secrets live.",
+        note_types=("credential_reference",),
+        path_prefixes=("75 Credentials/",),
+        tags=("self-atlas/credentials",),
+        keywords=("credential", "account", "login", "password", "api key", "token", "license", "serial", "recovery"),
     ),
     LensSpec(
         id="timeline",

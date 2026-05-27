@@ -1,6 +1,6 @@
 # Self Atlas
 
-Self Atlas is a Codex plugin for building a private Markdown life graph about a person: identity, family, work, taste, health context, mindset, hobbies, obsessions, values, projects, desires, and the weird little patterns that actually make someone legible.
+Self Atlas is a Codex plugin for building a private Markdown life graph about a person: identity, family, work, taste, health context, mindset, hobbies, obsessions, values, projects, desires, things bought/owned/wanted, private contact/logistics details, credential/account references, and the weird little patterns that actually make someone legible.
 
 The point is not to make a giant questionnaire. That would be spiritually punishable. The point is a small-loop memory system:
 
@@ -128,7 +128,9 @@ The report commands are read-only. They do not change existing Atlas content. `p
 
 ## Plugin Behavior
 
-When summoned, Codex should:
+Codex should treat clear first-person durable life facts, work updates, career direction, decisions, advice, preferences, taste signals, relationships, contact details, credentials/account logistics, goals, constraints, and recurring patterns as implicit Self Atlas capture intent, not wait for a perfect "save this" incantation. Phrases like "I bought...", "I own...", "I want...", "I am considering...", "I realized...", "I am into...", "I hate/love...", "at work...", "for my career...", "my address is...", "their phone number is...", "the login uses...", "the account is...", "I decided...", "your advice is...", or "future me should know..." should trigger the Self Atlas workflow when they contain stable personal context.
+
+When Self Atlas is triggered explicitly or implicitly, Codex should:
 
 1. Find the vault or ask to create a minimal one before saving.
 2. Search existing notes before answering.
@@ -141,6 +143,18 @@ When summoned, Codex should:
 9. Keep maps compact and split bloated notes before they become giant Markdown junk drawers.
 10. Update maps and indexes so the graph stays usable instead of becoming note soup.
 11. Use the template library as light scaffolding only: facts like birthday, communication style, dates, source links, and care notes are useful, but empty fields should not turn the vault into intake-form sludge.
+
+Implicit capture should still have taste and restraint:
+
+- Things bought, owned, wanted, returned, sold, subscriptions, gear, objects, tools, apps, clothes, books, and devices route to `75 Things/`.
+- Home addresses, phone numbers, email addresses, social handles, emergency contacts, birthdays, and practical contact details for the user or known people route to the relevant self/person notes and should be marked private or stronger.
+- Taste, people, work, career advice, accepted recommendations, project direction, health, money, timeline, logistics, values, desires, fears, identity, and recurring patterns route to their matching graph areas.
+- Account names, login emails, recovery routes, license/transfer workflows, and where a secret lives may be captured as sensitive credential/account logistics.
+- Meaningful advice should be captured only when it affects future choices, not when it is a disposable suggestion.
+- For normal/private non-dangerous facts, capture/update directly and mention the write briefly.
+- Do not capture if the user says not to save it, is clearly speaking hypothetically, or is asking for read-only brainstorming.
+- Do not capture raw passwords, API keys, transfer IDs, private tokens, government ID numbers, exact card/bank numbers, or recovery codes from casual conversation. Prefer safe context and workflows. If the user explicitly confirms storing a raw secret anyway, warn that Markdown is plaintext, do not include the raw secret in Source Log summaries, and do not echo it back.
+- Ask first when saving would be surprising, ambiguous, legally risky, very intimate, medically detailed, or third-party contact data from someone the user barely knows.
 
 If no initialized vault exists, Codex should ask:
 

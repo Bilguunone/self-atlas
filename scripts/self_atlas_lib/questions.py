@@ -286,6 +286,21 @@ QUESTION_TEMPLATES = (
         evidence_needed=("amount", "currency", "cadence", "deadline", "decision affected"),
     ),
     QuestionTemplate(
+        domain="things",
+        intent="capture-owned-or-wanted-thing",
+        question="What is one thing you bought, own, or keep wanting that says something real about you?",
+        why="Objects are receipts for taste, money pressure, daily rhythm, and the life you are trying to build. Useful, unless we turn it into spreadsheet cosplay.",
+        hint="Name the thing, status, date-ish, price if useful, why it matters, and whether it is actually being used.",
+        examples=(
+            "I bought a small MIDI controller because it makes music feel tactile and easier to start.",
+            "I own it but barely use it, which probably means the workflow still has friction.",
+            "The thing I keep wanting is: ...",
+        ),
+        target_note_types=("thing", "preference", "desire", "money_context"),
+        sensitivity="private",
+        evidence_needed=("thing name", "status", "date-ish", "price if relevant", "why it matters", "usage or next move"),
+    ),
+    QuestionTemplate(
         domain="health",
         intent="capture-body-event",
         question="What exactly happened the last time your body gave you a weird signal?",
@@ -435,6 +450,18 @@ DOMAINS = {
             "Think craft, money, body, love, family, reputation, home, adventure, or freedom.",
         ),
     ],
+    "things": [
+        (
+            "What thing did you buy, keep, or want that deserves to be remembered as more than a receipt?",
+            "Objects can reveal taste, priorities, creative direction, and money pressure without becoming inventory sludge.",
+            "Name the thing, whether it is bought/owned/wanted, why it matters, and what life or workflow it supports.",
+        ),
+        (
+            "What object, gear, app, or subscription is quietly shaping your daily life right now?",
+            "This catches tools and possessions that are influencing behavior before they fade into background noise.",
+            "Include date-ish, price if useful, how often you use it, and whether it still feels worth it.",
+        ),
+    ],
     "obsession": [
         (
             "What topic, tool, style, person, or world keeps pulling your attention back?",
@@ -510,6 +537,16 @@ QUESTION_EXAMPLES = {
         "multiple": "Craft, money, body, love, family, home, reputation, and adventure all matter.",
         "custom": "I will describe the year myself.",
     },
+    "What thing did you buy, keep, or want that deserves to be remembered as more than a receipt?": {
+        "single": "One thing I bought or want says something real about my taste or direction.",
+        "multiple": "Several things connect through money, music, work, comfort, and identity.",
+        "custom": "I will explain the thing and why it matters myself.",
+    },
+    "What object, gear, app, or subscription is quietly shaping your daily life right now?": {
+        "single": "One tool is quietly changing my rhythm, workflow, or habits.",
+        "multiple": "A few objects and apps are shaping different parts of my day.",
+        "custom": "I will name the object and the pattern myself.",
+    },
     "What topic, tool, style, person, or world keeps pulling your attention back?": {
         "single": "One obsession keeps coming back because it feels connected to who I am becoming.",
         "multiple": "Several obsessions are linked through taste, work, identity, and future projects.",
@@ -528,6 +565,9 @@ def infer_question_domain(question: str) -> str:
         ("logistics", ("visa", "appointment", "document", "documents", "deadline", "immigration", "relocation", "checklist", "submission")),
         ("health", ("health", "heart", "body", "medical", "sleep", "pain", "energy")),
         ("money", ("money", "financial", "income", "saving", "rent", "travel", "spreadsheet")),
+        ("things", ("bought", "buy", "purchased", "ordered", "own", "owned", "gear", "device", "keyboard", "controller", "instrument", "plugin", "hardware", "subscription", "wishlist", "wanting", "want to buy", "thinking of buying", "receipt")),
+        ("credentials", ("credential", "credentials", "account", "login", "password", "api key", "token", "recovery code", "license", "serial", "transfer id")),
+        ("person", ("address", "home address", "phone", "phone number", "email", "contact", "emergency contact", "handle")),
         ("love", ("love", "girlfriend", "boyfriend", "partner", "spouse", "relationship", "support")),
         ("family", ("family", "father", "mother", "sister", "parent", "brother")),
         ("timeline", ("timeline", "years", "year", "month", "date", "phase", "chapter", "attend", "attended")),
@@ -613,6 +653,10 @@ def evidence_needed_for_question(question: str, template: QuestionTemplate) -> t
         additions.append("names and roles")
     if has_any_keyword(lowered, ("money", "number", "amount", "cost", "rent", "income", "savings", "budget")):
         additions.append("amount, currency, and cadence")
+    if has_any_keyword(lowered, ("bought", "buy", "purchased", "ordered", "own", "owned", "gear", "wishlist", "wanting", "receipt")):
+        additions.append("status, date, price, and usage")
+    if has_any_keyword(lowered, ("address", "phone", "email", "contact", "login", "account", "credential", "license")):
+        additions.append("exact value, owner, and sensitivity")
     if has_any_keyword(lowered, ("document", "documents", "email", "checklist", "submission")):
         additions.append("required documents and current status")
     if has_any_keyword(lowered, ("heart", "pain", "body", "health", "sleep", "energy")):

@@ -32,6 +32,9 @@ sources: []
 - Preferences:
 - Values:
 - Projects:
+- Things bought, owned, or wanted:
+- Contact details:
+- Credential or account logistics:
 - Health context:
 - Dates and events:
 - Open questions:

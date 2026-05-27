@@ -27,6 +27,13 @@ sources: []
 
 ## Relationship Shape
 
+## Contact And Logistics
+
+- Phone:
+- Email:
+- Address:
+- Important practical notes:
+
 ## Emotional Texture
 
 ## Support Patterns

@@ -38,6 +38,8 @@ FULL_EXTRA_DIRS = [
     "50 Taste",
     "60 Interests",
     "70 Timeline",
+    "75 Things",
+    "75 Credentials",
     "80 Reflections",
 ]
 
@@ -83,6 +85,18 @@ DOMAIN_CONFIG = {
         "map": "60 Interests/Obsessions.md",
         "title": "Obsessions",
         "sensitivity": "normal",
+    },
+    "things": {
+        "folder": "75 Things",
+        "map": "75 Things/Things.md",
+        "title": "Things",
+        "sensitivity": "private",
+    },
+    "credentials": {
+        "folder": "75 Credentials",
+        "map": "75 Credentials/Credentials.md",
+        "title": "Credentials",
+        "sensitivity": "private",
     },
 }
 

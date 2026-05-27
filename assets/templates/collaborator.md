@@ -32,6 +32,14 @@ sources: []
 - Projects together:
 - Trust level:
 
+## Contact And Logistics
+
+- Phone:
+- Email:
+- Address:
+- Handles:
+- Work/admin notes:
+
 ## Strengths
 
 ## Working Style
